@@ -1,0 +1,15 @@
+Asynchronous
+Blockchain
+Cryptography
+Distributed
+Ethernet
+Firmware
+Heuristic
+Idempotent
+Kubernetes
+Multithreading
+Orthogonal
+Quantum computing
+Recursive
+Synchronization
+exploit

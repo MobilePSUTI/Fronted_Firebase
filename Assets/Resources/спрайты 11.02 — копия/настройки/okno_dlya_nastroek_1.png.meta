@@ -1,0 +1,1987 @@
+fileFormatVersion: 2
+guid: a55b60f60d8f95a43b3eeea60aac1497
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8906692003271954766
+    second: okno_dlya_nastroek_1_0
+  - first:
+      213: -3353263116033549265
+    second: okno_dlya_nastroek_1_1
+  - first:
+      213: 4795245897486404451
+    second: okno_dlya_nastroek_1_2
+  - first:
+      213: 911821695762872978
+    second: okno_dlya_nastroek_1_3
+  - first:
+      213: 8711365300187834321
+    second: okno_dlya_nastroek_1_4
+  - first:
+      213: 5292772150993587842
+    second: okno_dlya_nastroek_1_5
+  - first:
+      213: 3832045066057099005
+    second: okno_dlya_nastroek_1_6
+  - first:
+      213: 5706057374602703610
+    second: okno_dlya_nastroek_1_7
+  - first:
+      213: -8962378890010427249
+    second: okno_dlya_nastroek_1_8
+  - first:
+      213: 8537599273506485121
+    second: okno_dlya_nastroek_1_9
+  - first:
+      213: 4752388873052229020
+    second: okno_dlya_nastroek_1_10
+  - first:
+      213: 8974079496381010861
+    second: okno_dlya_nastroek_1_11
+  - first:
+      213: 3309650806573024099
+    second: okno_dlya_nastroek_1_12
+  - first:
+      213: 3183719282725126444
+    second: okno_dlya_nastroek_1_13
+  - first:
+      213: -9156535672350670809
+    second: okno_dlya_nastroek_1_14
+  - first:
+      213: -7008253794419429178
+    second: okno_dlya_nastroek_1_15
+  - first:
+      213: 6992770264303557532
+    second: okno_dlya_nastroek_1_16
+  - first:
+      213: 4564340302632820539
+    second: okno_dlya_nastroek_1_17
+  - first:
+      213: -7251838600472841055
+    second: okno_dlya_nastroek_1_18
+  - first:
+      213: -1341256066183768495
+    second: okno_dlya_nastroek_1_19
+  - first:
+      213: 6538566644052434915
+    second: okno_dlya_nastroek_1_20
+  - first:
+      213: -227335427114061276
+    second: okno_dlya_nastroek_1_21
+  - first:
+      213: 258404565946308679
+    second: okno_dlya_nastroek_1_22
+  - first:
+      213: 3876675451233445161
+    second: okno_dlya_nastroek_1_23
+  - first:
+      213: 8701783607638076728
+    second: okno_dlya_nastroek_1_24
+  - first:
+      213: -7989138578038375516
+    second: okno_dlya_nastroek_1_25
+  - first:
+      213: -3487663458247567886
+    second: okno_dlya_nastroek_1_26
+  - first:
+      213: 6014731340652057522
+    second: okno_dlya_nastroek_1_27
+  - first:
+      213: -2778593378444077718
+    second: okno_dlya_nastroek_1_28
+  - first:
+      213: -8419175578760017619
+    second: okno_dlya_nastroek_1_29
+  - first:
+      213: -5680292487636706021
+    second: okno_dlya_nastroek_1_30
+  - first:
+      213: -6446322765972740547
+    second: okno_dlya_nastroek_1_31
+  - first:
+      213: 8000303803364648389
+    second: okno_dlya_nastroek_1_32
+  - first:
+      213: -3084976172827222272
+    second: okno_dlya_nastroek_1_33
+  - first:
+      213: -4562485962393930805
+    second: okno_dlya_nastroek_1_34
+  - first:
+      213: 130990344922570524
+    second: okno_dlya_nastroek_1_35
+  - first:
+      213: -6333330862072524601
+    second: okno_dlya_nastroek_1_36
+  - first:
+      213: 4473328484431033938
+    second: okno_dlya_nastroek_1_37
+  - first:
+      213: -5979432229919236368
+    second: okno_dlya_nastroek_1_38
+  - first:
+      213: -7243976494517263433
+    second: okno_dlya_nastroek_1_39
+  - first:
+      213: -3725998755259100744
+    second: okno_dlya_nastroek_1_40
+  - first:
+      213: -1034173752971189166
+    second: okno_dlya_nastroek_1_41
+  - first:
+      213: -2262987376391605070
+    second: okno_dlya_nastroek_1_42
+  - first:
+      213: 7381969276024414793
+    second: okno_dlya_nastroek_1_43
+  - first:
+      213: 5989309626577057350
+    second: okno_dlya_nastroek_1_44
+  - first:
+      213: -4078169855359768705
+    second: okno_dlya_nastroek_1_45
+  - first:
+      213: 6974413618723752392
+    second: okno_dlya_nastroek_1_46
+  - first:
+      213: 8425397428775269830
+    second: okno_dlya_nastroek_1_47
+  - first:
+      213: 4426470693042725345
+    second: okno_dlya_nastroek_1_48
+  - first:
+      213: -1037944960725134251
+    second: okno_dlya_nastroek_1_49
+  - first:
+      213: 19852247075192138
+    second: okno_dlya_nastroek_1_50
+  - first:
+      213: -7010356712580499691
+    second: okno_dlya_nastroek_1_51
+  - first:
+      213: 3784273097388593498
+    second: okno_dlya_nastroek_1_52
+  - first:
+      213: 6567663566325194542
+    second: okno_dlya_nastroek_1_53
+  - first:
+      213: 4045994359938076786
+    second: okno_dlya_nastroek_1_54
+  - first:
+      213: 3602648676211776912
+    second: okno_dlya_nastroek_1_55
+  - first:
+      213: -6103938280774898184
+    second: okno_dlya_nastroek_1_56
+  - first:
+      213: 1896954836982083922
+    second: okno_dlya_nastroek_1_57
+  - first:
+      213: -2680755129075552276
+    second: okno_dlya_nastroek_1_58
+  - first:
+      213: 8507705656117547767
+    second: okno_dlya_nastroek_1_59
+  - first:
+      213: 7641957791067602893
+    second: okno_dlya_nastroek_1_60
+  - first:
+      213: -5996387919127932938
+    second: okno_dlya_nastroek_1_61
+  - first:
+      213: -6406736827302445251
+    second: okno_dlya_nastroek_1_62
+  - first:
+      213: 6330074881658968491
+    second: okno_dlya_nastroek_1_63
+  - first:
+      213: -6496132201132568526
+    second: okno_dlya_nastroek_1_64
+  - first:
+      213: -3552681278337172739
+    second: okno_dlya_nastroek_1_65
+  - first:
+      213: 3701861583387966573
+    second: okno_dlya_nastroek_1_66
+  - first:
+      213: -6745740049571524651
+    second: okno_dlya_nastroek_1_67
+  - first:
+      213: 1011464016212406441
+    second: okno_dlya_nastroek_1_68
+  - first:
+      213: 4513235534522452897
+    second: okno_dlya_nastroek_1_69
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Win64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 910
+        height: 1210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4156d2ff2dea9b70800000000000000
+      internalID: 8906692003271954766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_1
+      rect:
+        serializedVersion: 2
+        x: 901
+        y: 1187
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2c966a56f0d671d0800000000000000
+      internalID: -3353263116033549265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_2
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 1182
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36b835accb22c8240800000000000000
+      internalID: 4795245897486404451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_3
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 1174
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29ab072500177ac00800000000000000
+      internalID: 911821695762872978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_4
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 1150
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d72c52f59cf4e870800000000000000
+      internalID: 8711365300187834321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_5
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 1143
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28e8d01aa34b37940800000000000000
+      internalID: 5292772150993587842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_6
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 1137
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df62f9d3fa82e2530800000000000000
+      internalID: 3832045066057099005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_7
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 1124
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af2313143fcff2f40800000000000000
+      internalID: 5706057374602703610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_8
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 1130
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f80087e52eb3f9380800000000000000
+      internalID: -8962378890010427249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_9
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 1094
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 183bcfb1e45ab7670800000000000000
+      internalID: 8537599273506485121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_10
+      rect:
+        serializedVersion: 2
+        x: 899
+        y: 1067
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9d0cc43080e3f140800000000000000
+      internalID: 4752388873052229020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_11
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 1037
+        width: 10
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da318e751c55a8c70800000000000000
+      internalID: 8974079496381010861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_12
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 1031
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 363ce509fdd3eed20800000000000000
+      internalID: 3309650806573024099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_13
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 972
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c21846fc1d7de2c20800000000000000
+      internalID: 3183719282725126444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_14
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 932
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7208854c1537de080800000000000000
+      internalID: -9156535672350670809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_15
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 926
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c0b8d72e4eadbe90800000000000000
+      internalID: -7008253794419429178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_16
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 918
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9b5abf818f4b0160800000000000000
+      internalID: 6992770264303557532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_17
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 887
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3f9d64825bc75f30800000000000000
+      internalID: 4564340302632820539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_18
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 881
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a4b95af63b4c5b90800000000000000
+      internalID: -7251838600472841055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_19
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 866
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 156574ec6b6e26de0800000000000000
+      internalID: -1341256066183768495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_20
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 874
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ef96fe48b7adba50800000000000000
+      internalID: 6538566644052434915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_21
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 855
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 422310e22a758dcf0800000000000000
+      internalID: -227335427114061276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_22
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 838
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74891996599069300800000000000000
+      internalID: 258404565946308679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_23
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 811
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9252f3c88c7bcc530800000000000000
+      internalID: 3876675451233445161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_24
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 781
+        width: 10
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83da59d4612f2c870800000000000000
+      internalID: 8701783607638076728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_25
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 775
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ab37a2aac0e02190800000000000000
+      internalID: -7989138578038375516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_26
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 716
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f51b0b2094599fc0800000000000000
+      internalID: -3487663458247567886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_27
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 676
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b399f2794e987350800000000000000
+      internalID: 6014731340652057522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_28
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 670
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a65969e3b047079d0800000000000000
+      internalID: -2778593378444077718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_29
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 662
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d298d56fa64192b80800000000000000
+      internalID: -8419175578760017619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_30
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 631
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1d1816f31c8b21b0800000000000000
+      internalID: -5680292487636706021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_31
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 625
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d366ea2399f0a86a0800000000000000
+      internalID: -6446322765972740547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_32
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 610
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c5a1c6fbe9c60f60800000000000000
+      internalID: 8000303803364648389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_33
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 618
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00fd6160486ff25d0800000000000000
+      internalID: -3084976172827222272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_34
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 599
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc3bdc6b03bcea0c0800000000000000
+      internalID: -4562485962393930805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_35
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 582
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1f9d12560f51d100800000000000000
+      internalID: 130990344922570524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_36
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 555
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c01629e22d7b18a0800000000000000
+      internalID: -6333330862072524601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_37
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 525
+        width: 10
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 256f52e4e84741e30800000000000000
+      internalID: 4473328484431033938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_38
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 519
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fe5429311ac40da0800000000000000
+      internalID: -5979432229919236368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_39
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 460
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b3e40b22c9387b90800000000000000
+      internalID: -7243976494517263433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_40
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 420
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b1db3f8fd79a4cc0800000000000000
+      internalID: -3725998755259100744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_41
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 414
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 254ae127370e5a1f0800000000000000
+      internalID: -1034173752971189166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_42
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 406
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b43cf298f04890e0800000000000000
+      internalID: -2262987376391605070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_43
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 375
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9426848f1f5027660800000000000000
+      internalID: 7381969276024414793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_44
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 369
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 646f3f56f5d4e1350800000000000000
+      internalID: 5989309626577057350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_45
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 354
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f772395af1e6767c0800000000000000
+      internalID: -4078169855359768705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_46
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 362
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c90da4fb381ac060800000000000000
+      internalID: 6974413618723752392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_47
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 343
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c5b3a162560de470800000000000000
+      internalID: 8425397428775269830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_48
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 326
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e12d7394abfd6d30800000000000000
+      internalID: 4426470693042725345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_49
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 299
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5545297be8a7891f0800000000000000
+      internalID: -1037944960725134251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_50
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 269
+        width: 10
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4df8e67387864000800000000000000
+      internalID: 19852247075192138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_51
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 263
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5173ddd56b536be90800000000000000
+      internalID: -7010356712580499691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_52
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 204
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a511ae60550748430800000000000000
+      internalID: 3784273097388593498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_53
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 164
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2f96137737052b50800000000000000
+      internalID: 6567663566325194542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_54
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 158
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 270d75b0f62462830800000000000000
+      internalID: 4045994359938076786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_55
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 150
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09d522422ed2ff130800000000000000
+      internalID: 3602648676211776912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_56
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 119
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fde08349747a4ba0800000000000000
+      internalID: -6103938280774898184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_57
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 113
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 251b64daf56535a10800000000000000
+      internalID: 1896954836982083922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_58
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 100
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cef25a1d96b0ccad0800000000000000
+      internalID: -2680755129075552276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_59
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 106
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f2d77ee731711670800000000000000
+      internalID: 8507705656117547767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_60
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 70
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcffc154f10bd0a60800000000000000
+      internalID: 7641957791067602893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_61
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 44
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ff8fe035fc88cca0800000000000000
+      internalID: -5996387919127932938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_62
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 13
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3f7937ccc2b617a0800000000000000
+      internalID: -6406736827302445251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_63
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 20
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba9d7e21191f8d750800000000000000
+      internalID: 6330074881658968491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_64
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 0
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23054895e2a19d5a0800000000000000
+      internalID: -6496132201132568526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_65
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 0
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfa3884433752bec0800000000000000
+      internalID: -3552681278337172739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_66
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 0
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6c318d2f77af5330800000000000000
+      internalID: 3701861583387966573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_67
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 7
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5dfc9265a215262a0800000000000000
+      internalID: -6745740049571524651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_68
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 2
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a03e6de921790e00800000000000000
+      internalID: 1011464016212406441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: okno_dlya_nastroek_1_69
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 0
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ab81e67ecb32ae30800000000000000
+      internalID: 4513235534522452897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      okno_dlya_nastroek_1_0: 8906692003271954766
+      okno_dlya_nastroek_1_1: -3353263116033549265
+      okno_dlya_nastroek_1_10: 4752388873052229020
+      okno_dlya_nastroek_1_11: 8974079496381010861
+      okno_dlya_nastroek_1_12: 3309650806573024099
+      okno_dlya_nastroek_1_13: 3183719282725126444
+      okno_dlya_nastroek_1_14: -9156535672350670809
+      okno_dlya_nastroek_1_15: -7008253794419429178
+      okno_dlya_nastroek_1_16: 6992770264303557532
+      okno_dlya_nastroek_1_17: 4564340302632820539
+      okno_dlya_nastroek_1_18: -7251838600472841055
+      okno_dlya_nastroek_1_19: -1341256066183768495
+      okno_dlya_nastroek_1_2: 4795245897486404451
+      okno_dlya_nastroek_1_20: 6538566644052434915
+      okno_dlya_nastroek_1_21: -227335427114061276
+      okno_dlya_nastroek_1_22: 258404565946308679
+      okno_dlya_nastroek_1_23: 3876675451233445161
+      okno_dlya_nastroek_1_24: 8701783607638076728
+      okno_dlya_nastroek_1_25: -7989138578038375516
+      okno_dlya_nastroek_1_26: -3487663458247567886
+      okno_dlya_nastroek_1_27: 6014731340652057522
+      okno_dlya_nastroek_1_28: -2778593378444077718
+      okno_dlya_nastroek_1_29: -8419175578760017619
+      okno_dlya_nastroek_1_3: 911821695762872978
+      okno_dlya_nastroek_1_30: -5680292487636706021
+      okno_dlya_nastroek_1_31: -6446322765972740547
+      okno_dlya_nastroek_1_32: 8000303803364648389
+      okno_dlya_nastroek_1_33: -3084976172827222272
+      okno_dlya_nastroek_1_34: -4562485962393930805
+      okno_dlya_nastroek_1_35: 130990344922570524
+      okno_dlya_nastroek_1_36: -6333330862072524601
+      okno_dlya_nastroek_1_37: 4473328484431033938
+      okno_dlya_nastroek_1_38: -5979432229919236368
+      okno_dlya_nastroek_1_39: -7243976494517263433
+      okno_dlya_nastroek_1_4: 8711365300187834321
+      okno_dlya_nastroek_1_40: -3725998755259100744
+      okno_dlya_nastroek_1_41: -1034173752971189166
+      okno_dlya_nastroek_1_42: -2262987376391605070
+      okno_dlya_nastroek_1_43: 7381969276024414793
+      okno_dlya_nastroek_1_44: 5989309626577057350
+      okno_dlya_nastroek_1_45: -4078169855359768705
+      okno_dlya_nastroek_1_46: 6974413618723752392
+      okno_dlya_nastroek_1_47: 8425397428775269830
+      okno_dlya_nastroek_1_48: 4426470693042725345
+      okno_dlya_nastroek_1_49: -1037944960725134251
+      okno_dlya_nastroek_1_5: 5292772150993587842
+      okno_dlya_nastroek_1_50: 19852247075192138
+      okno_dlya_nastroek_1_51: -7010356712580499691
+      okno_dlya_nastroek_1_52: 3784273097388593498
+      okno_dlya_nastroek_1_53: 6567663566325194542
+      okno_dlya_nastroek_1_54: 4045994359938076786
+      okno_dlya_nastroek_1_55: 3602648676211776912
+      okno_dlya_nastroek_1_56: -6103938280774898184
+      okno_dlya_nastroek_1_57: 1896954836982083922
+      okno_dlya_nastroek_1_58: -2680755129075552276
+      okno_dlya_nastroek_1_59: 8507705656117547767
+      okno_dlya_nastroek_1_6: 3832045066057099005
+      okno_dlya_nastroek_1_60: 7641957791067602893
+      okno_dlya_nastroek_1_61: -5996387919127932938
+      okno_dlya_nastroek_1_62: -6406736827302445251
+      okno_dlya_nastroek_1_63: 6330074881658968491
+      okno_dlya_nastroek_1_64: -6496132201132568526
+      okno_dlya_nastroek_1_65: -3552681278337172739
+      okno_dlya_nastroek_1_66: 3701861583387966573
+      okno_dlya_nastroek_1_67: -6745740049571524651
+      okno_dlya_nastroek_1_68: 1011464016212406441
+      okno_dlya_nastroek_1_69: 4513235534522452897
+      okno_dlya_nastroek_1_7: 5706057374602703610
+      okno_dlya_nastroek_1_8: -8962378890010427249
+      okno_dlya_nastroek_1_9: 8537599273506485121
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

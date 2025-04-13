@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "865816602920",
+    "firebase_url": "https://mobilepsuti-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mobilepsuti",
+    "storage_bucket": "mobilepsuti.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865816602920:android:ab69de3d02b755bd45081d",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.com.unity.template.mobile2D"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA1e_hOFP9f_xORVmaYVcgZrpmrJUi91M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

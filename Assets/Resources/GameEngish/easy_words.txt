@@ -1,0 +1,15 @@
+﻿Tool
+Wire
+Bolt
+Chip
+Code
+Data
+File
+Port
+Net
+Loop
+Map
+Task
+Link
+Load
+Node
