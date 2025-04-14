@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.EventSystems;
 
 public class StudentRegistration : MonoBehaviour
 {
@@ -21,13 +22,20 @@ public class StudentRegistration : MonoBehaviour
     public Image[] avatarOptions;
     public Image selectedAvatarImage;
 
+    [Header("UI Adjustment")]
+    public RectTransform registrationContentPanel; // Панель с полями ввода
+    public ScrollRect scrollRect; // Опционально, если используется ScrollRect
+    public float keyboardPadding = 10f; // Отступ от клавиатуры
+
     [Header("Settings")]
-    public int maxAvatarSize = 512; // Максимальный размер аватара в пикселях
+    public int maxAvatarSize = 512;
 
     private int selectedAvatarIndex = -1;
     private Texture2D[] avatarTextures;
     private FirebaseDBManager firebaseManager;
     private List<Group> groups;
+    private bool isKeyboardVisible = false;
+    private Vector2 originalContentPosition;
 
     void Start()
     {
@@ -35,13 +43,125 @@ public class StudentRegistration : MonoBehaviour
         firebaseManager = gameObject.AddComponent<FirebaseDBManager>();
         _ = firebaseManager.Initialize();
 
-        // Загрузка списка групп и аватарок
-        StartCoroutine(LoadGroups());
-        LoadAvatarOptions();
-
         // Настройка UI
         avatarSelectionPanel.SetActive(false);
         errorText.text = "";
+
+        // Инициализация для работы с клавиатурой
+        if (registrationContentPanel == null && registrationPanel != null)
+        {
+            registrationContentPanel = registrationPanel.GetComponent<RectTransform>();
+        }
+        originalContentPosition = registrationContentPanel != null ?
+            registrationContentPanel.anchoredPosition : Vector2.zero;
+
+        // Настройка полей ввода
+        SetupInputFields();
+
+        // Загрузка данных
+        StartCoroutine(LoadGroups());
+        LoadAvatarOptions();
+    }
+
+    void Update()
+    {
+#if UNITY_ANDROID || UNITY_IOS
+        // Проверка состояния клавиатуры
+        if (TouchScreenKeyboard.visible != isKeyboardVisible)
+        {
+            isKeyboardVisible = TouchScreenKeyboard.visible;
+            if (!isKeyboardVisible)
+            {
+                ResetContentPosition();
+            }
+        }
+#endif
+    }
+
+    void SetupInputFields()
+    {
+        // Настройка событий для всех полей ввода
+        InputField[] allInputs = GetComponentsInChildren<InputField>(true);
+        foreach (InputField input in allInputs)
+        {
+            // Добавляем EventTrigger если его нет
+            EventTrigger trigger = input.gameObject.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                trigger = input.gameObject.AddComponent<EventTrigger>();
+            }
+
+            // Создаем запись для события выбора
+            var entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.Select;
+            entry.callback.AddListener((data) => { OnInputSelected(input); });
+            trigger.triggers.Add(entry);
+
+            // Оставляем onEndEdit как есть
+            input.onEndEdit.AddListener((text) => OnInputDeselected(input));
+            input.shouldHideMobileInput = false;
+        }
+    }
+
+    void OnInputSelected(InputField input)
+    {
+        AdjustForKeyboard(input);
+    }
+
+    void OnInputDeselected(InputField input)
+    {
+        ResetContentPosition();
+    }
+
+    void AdjustForKeyboard(InputField input)
+    {
+        if (input == null || registrationContentPanel == null) return;
+
+        Canvas.ForceUpdateCanvases();
+
+        // Получаем позицию поля ввода
+        RectTransform inputRect = input.GetComponent<RectTransform>();
+        Vector2 inputPosition = (Vector2)inputRect.transform.position;
+
+        // Вычисляем смещение
+        float keyboardHeight = GetKeyboardHeight();
+        float canvasHeight = GetComponent<RectTransform>().rect.height;
+        float inputBottom = inputPosition.y - inputRect.rect.height / 2;
+        float visiblePosition = canvasHeight - keyboardHeight - keyboardPadding;
+
+        if (inputBottom < visiblePosition)
+        {
+            float adjustment = visiblePosition - inputBottom;
+            registrationContentPanel.anchoredPosition += new Vector2(0, adjustment);
+        }
+    }
+
+    void ResetContentPosition()
+    {
+        if (registrationContentPanel != null)
+        {
+            registrationContentPanel.anchoredPosition = originalContentPosition;
+        }
+    }
+
+    float GetKeyboardHeight()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        using (AndroidJavaClass UnityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            AndroidJavaObject View = UnityClass.GetStatic<AndroidJavaObject>("currentActivity")
+                .Get<AndroidJavaObject>("mUnityPlayer").Call<AndroidJavaObject>("getView");
+            using (AndroidJavaObject rect = new AndroidJavaObject("android.graphics.Rect"))
+            {
+                View.Call("getWindowVisibleDisplayFrame", rect);
+                return Screen.height - rect.Call<int>("height");
+            }
+        }
+#elif UNITY_IOS && !UNITY_EDITOR
+        return TouchScreenKeyboard.area.height;
+#else
+        return 300; // Примерная высота для редактора
+#endif
     }
 
     void LoadAvatarOptions()
@@ -112,10 +232,7 @@ public class StudentRegistration : MonoBehaviour
 
         groups = task.Result;
 
-        // Добавляем заголовок в выпадающий список
         groupDropdown.options.Add(new Dropdown.OptionData("Выберите группу"));
-
-        // Сортируем группы по названию
         groups.Sort((a, b) => a.Title.CompareTo(b.Title));
 
         if (groups.Count > 0)
@@ -141,7 +258,6 @@ public class StudentRegistration : MonoBehaviour
 
     public void OnRegisterButtonClick()
     {
-        // Валидация полей
         string error = ValidateFields();
         if (!string.IsNullOrEmpty(error))
         {
@@ -149,7 +265,6 @@ public class StudentRegistration : MonoBehaviour
             return;
         }
 
-        // Переход к выбору аватара
         registrationPanel.SetActive(false);
         avatarSelectionPanel.SetActive(true);
         errorText.text = "";
@@ -193,14 +308,12 @@ public class StudentRegistration : MonoBehaviour
             return;
         }
 
-        // Получаем данные из полей
         string email = emailInput.text.Trim();
         string password = passwordInput.text.Trim();
         string firstName = firstNameInput.text.Trim();
         string lastName = lastNameInput.text.Trim();
         string secondName = secondNameInput.text.Trim();
 
-        // Получаем ID выбранной группы (теперь string)
         int selectedGroupIndex = groupDropdown.value - 1;
         if (selectedGroupIndex < 0 || selectedGroupIndex >= groups.Count)
         {
@@ -209,14 +322,12 @@ public class StudentRegistration : MonoBehaviour
             return;
         }
 
-        string groupId = groups[selectedGroupIndex].Id; // Теперь string
+        string groupId = groups[selectedGroupIndex].Id;
 
-        // Подготавливаем аватар
         Texture2D selectedTexture = avatarTextures[selectedAvatarIndex];
         Texture2D resizedTexture = ResizeTexture(selectedTexture, maxAvatarSize, maxAvatarSize);
         byte[] avatarBytes = resizedTexture.EncodeToPNG();
 
-        // Начинаем процесс регистрации
         StartCoroutine(RegisterStudent(email, password, firstName, lastName, secondName, groupId, avatarBytes));
     }
 
@@ -237,7 +348,7 @@ public class StudentRegistration : MonoBehaviour
     }
 
     IEnumerator RegisterStudent(string email, string password, string firstName,
-     string lastName, string secondName, string groupId, byte[] avatarBytes)
+        string lastName, string secondName, string groupId, byte[] avatarBytes)
     {
         if (loadingIndicator != null)
             loadingIndicator.SetActive(true);
@@ -268,7 +379,6 @@ public class StudentRegistration : MonoBehaviour
             loadingIndicator.SetActive(false);
     }
 
-
     public void OnBackButtonClick()
     {
         if (avatarSelectionPanel.activeSelf)
@@ -293,10 +403,5 @@ public class StudentRegistration : MonoBehaviour
         {
             return false;
         }
-    }
-
-    private void ShowError(string message)
-    {
-        errorText.text = message;
     }
 }

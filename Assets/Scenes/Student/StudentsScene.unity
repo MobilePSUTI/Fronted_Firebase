@@ -494,7 +494,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1627235319}
-  - {fileID: 1480670958}
+  - {fileID: 1344520085}
   m_Father: {fileID: 1021968665}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -677,12 +677,12 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
+    m_Top: -70
     m_Bottom: 0
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 1180.67, y: 1094.36}
+  m_CellSize: {x: 1180.67, y: 1264.48}
   m_Spacing: {x: 0, y: -0.83}
   m_Constraint: 1
   m_ConstraintCount: 1
@@ -752,7 +752,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newsContainer: {fileID: 623022561}
   scrollRect: {fileID: 1627235324}
-  loadingIndicator: {fileID: 1480670957}
+  loadingIndicator: {fileID: 1344520084}
 --- !u!1 &652711808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,6 +1388,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1316282581}
   m_CullTransparentMesh: 1
+--- !u!1 &1344520084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1344520085}
+  - component: {fileID: 1344520087}
+  - component: {fileID: 1344520086}
+  m_Layer: 5
+  m_Name: Back_indicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1344520085
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344520084}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1480670958}
+  m_Father: {fileID: 304003517}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1.8113, y: -16.9}
+  m_SizeDelta: {x: 1196.4, y: 2006.5}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1344520086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344520084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -2919426392279470979, guid: 3f6e4ea5bd0d98a4d9340582c003d386, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1344520087
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344520084}
+  m_CullTransparentMesh: 1
 --- !u!1 &1480670957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,17 +1490,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1480670957}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 304003517}
+  m_Father: {fileID: 1344520085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.8, y: 625}
-  m_SizeDelta: {x: 1049.3, y: 210.7}
+  m_AnchoredPosition: {x: 24.811298, y: 618.9001}
+  m_SizeDelta: {x: 1001.8, y: 231.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1480670959
 MonoBehaviour:
@@ -1461,11 +1537,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 133
+    m_FontSize: 147
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 133
+    m_MaxSize: 147
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1

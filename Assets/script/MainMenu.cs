@@ -63,12 +63,13 @@ public class MainMenu : MonoBehaviour
         {
             UserSession.CurrentUser = task.Result;
 
-            // Check user role
             if (UserSession.CurrentUser.Role == "student")
             {
                 errorText.text = "";
-                // Загружаем новости перед переходом на сцену
-                yield return StartCoroutine(LoadNewsBeforeTransition());
+                // Запускаем загрузку новостей в фоне
+                StartCoroutine(LoadNewsInBackground());
+                // Переходим сразу на сцену студентов
+                yield return StartCoroutine(LoadStudentsSceneAsync());
             }
             else
             {
@@ -83,6 +84,42 @@ public class MainMenu : MonoBehaviour
 
         if (loadingIndicator != null)
             loadingIndicator.SetActive(false);
+    }
+
+    IEnumerator LoadNewsInBackground()
+    {
+        isNewsLoading = true;
+        var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
+        yield return StartCoroutine(vkNewsLoad.GetNewsFromVK(0, 100));
+
+        if (vkNewsLoad.allPosts != null && vkNewsLoad.groupDictionary != null)
+        {
+            NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
+            NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
+            Debug.Log("Новости успешно загружены в фоне");
+        }
+        else
+        {
+            Debug.LogWarning("Не удалось загрузить новости в фоне");
+        }
+
+        Destroy(vkNewsLoad);
+        isNewsLoading = false;
+    }
+
+    IEnumerator LoadStudentsSceneAsync()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("StudentsScene");
+        asyncLoad.allowSceneActivation = false;
+
+        while (!asyncLoad.isDone)
+        {
+            if (asyncLoad.progress >= 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
+            yield return null;
+        }
     }
 
     public void OnNewsButtonClick()
@@ -106,10 +143,8 @@ public class MainMenu : MonoBehaviour
         if (loadingIndicator != null)
             loadingIndicator.SetActive(true);
 
-        // Загружаем новости
         yield return StartCoroutine(GetNewsFromVK());
 
-        // Переходим на сцену студентов
         yield return StartCoroutine(LoadStudentsSceneAsync());
 
         if (loadingIndicator != null)
@@ -123,35 +158,18 @@ public class MainMenu : MonoBehaviour
         var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
         yield return StartCoroutine(vkNewsLoad.GetNewsFromVK(0, 100));
 
-        // Сохраняем данные в кэш
         if (vkNewsLoad.allPosts != null && vkNewsLoad.groupDictionary != null)
         {
             NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
             NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
-            Debug.Log("Новости успешно загружены и сохранены в кэш");
+            Debug.Log("Новости успешно загружены");
         }
         else
         {
             Debug.LogError("Не удалось загрузить новости");
             errorText.text = "Ошибка загрузки новостей";
-            yield break;
         }
 
         Destroy(vkNewsLoad);
-    }
-
-    IEnumerator LoadStudentsSceneAsync()
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("StudentsScene");
-        asyncLoad.allowSceneActivation = false;
-
-        while (!asyncLoad.isDone)
-        {
-            if (asyncLoad.progress >= 0.9f)
-            {
-                asyncLoad.allowSceneActivation = true;
-            }
-            yield return null;
-        }
     }
 }

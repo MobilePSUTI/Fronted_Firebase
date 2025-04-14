@@ -25,20 +25,11 @@ public class NewsSceneManager : MonoBehaviour
     private GameObject newsItemWithoutPhotoPrefab; // Префаб новости без фото
 
     private Queue<GameObject> newsItemPool = new Queue<GameObject>(); // Пул объектов для новостей
+    private bool isInitialLoadComplete = false;
 
     void Start()
     {
-        // Инициализируем lastUpdateTime текущим временем
-        lastUpdateTime = DateTime.Now;
-
-        // Проверяем, что контейнер для новостей назначен
-        if (newsContainer == null)
-        {
-            Debug.LogError("Контейнер для новостей (newsContainer) не назначен.");
-            return;
-        }
-
-        // Загружаем префабы один раз при старте
+        // Загружаем префабы
         newsItemWithPhotoPrefab = Resources.Load<GameObject>(NewsItemWithPhotoPrefabPath);
         newsItemWithoutPhotoPrefab = Resources.Load<GameObject>(NewsItemWithoutPhotoPrefabPath);
 
@@ -51,14 +42,64 @@ public class NewsSceneManager : MonoBehaviour
         // Показываем индикатор загрузки
         if (loadingIndicator != null)
             loadingIndicator.SetActive(true);
-
-        // Загружаем новости из кэша
-        StartCoroutine(DisplayCachedNews());
-
-        // Запускаем корутину для периодической проверки обновлений
-        StartCoroutine(CheckForUpdates());
+        lastUpdateTime = DateTime.Now;
+        // Начинаем загрузку новостей
+        StartCoroutine(LoadNewsAndDisplay());
     }
+    IEnumerator LoadNewsAndDisplay()
+    {
+        // Загружаем новости
+        var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
+        yield return StartCoroutine(vkNewsLoad.GetNewsFromVK(0, 100));
 
+        // Проверяем результат
+        if (vkNewsLoad.allPosts != null && vkNewsLoad.groupDictionary != null)
+        {
+            // Сохраняем в кэш
+            NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
+            NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
+
+            // Отображаем новости
+            yield return StartCoroutine(DisplayNews(vkNewsLoad.allPosts, vkNewsLoad.groupDictionary));
+        }
+        else
+        {
+            Debug.LogError("Не удалось загрузить новости");
+            // Можно добавить повторную попытку здесь
+        }
+
+        // Скрываем индикатор загрузки
+        if (loadingIndicator != null)
+            loadingIndicator.SetActive(false);
+
+        Destroy(vkNewsLoad);
+        isInitialLoadComplete = true;
+    }
+    IEnumerator DisplayNews(List<Post> posts, Dictionary<long, VKGroup> groups)
+    {
+        // Очищаем старые новости
+        foreach (Transform child in newsContainer)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        // Отображаем новые новости
+        foreach (var post in posts)
+        {
+            bool hasText = !string.IsNullOrEmpty(post.text);
+            bool hasImage = post.attachments != null && post.attachments.Any(a => a.type == "photo");
+
+            if (!hasText && !hasImage) continue;
+
+            var group = groups.ContainsKey(-post.owner_id) ? groups[-post.owner_id] : null;
+            if (group == null) continue;
+
+            GameObject newsItem = GetNewsItemFromPool(hasImage);
+            SetupNewsItem(newsItem, post, group, hasText, hasImage);
+
+            yield return null;
+        }
+    }
     void Update()
     {
         // Проверяем, тянет ли пользователь список
@@ -95,50 +136,39 @@ public class NewsSceneManager : MonoBehaviour
 
     IEnumerator CheckAndUpdateNews()
     {
-        // Если обновление уже выполняется, выходим
-        if (isUpdating)
-        {
-            yield break;
-        }
+        if (isUpdating) yield break;
+        isUpdating = true;
 
-        isUpdating = true; // Устанавливаем флаг обновления
-
-        // Проверяем, что lastUpdateTime находится в допустимом диапазоне
+        // Защита от некорректной даты
         if (lastUpdateTime.Year < 1 || lastUpdateTime.Year > 9999)
         {
-            Debug.LogError("Некорректное значение lastUpdateTime.");
-            isUpdating = false;
-            yield break;
-        }
-
-        // Загружаем новости из ВКонтакте
-        var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
-        yield return StartCoroutine(vkNewsLoad.GetNewsFromVK());
-
-        // Преобразуем lastUpdateTime в Unix timestamp для сравнения
-        long lastUpdateTimestamp = ((DateTimeOffset)lastUpdateTime).ToUnixTimeSeconds();
-
-        // Проверяем, есть ли новые новости
-        var newPosts = vkNewsLoad.allPosts
-            .Where(p => p.date > lastUpdateTimestamp) // Сравниваем Unix timestamp
-            .ToList();
-
-        if (newPosts.Count > 0)
-        {
-            // Обновляем время последнего обновления
             lastUpdateTime = DateTime.Now;
-
-            // Добавляем новые новости в начало списка
-            NewsDataCache.CachedPosts.InsertRange(0, newPosts);
-
-            // Обновляем UI
-            yield return StartCoroutine(AddNewPostsToUI(newPosts));
         }
 
-        // Уничтожаем временный компонент
-        Destroy(vkNewsLoad);
+        try
+        {
+            long lastUpdateTimestamp = new DateTimeOffset(lastUpdateTime).ToUnixTimeSeconds();
 
-        isUpdating = false; // Сбрасываем флаг обновления
+            var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
+            yield return StartCoroutine(vkNewsLoad.GetNewsFromVK());
+
+            var newPosts = vkNewsLoad.allPosts
+                .Where(p => p.date > lastUpdateTimestamp)
+                .ToList();
+
+            if (newPosts.Count > 0)
+            {
+                lastUpdateTime = DateTime.Now;
+                NewsDataCache.CachedPosts.InsertRange(0, newPosts);
+                yield return StartCoroutine(AddNewPostsToUI(newPosts));
+            }
+
+            Destroy(vkNewsLoad);
+        }
+        finally
+        {
+            isUpdating = false;
+        }
     }
 
     IEnumerator AddNewPostsToUI(List<Post> newPosts)
@@ -234,6 +264,13 @@ public class NewsSceneManager : MonoBehaviour
         {
             if (item.activeInHierarchy == false && item.name == newsItemPrefab.name)
             {
+                // Сбрасываем трансформацию изображения
+                var foto = item.transform.Find("Foto")?.GetComponent<RawImage>();
+                if (foto != null)
+                {
+                    foto.GetComponent<RectTransform>().sizeDelta = new Vector2(newsItemPrefab.GetComponent<RectTransform>().rect.width, 0);
+                }
+
                 item.SetActive(true);
                 return item;
             }
@@ -247,35 +284,75 @@ public class NewsSceneManager : MonoBehaviour
 
     void SetupNewsItem(GameObject newsItem, Post post, VKGroup group, bool hasText, bool hasImage)
     {
+        // Существующие компоненты
         var nameGroup = newsItem.transform.Find("Name_group")?.GetComponent<Text>();
         var dateTimeText = newsItem.transform.Find("DateTimeText")?.GetComponent<Text>();
-        var newsText = newsItem.transform.Find("Text (Legacy)")?.GetComponent<Text>();
         var fotoGroup = newsItem.transform.Find("foto_group")?.GetComponent<RawImage>();
         var foto = newsItem.transform.Find("Foto")?.GetComponent<RawImage>();
 
-        if (nameGroup == null || dateTimeText == null || newsText == null)
-        {
-            Debug.LogError("Не удалось найти необходимые компоненты в префабе.");
-            return;
-        }
-
+        // Инициализация стандартных полей
         nameGroup.text = group.name;
         StartCoroutine(LoadGroupImage(group.photo_200, fotoGroup));
-
-        newsText.text = hasText ? post.text : "";
 
         System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(post.date).ToLocalTime();
         dateTimeText.text = dateTime.ToString("dd.MM.yyyy HH:mm");
 
-        if (hasImage)
+        // Настройка изображения
+        if (hasImage && foto != null)
         {
             var photoSize = post.attachments.First(a => a.type == "photo").photo.sizes.FirstOrDefault(s => s.type == "x");
             if (photoSize != null && !string.IsNullOrEmpty(photoSize.url))
             {
-                StartCoroutine(LoadImage(photoSize.url, foto));
+                StartCoroutine(LoadAndScaleImage(photoSize.url, foto, photoSize.width, photoSize.height));
             }
         }
+
+        // Инициализация расширяемого текста
+        var expandableText = newsItem.GetComponent<ExpandableNewsText>();
+        if (expandableText == null)
+        {
+            expandableText = newsItem.AddComponent<ExpandableNewsText>();
+            expandableText.textShort = newsItem.transform.Find("Text_Short")?.GetComponent<Text>();
+            expandableText.textFull = newsItem.transform.Find("Text_Full")?.GetComponent<Text>();
+            expandableText.showMoreButton = newsItem.transform.Find("Button_ShowMore")?.GetComponent<Button>();
+        }
+
+        expandableText.Initialize(hasText ? post.text : "");
+    }
+
+    IEnumerator LoadAndScaleImage(string url, RawImage targetImage, int originalWidth, int originalHeight)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("Ошибка загрузки: " + request.error);
+            yield break;
+        }
+
+        // Получаем текстуру
+        Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+        targetImage.texture = texture;
+
+        // Настройка размеров
+        RectTransform imageRect = targetImage.GetComponent<RectTransform>();
+        float containerWidth = imageRect.parent.GetComponent<RectTransform>().rect.width;
+        float aspectRatio = (float)originalWidth / originalHeight;
+
+        // Рассчитываем высоту с учетом пропорций
+        float targetHeight = containerWidth / aspectRatio;
+
+        // Ограничиваем максимальную высоту (например, 600px или высоту контейнера)
+        float maxHeight = 850f; // Замените на нужное значение
+        targetHeight = Mathf.Min(targetHeight, maxHeight);
+
+        // Устанавливаем размер
+        imageRect.sizeDelta = new Vector2(containerWidth, targetHeight);
+
+        // Принудительно обновляем макет
+        LayoutRebuilder.ForceRebuildLayoutImmediate(imageRect.parent.GetComponent<RectTransform>());
     }
 
     IEnumerator LoadGroupImage(string url, RawImage targetImage)
