@@ -2,38 +2,59 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 public class StudentListManager : MonoBehaviour
 {
     public GameObject studentPrefab;
     public Transform studentParent;
+    public GameObject loadingIndicator;
 
     async void Start()
     {
-        var dbManager = gameObject.AddComponent<FirebaseDBManager>();
-        await dbManager.Initialize();
+        if (loadingIndicator != null) loadingIndicator.SetActive(true);
 
-        var students = await dbManager.GetStudentsByGroup(UserSession.SelectedGroupId);
-
-        if (students != null && students.Count > 0)
+        try
         {
-            CreateStudentList(students);
+            // Проверяем кеш
+            if (UserSession.CachedStudents.TryGetValue(UserSession.SelectedGroupId, out var cachedStudents))
+            {
+                CreateStudentList(cachedStudents);
+                return;
+            }
+
+            var dbManager = gameObject.AddComponent<FirebaseDBManager>();
+            await dbManager.Initialize();
+
+            var students = await dbManager.GetStudentsByGroup(UserSession.SelectedGroupId);
+
+            if (students != null && students.Count > 0)
+            {
+                // Сохраняем в кеш
+                UserSession.CachedStudents[UserSession.SelectedGroupId] = students;
+                CreateStudentList(students);
+            }
+            else
+            {
+                Debug.LogWarning("Нет студентов в выбранной группе");
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            Debug.LogWarning("Нет студентов в выбранной группе");
+            Debug.LogError($"Ошибка загрузки студентов: {ex.Message}");
+        }
+        finally
+        {
+            if (loadingIndicator != null) loadingIndicator.SetActive(false);
         }
     }
 
-    public async void CreateStudentList(List<Student> students)
+    async void CreateStudentList(List<Student> students)
     {
         var dbManager = FindObjectOfType<FirebaseDBManager>();
 
         foreach (Student student in students)
         {
-            // Заранее загружаем GroupName
             student.GroupName = await dbManager.GetGroupName(student.GroupId);
 
             GameObject studentUI = Instantiate(studentPrefab, studentParent);

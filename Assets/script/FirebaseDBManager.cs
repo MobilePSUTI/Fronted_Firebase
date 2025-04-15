@@ -93,7 +93,8 @@ public class FirebaseDBManager : MonoBehaviour
                             Last = userSnapshot.Child("last_name")?.Value?.ToString() ?? "",
                             Second = userSnapshot.Child("second_name")?.Value?.ToString() ?? "",
                             GroupName = await GetGroupName(userSnapshot.Child("group_id")?.Value?.ToString()),
-                            Role = role
+                            Role = role,
+                            // написать загрузку аватара при входе студента
                         };
                     }
                     else
@@ -112,18 +113,6 @@ public class FirebaseDBManager : MonoBehaviour
             Debug.LogError($"[Auth] Critical error: {ex.Message}\n{ex.StackTrace}");
             return null;
         }
-    }
-
-    private DataSnapshot FindTableInSnapshot(DataSnapshot snapshot, string tableName)
-    {
-        foreach (DataSnapshot node in snapshot.Children)
-        {
-            if (node.HasChild("name") && node.Child("name").Value?.ToString() == tableName)
-            {
-                return node.Child("data");
-            }
-        }
-        return null;
     }
 
     public async Task<string> GetGroupName(string groupId)
