@@ -7,8 +7,23 @@ using System;
 
 public class FirebaseDBManager : MonoBehaviour
 {
+    private static FirebaseDBManager _instance;
+    public static FirebaseDBManager Instance => _instance;
+
     private DatabaseReference databaseRef;
     private bool isInitialized = false;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this); // ”ничтожаем только компонент, а не весь GameObject
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject); // ѕереносим только этот объект
+    }
 
     public async Task Initialize()
     {

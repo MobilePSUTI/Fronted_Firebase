@@ -29,46 +29,36 @@ public class NewsSceneManager : MonoBehaviour
 
     void Start()
     {
-        // Загружаем префабы
         newsItemWithPhotoPrefab = Resources.Load<GameObject>(NewsItemWithPhotoPrefabPath);
         newsItemWithoutPhotoPrefab = Resources.Load<GameObject>(NewsItemWithoutPhotoPrefabPath);
 
-        if (newsItemWithPhotoPrefab == null || newsItemWithoutPhotoPrefab == null)
-        {
-            Debug.LogError("Префабы не найдены в папке Resources.");
-            return;
-        }
-
-        // Показываем индикатор загрузки
         if (loadingIndicator != null)
             loadingIndicator.SetActive(true);
-        lastUpdateTime = DateTime.Now;
-        // Начинаем загрузку новостей
+
+        // Всегда сначала показываем кэшированные данные, если они есть
+        if (NewsDataCache.CachedPosts != null && NewsDataCache.CachedPosts.Count > 0 &&
+            NewsDataCache.CachedVKGroups != null && NewsDataCache.CachedVKGroups.Count > 0)
+        {
+            StartCoroutine(DisplayCachedNews());
+        }
+
+        // Затем загружаем свежие данные
         StartCoroutine(LoadNewsAndDisplay());
     }
     IEnumerator LoadNewsAndDisplay()
     {
-        // Загружаем новости
         var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
         yield return StartCoroutine(vkNewsLoad.GetNewsFromVK(0, 100));
 
-        // Проверяем результат
         if (vkNewsLoad.allPosts != null && vkNewsLoad.groupDictionary != null)
         {
-            // Сохраняем в кэш
             NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
             NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
+            NewsDataCache.SaveCacheToPersistentStorage();
 
-            // Отображаем новости
             yield return StartCoroutine(DisplayNews(vkNewsLoad.allPosts, vkNewsLoad.groupDictionary));
         }
-        else
-        {
-            Debug.LogError("Не удалось загрузить новости");
-            // Можно добавить повторную попытку здесь
-        }
 
-        // Скрываем индикатор загрузки
         if (loadingIndicator != null)
             loadingIndicator.SetActive(false);
 

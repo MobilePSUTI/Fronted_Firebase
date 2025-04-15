@@ -3,8 +3,28 @@
   "WorkspaceRootPath": "D:\\Fronted_Firebase\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\studentlistmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\studentlistmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\prmenumodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\prmenumodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\groupbuttoncreator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\groupbuttoncreator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\usersession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\usersession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\firebasedbmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\firebasedbmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +34,84 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
+              "Title": "UserSession.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\UserSession.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\UserSession.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\UserSession.cs",
+              "RelativeToolTip": "Assets\\script\\UserSession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-15T07:06:58.145Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "PrMenuModel.cs",
               "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\PrMenuModel.cs",
               "RelativeDocumentMoniker": "Assets\\script\\PrMenuModel.cs",
               "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\PrMenuModel.cs",
               "RelativeToolTip": "Assets\\script\\PrMenuModel.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAAwCkAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAKwAAAAAAAAAAAAYwL0AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-15T06:18:51.505Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GroupButtonCreator.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\GroupButtonCreator.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\GroupButtonCreator.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\GroupButtonCreator.cs",
+              "RelativeToolTip": "Assets\\script\\GroupButtonCreator.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAYwEEAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-15T08:07:42.004Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StudentListManager.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\StudentListManager.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\StudentListManager.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\StudentListManager.cs",
+              "RelativeToolTip": "Assets\\script\\StudentListManager.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAgwDkAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-15T08:15:03.228Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\User.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\User.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\User.cs",
+              "RelativeToolTip": "Assets\\script\\User.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAswBQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-15T07:06:59.564Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FirebaseDBManager.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\FirebaseDBManager.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\FirebaseDBManager.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\FirebaseDBManager.cs",
+              "RelativeToolTip": "Assets\\script\\FirebaseDBManager.cs",
+              "ViewState": "AgIAAJMBAAAAAAAAAAAQwMcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-15T07:04:06.716Z",
               "EditorCaption": ""
             }
           ]
