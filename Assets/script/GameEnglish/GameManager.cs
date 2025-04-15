@@ -3,7 +3,7 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.IO;
-using System.Linq; // Для использования Distinct()
+using System.Linq; // Р”Р»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ Distinct()
 
 public class GameManager : MonoBehaviour
 {
@@ -24,12 +24,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI coinsText;
     public TextMeshProUGUI timerText;
 
-    // Списки слов
+    // РЎРїРёСЃРєРё СЃР»РѕРІ
     private List<string> easyWords = new List<string>();
     private List<string> mediumWords = new List<string>();
     private List<string> hardWords = new List<string>();
 
-    // Резервные списки слов
+    // Р РµР·РµСЂРІРЅС‹Рµ СЃРїРёСЃРєРё СЃР»РѕРІ
     private readonly List<string> defaultEasyWords = new List<string> { "cat", "dog", "sun", "hat", "pen" };
     private readonly List<string> defaultMediumWords = new List<string> { "apple", "house", "water", "light", "music" };
     private readonly List<string> defaultHardWords = new List<string> { "elephant", "computer", "keyboard", "adventure", "mountain" };
@@ -84,11 +84,11 @@ public class GameManager : MonoBehaviour
             return new List<string>(defaultWords);
         }
 
-        // Разделяем текст файла по строкам и удаляем пустые записи
+        // Р Р°Р·РґРµР»СЏРµРј С‚РµРєСЃС‚ С„Р°Р№Р»Р° РїРѕ СЃС‚СЂРѕРєР°Рј Рё СѓРґР°Р»СЏРµРј РїСѓСЃС‚С‹Рµ Р·Р°РїРёСЃРё
         var words = file.text.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries)
-                            .Select(w => w.Trim()) // Удаляем пробелы по краям
-                            .Where(w => !string.IsNullOrWhiteSpace(w)) // Игнорируем пустые строки
-                            .Distinct() // Удаляем дубликаты
+                            .Select(w => w.Trim()) // РЈРґР°Р»СЏРµРј РїСЂРѕР±РµР»С‹ РїРѕ РєСЂР°СЏРј
+                            .Where(w => !string.IsNullOrWhiteSpace(w)) // РРіРЅРѕСЂРёСЂСѓРµРј РїСѓСЃС‚С‹Рµ СЃС‚СЂРѕРєРё
+                            .Distinct() // РЈРґР°Р»СЏРµРј РґСѓР±Р»РёРєР°С‚С‹
                             .ToList();
 
         if (words.Count == 0)

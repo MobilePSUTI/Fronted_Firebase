@@ -3,40 +3,43 @@ using TMPro;
 
 public class EnemyController : MonoBehaviour
 {
-    [Header("Настройки")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     public float moveSpeed = 2f;
     public TextMeshProUGUI wordDisplay;
     public string targetWord;
-    private string currentTyped = "";
-    private int hiddenLetterIndex; // Индекс скрытой буквы
-    // позиция y = -343480
+    private string currentTyped = ""; 
+    private int hiddenLetterIndex; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    private GameObject borderLine;
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ y = -343480
 
     private void Start()
     {
-        // Получаем случайное слово
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         targetWord = GameManager.Instance.GetRandomWord().ToLower();
 
-        // Выбираем случайную букву для скрытия (кроме первой)
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
         hiddenLetterIndex = Random.Range(1, targetWord.Length);
 
-        // Инициализируем отображение слова
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         UpdateWordDisplay();
 
-        // Настраиваем TextMeshPro
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ TextMeshPro
         if (wordDisplay == null)
         {
             wordDisplay = GetComponentInChildren<TextMeshProUGUI>();
         }
+        
+        borderLine = GameObject.Find("BorderLine");
     }
 
     private void Update()
     {
         if (PauseManager.Instance.IsGamePaused()) return;
-        // Движение вниз
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
 
-        // Если враг ушел за экран
-        if (transform.position.y < -5f)
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+        if (transform.position.y < borderLine.transform.position.y)
         {
             GameManager.Instance.WordMissed();
             Destroy(gameObject);
@@ -47,10 +50,10 @@ public class EnemyController : MonoBehaviour
     {
         key = char.ToLower(key);
 
-        // Проверяем, соответствует ли нажатая клавиша скрытой букве
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         if (targetWord[hiddenLetterIndex] == key)
         {
-            currentTyped = targetWord; // Считаем слово угаданным
+            currentTyped = targetWord; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             UpdateWordDisplay();
             WordCompleted();
         }
@@ -61,10 +64,10 @@ public class EnemyController : MonoBehaviour
         string display = "";
         for (int i = 0; i < targetWord.Length; i++)
         {
-            // Показываем букву, если она уже введена или это не скрытая буква
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             if (i < currentTyped.Length || i != hiddenLetterIndex)
             {
-                // Подсвечиваем уже введенные буквы зеленым
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 if (i < currentTyped.Length)
                     display += "<color=green>" + targetWord[i] + "</color>";
                 else
@@ -72,7 +75,7 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                display += "_"; // Скрытая буква
+                display += "_"; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             }
         }
         wordDisplay.text = display;
