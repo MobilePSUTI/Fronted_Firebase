@@ -4,29 +4,33 @@ using UnityEngine.UI;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    private float spawnTimer;
     public float spawnInterval = 3f;
     public RectTransform spawnArea;
 
     private void Update()
     {
-        if (Time.timeSinceLevelLoad % spawnInterval < Time.deltaTime)
+
+        spawnTimer += Time.deltaTime;
+        if (spawnTimer >= spawnInterval)
         {
             SpawnEnemy();
+            spawnTimer = 0f;
             spawnInterval = Mathf.Max(1f, spawnInterval * 0.98f);
         }
     }
 
     private void SpawnEnemy()
-{
-    // Координаты для спавна в верхней части экрана
-    Vector2 spawnPos = new Vector2(
-        Random.Range(-300f, 300f),
-        400f // Отступ сверху
-    );
+    {
+        // РљРѕРѕСЂРґРёРЅР°С‚С‹ РґР»СЏ СЃРїР°РІРЅР° РІ РІРµСЂС…РЅРµР№ С‡Р°СЃС‚Рё СЌРєСЂР°РЅР°
+        Vector2 spawnPos = new Vector2(
+            Random.Range(-300f, 300f),
+            400f // РћС‚СЃС‚СѓРї СЃРІРµСЂС…Сѓ
+        );
     
-    GameObject enemy = Instantiate(enemyPrefab, spawnArea.transform);
-    RectTransform rt = enemy.GetComponent<RectTransform>();
-    rt.anchoredPosition = spawnPos;
-    rt.localScale = Vector3.one; // Важно!
-}
+        GameObject enemy = Instantiate(enemyPrefab, spawnArea.transform);
+        RectTransform rt = enemy.GetComponent<RectTransform>();
+        rt.anchoredPosition = spawnPos;
+        rt.localScale = Vector3.one; // Р’Р°Р¶РЅРѕ!
+    }
 }
