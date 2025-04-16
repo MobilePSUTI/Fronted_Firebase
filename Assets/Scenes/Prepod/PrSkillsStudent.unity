@@ -1860,7 +1860,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0, y: 471.3}
+  m_AnchoredPosition: {x: 0, y: 471.3}
   m_SizeDelta: {x: 807.9, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &523965610
@@ -3277,6 +3277,7 @@ GameObject:
   - component: {fileID: 873512650}
   - component: {fileID: 873512649}
   - component: {fileID: 873512651}
+  - component: {fileID: 873512652}
   m_Layer: 5
   m_Name: skills_student
   m_TagString: Untagged
@@ -3358,8 +3359,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a26d89fc2818b469bb341fb015ef7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  studentGroupText: {fileID: 1680657410}
   studentNameText: {fileID: 1946400288}
+  studentGroupText: {fileID: 1680657410}
+  skillsManager: {fileID: 873512652}
+--- !u!114 &873512652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873512647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae046f774ad2a0548ace562710b632c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainSkillsButton: {fileID: 1059451720}
+  additionalSkillsButton: {fileID: 2082070783}
+  mainSkillsPanel: {fileID: 1362649665}
+  additionalSkillsPanel: {fileID: 690188606}
+  mainSkillTexts:
+  - {fileID: 363082361}
+  - {fileID: 2115341821}
+  - {fileID: 767850751}
+  - {fileID: 1080230862}
+  - {fileID: 1223864067}
+  - {fileID: 640593733}
+  - {fileID: 383347222}
+  additionalSkillTexts:
+  - {fileID: 1233117183}
+  - {fileID: 1276466827}
+  - {fileID: 1352660395}
+  - {fileID: 342653052}
+  - {fileID: 956464501}
+  - {fileID: 593074237}
+  - {fileID: 1776312634}
+  mainSkillButtons:
+  - {fileID: 1324121121}
+  - {fileID: 544049515}
+  - {fileID: 657086933}
+  - {fileID: 692283056}
+  - {fileID: 106779669}
+  - {fileID: 1434740171}
+  - {fileID: 475571841}
+  additionalSkillButtons:
+  - {fileID: 1683715031}
+  - {fileID: 1490622404}
+  - {fileID: 1873221404}
+  - {fileID: 212309087}
+  - {fileID: 378348433}
+  - {fileID: 1092654932}
+  - {fileID: 331622784}
 --- !u!1 &898093447
 GameObject:
   m_ObjectHideFlags: 0

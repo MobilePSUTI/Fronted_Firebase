@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\Fronted_Firebase\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|D:\\Fronted_Firebase\\assets\\script\\news\\newsscenemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\news\\newsscenemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\studentprogresscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\studentprogresscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\news\\vknewsload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\news\\vknewsload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|D:\\Fronted_Firebase\\assets\\script\\firebasedbmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\firebasedbmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,33 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "VKNewsLoad.cs",
-              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\News\\VKNewsLoad.cs",
-              "RelativeDocumentMoniker": "Assets\\script\\News\\VKNewsLoad.cs",
-              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\News\\VKNewsLoad.cs",
-              "RelativeToolTip": "Assets\\script\\News\\VKNewsLoad.cs",
-              "ViewState": "AgIAAEQAAAAAAAAAAAAAAIwAAAARAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "StudentProgressController.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\StudentProgressController.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\StudentProgressController.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\StudentProgressController.cs",
+              "RelativeToolTip": "Assets\\script\\StudentProgressController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T22:20:54.265Z",
+              "WhenOpened": "2025-04-16T20:13:46.114Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "NewsSceneManager.cs",
-              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\News\\NewsSceneManager.cs",
-              "RelativeDocumentMoniker": "Assets\\script\\News\\NewsSceneManager.cs",
-              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\News\\NewsSceneManager.cs",
-              "RelativeToolTip": "Assets\\script\\News\\NewsSceneManager.cs",
-              "ViewState": "AgIAAKIAAAAAAAAAAAAqwLIAAAAaAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "MainMenu.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\MainMenu.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\MainMenu.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\MainMenu.cs",
+              "RelativeToolTip": "Assets\\script\\MainMenu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T20:54:59.354Z",
+              "WhenOpened": "2025-04-16T19:58:30.349Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FirebaseDBManager.cs",
+              "DocumentMoniker": "D:\\Fronted_Firebase\\Assets\\script\\FirebaseDBManager.cs",
+              "RelativeDocumentMoniker": "Assets\\script\\FirebaseDBManager.cs",
+              "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\FirebaseDBManager.cs",
+              "RelativeToolTip": "Assets\\script\\FirebaseDBManager.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAAwDMAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-16T19:41:30.604Z"
             }
           ]
         }

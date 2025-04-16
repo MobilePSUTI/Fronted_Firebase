@@ -71,6 +71,7 @@
     <Compile Include="Assets\script\GameStMl\FacultySelector.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\script\Group.cs" />
+    <Compile Include="Assets\script\PrSkillsManager.cs" />
     <Compile Include="Assets\script\GameEnglish\GameManager.cs" />
     <Compile Include="Assets\script\PageAuth.cs" />
     <Compile Include="Assets\script\ChatManager.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\script\LoadingText.cs" />
+    <Compile Include="Assets\script\StudentProgressController.cs" />
     <Compile Include="Assets\script\SceneLoader.cs" />
     <Compile Include="Assets\script\Panel\ClosePanel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
