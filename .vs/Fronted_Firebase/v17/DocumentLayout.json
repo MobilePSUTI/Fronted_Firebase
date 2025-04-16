@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\studentprogresscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|d:\\fronted_firebase\\assets\\script\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|D:\\Fronted_Firebase\\assets\\script\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{35D6CE1D-5CCD-F79D-772F-D9C368716C2D}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "Assets\\script\\StudentProgressController.cs",
               "ToolTip": "D:\\Fronted_Firebase\\Assets\\script\\StudentProgressController.cs",
               "RelativeToolTip": "Assets\\script\\StudentProgressController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAALAAAAAAAAAAAAAAAL8AAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-16T20:13:46.114Z",
               "EditorCaption": ""
@@ -47,8 +47,7 @@
               "RelativeToolTip": "Assets\\script\\MainMenu.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T19:58:30.349Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T19:58:30.349Z"
             },
             {
               "$type": "Document",

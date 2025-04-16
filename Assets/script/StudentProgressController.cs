@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Firebase.Database;
 using System;
-using System.Threading.Tasks;
 
 public class StudentProgressController : MonoBehaviour
 {
@@ -30,10 +30,12 @@ public class StudentProgressController : MonoBehaviour
     private Dictionary<string, SkillData> allSkills = new Dictionary<string, SkillData>();
     private Dictionary<string, int> studentMainSkills = new Dictionary<string, int>();
     private Dictionary<string, int> studentAdditionalSkills = new Dictionary<string, int>();
+    private List<string> programMainSkills = new List<string>(); // Основные скиллы программы
 
     private async void Start()
     {
         await LoadAllSkills();
+        await LoadStudentData();
         await LoadStudentSkills();
         UpdateSkillUI();
     }
@@ -65,6 +67,56 @@ public class StudentProgressController : MonoBehaviour
         }
     }
 
+    private async Task LoadStudentData()
+    {
+        if (UserSession.CurrentUser == null) return;
+
+        try
+        {
+            // 1. Получаем group_id студента
+            DataSnapshot studentSnapshot = await FirebaseDatabase.DefaultInstance
+                .GetReference("14/data/" + UserSession.CurrentUser.Id)
+                .GetValueAsync();
+
+            if (studentSnapshot.Exists)
+            {
+                string groupId = studentSnapshot.Child("group_id").Value.ToString();
+
+                // 2. Получаем educational_program_id группы
+                DataSnapshot groupSnapshot = await FirebaseDatabase.DefaultInstance
+                    .GetReference("6/data/" + groupId)
+                    .GetValueAsync();
+
+                if (groupSnapshot.Exists)
+                {
+                    string programId = groupSnapshot.Child("educational_program_id").Value.ToString();
+
+                    // 3. Получаем main_skills программы
+                    DataSnapshot programSnapshot = await FirebaseDatabase.DefaultInstance
+                        .GetReference("4/data/" + programId)
+                        .GetValueAsync();
+
+                    if (programSnapshot.Exists)
+                    {
+                        // Получаем список ID основных скиллов для этой программы
+                        DataSnapshot mainSkillsSnapshot = programSnapshot.Child("main_skills");
+                        if (mainSkillsSnapshot.Exists)
+                        {
+                            foreach (DataSnapshot skillIdSnapshot in mainSkillsSnapshot.Children)
+                            {
+                                programMainSkills.Add(skillIdSnapshot.Value.ToString());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error loading student data: {ex.Message}");
+        }
+    }
+
     private async Task LoadStudentSkills()
     {
         if (UserSession.CurrentUser == null) return;
@@ -77,21 +129,22 @@ public class StudentProgressController : MonoBehaviour
 
             if (snapshot.Exists)
             {
-                // Load main skills
+                // Load main skills (only those that belong to student's program)
                 DataSnapshot mainSkillsSnapshot = snapshot.Child("main_skills");
                 if (mainSkillsSnapshot.Exists)
                 {
                     foreach (DataSnapshot skillSnapshot in mainSkillsSnapshot.Children)
                     {
                         string skillId = skillSnapshot.Key;
-                        if (int.TryParse(skillSnapshot.Value.ToString(), out int points))
+                        if (programMainSkills.Contains(skillId) &&
+                            int.TryParse(skillSnapshot.Value.ToString(), out int points))
                         {
                             studentMainSkills[skillId] = points;
                         }
                     }
                 }
 
-                // Load additional skills
+                // Load additional skills (all)
                 DataSnapshot additionalSkillsSnapshot = snapshot.Child("additional_skills");
                 if (additionalSkillsSnapshot.Exists)
                 {
@@ -114,24 +167,24 @@ public class StudentProgressController : MonoBehaviour
 
     private void UpdateSkillUI()
     {
-        // Update main skills
-        var mainSkills = allSkills.Values
-            .Where(s => s.type == "main")
-            .OrderBy(s => int.Parse(s.id))
+        // Update main skills (only those from student's program)
+        var filteredMainSkills = programMainSkills
+            .Select(id => allSkills.ContainsKey(id) ? allSkills[id] : null)
+            .Where(skill => skill != null)
             .Take(7)
             .ToList();
 
-        for (int i = 0; i < mainSkills.Count && i < mainSkillBars.Count; i++)
+        for (int i = 0; i < filteredMainSkills.Count && i < mainSkillBars.Count; i++)
         {
-            string skillId = mainSkills[i].id;
+            string skillId = filteredMainSkills[i].id;
             int points = studentMainSkills.ContainsKey(skillId) ? studentMainSkills[skillId] : 0;
 
             mainSkillBars[i].fillAmount = points / 100f;
             mainSkillTexts[i].text = points.ToString();
-            mainSkillTitles[i].text = mainSkills[i].title;
+            mainSkillTitles[i].text = filteredMainSkills[i].title;
         }
 
-        // Update additional skills
+        // Update additional skills (all)
         var additionalSkills = allSkills.Values
             .Where(s => s.type == "additional")
             .OrderBy(s => int.Parse(s.id))
