@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      falling-numbers-matrix-background-vector_0: -3571121484645727853
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
