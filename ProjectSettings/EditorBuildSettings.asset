@@ -27,13 +27,13 @@ EditorBuildSettings:
     path: Assets/Scenes/Student/GameStMl.unity
     guid: 656bf58ae296a2f46aa1b05d268f3498
   - enabled: 1
-    path: Assets/Scenes/Student/GameModel/MainGameEnglish.unity
+    path: Assets/Scenes/Student/GameModel/EngGame/MainGameEnglish.unity
     guid: ff3436fde97e45c4d8b6977744425cd4
   - enabled: 1
-    path: Assets/Scenes/Student/GameModel/GameEnglish.unity
+    path: Assets/Scenes/Student/GameModel/EngGame/GameEnglish.unity
     guid: ebf0365f661457c41a7962e4aac20be8
   - enabled: 1
-    path: Assets/Scenes/Student/GameModel/GameOverEnglish.unity
+    path: Assets/Scenes/Student/GameModel/EngGame/GameOverEnglish.unity
     guid: b6ab3b5ba7d8b4f49b5d6d41b14f65ae
   - enabled: 1
     path: Assets/Scenes/Student/ChatsStMl.unity

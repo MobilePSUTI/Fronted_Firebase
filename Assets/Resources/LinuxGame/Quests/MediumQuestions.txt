@@ -1,0 +1,10 @@
+Как удалить пустую директорию?|rmdir|rm|del|erase
+Как скопировать файл?|cp|mv|touch|clone
+Как переместить файл?|mv|cp|push|send
+Как посмотреть содержимое файла?|cat|ls|open|view
+Как получить справку по команде?|man|help|info|about
+Как узнать, кто вы в системе?|whoami|who|me|id
+Как отсортировать строки в файле?|sort|order|line|grep
+Как найти строку в файле?|grep|find|search|locate
+Как отобразить последние строки файла?|tail|last|end|bottom
+Как вывести первые строки файла?|head|top|first|begin

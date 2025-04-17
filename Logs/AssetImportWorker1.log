@@ -15,7 +15,7 @@ D:/Unity/Progect/Fronted_Firebase
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-52827
+65429
 -job-worker-count
 5
 -background-job-worker-count
@@ -59,16 +59,16 @@ D:/Unity/Progect/Fronted_Firebase
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [75324]  Target information:
+Player connection [50448]  Target information:
 
-Player connection [75324]  * "[IP] 192.168.0.104 [Port] 0 [Flags] 2 [Guid] 3775916284 [EditorId] 3775916284 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [50448]  * "[IP] 192.168.0.104 [Port] 0 [Flags] 2 [Guid] 3116083951 [EditorId] 3116083951 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [75324]  * "[IP] 26.175.8.104 [Port] 0 [Flags] 2 [Guid] 3775916284 [EditorId] 3775916284 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [50448]  * "[IP] 26.175.8.104 [Port] 0 [Flags] 2 [Guid] 3116083951 [EditorId] 3116083951 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [75324]  * "[IP] 172.19.112.1 [Port] 0 [Flags] 2 [Guid] 3775916284 [EditorId] 3775916284 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [50448]  * "[IP] 172.19.112.1 [Port] 0 [Flags] 2 [Guid] 3116083951 [EditorId] 3116083951 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [75324] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [75324] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [50448] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [50448] Host joined alternative multi-casting on [225.0.0.222:34997]...
 JobSystem: Creating JobQueue using job-worker-count value 5
 Input System module state changed to: Initialized.
 [Physics::Module] Initialized fallback backend.
@@ -80,7 +80,7 @@ Library Redirect Path: Library/
 [Physics::Module] SDK Version: 4.1.2
 [Physics::Module] Integration Version: 1.0.0
 [Physics::Module] Threading Mode: Multi-Threaded
-Refreshing native plugins compatible for Editor in 28.37 ms, found 7 plugins.
+Refreshing native plugins compatible for Editor in 5.64 ms, found 7 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.0.38f1 (82314a941f2d)
 [Subsystems] Discovering subsystems at path D:/Unity/6000.0.38f1/Editor/Data/Resources/UnitySubsystems
@@ -96,50 +96,50 @@ Initialize mono
 Mono path[0] = 'D:/Unity/6000.0.38f1/Editor/Data/Managed'
 Mono path[1] = 'D:/Unity/6000.0.38f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'D:/Unity/6000.0.38f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56392
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56388
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: D:/Unity/6000.0.38f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
 Register platform support module: D:/Unity/6000.0.38f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: D:/Unity/6000.0.38f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
-Registered in 0.016960 seconds.
-- Loaded All Assemblies, in  0.875 seconds
+Registered in 0.002149 seconds.
+- Loaded All Assemblies, in  0.400 seconds
 [usbmuxd] Start listen thread
 [usbmuxd] Listen thread started
 Native extension for iOS target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 347 ms
+Android Extension - Scanning For ADB Devices 276 ms
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.871 seconds
-Domain Reload Profiling: 1748ms
-	BeginReloadAssembly (491ms)
+- Finished resetting the current domain, in  0.665 seconds
+Domain Reload Profiling: 1065ms
+	BeginReloadAssembly (136ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (3ms)
-	RebuildCommonClasses (69ms)
-	RebuildNativeTypeToScriptingClass (11ms)
-	initialDomainReloadingComplete (81ms)
-	LoadAllAssembliesAndSetupDomain (222ms)
-		LoadAssemblies (488ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (38ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (40ms)
+	LoadAllAssembliesAndSetupDomain (172ms)
+		LoadAssemblies (136ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (216ms)
-			TypeCache.Refresh (211ms)
-				TypeCache.ScanAssembly (190ms)
+		AnalyzeDomain (169ms)
+			TypeCache.Refresh (167ms)
+				TypeCache.ScanAssembly (153ms)
 			BuildScriptInfoCaches (0ms)
-			ResolveRequiredComponents (4ms)
-	FinalizeReload (873ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (665ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (775ms)
+		SetupLoadedEditorAssemblies (629ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (498ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (55ms)
-			ProcessInitializeOnLoadAttributes (151ms)
-			ProcessInitializeOnLoadMethodAttributes (67ms)
+			InitializePlatformSupportModulesInManaged (378ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (51ms)
+			ProcessInitializeOnLoadAttributes (132ms)
+			ProcessInitializeOnLoadMethodAttributes (62ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -148,12 +148,12 @@ Domain Reload Profiling: 1748ms
 Worker process is ready to serve import requests
 Import Worker Mode flag is 0x00
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  1.958 seconds
-Refreshing native plugins compatible for Editor in 6.29 ms, found 7 plugins.
+- Loaded All Assemblies, in  1.153 seconds
+Refreshing native plugins compatible for Editor in 5.82 ms, found 7 plugins.
 Native extension for iOS target not found
 Native extension for Android target not found
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 6.35 ms, found 7 plugins.
+Refreshing native plugins compatible for Editor in 5.00 ms, found 7 plugins.
 Mono: successfully reloaded assembly
 Package Manager log level set to [2]
 [Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
@@ -162,76 +162,144 @@ Package Manager log level set to [2]
 [Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] Unable to send message (not connected to server process).
 [Package Manager] Cannot connect to Unity Package Manager local server
-- Finished resetting the current domain, in  1.457 seconds
-Domain Reload Profiling: 3414ms
-	BeginReloadAssembly (214ms)
+- Finished resetting the current domain, in  1.064 seconds
+Domain Reload Profiling: 2216ms
+	BeginReloadAssembly (199ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (13ms)
+		DisableScriptedObjects (7ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (38ms)
-	RebuildCommonClasses (41ms)
-	RebuildNativeTypeToScriptingClass (16ms)
-	initialDomainReloadingComplete (48ms)
-	LoadAllAssembliesAndSetupDomain (1637ms)
-		LoadAssemblies (1300ms)
+		CreateAndSetChildDomain (33ms)
+	RebuildCommonClasses (39ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (45ms)
+	LoadAllAssembliesAndSetupDomain (854ms)
+		LoadAssemblies (646ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (457ms)
-			TypeCache.Refresh (338ms)
-				TypeCache.ScanAssembly (312ms)
-			BuildScriptInfoCaches (102ms)
-			ResolveRequiredComponents (13ms)
-	FinalizeReload (1458ms)
+		AnalyzeDomain (332ms)
+			TypeCache.Refresh (251ms)
+				TypeCache.ScanAssembly (229ms)
+			BuildScriptInfoCaches (67ms)
+			ResolveRequiredComponents (11ms)
+	FinalizeReload (1064ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (1294ms)
+		SetupLoadedEditorAssemblies (930ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (22ms)
-			SetLoadedEditorAssemblies (6ms)
-			BeforeProcessingInitializeOnLoad (132ms)
-			ProcessInitializeOnLoadAttributes (976ms)
-			ProcessInitializeOnLoadMethodAttributes (156ms)
-			AfterProcessingInitializeOnLoad (2ms)
+			InitializePlatformSupportModulesInManaged (16ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (123ms)
+			ProcessInitializeOnLoadAttributes (704ms)
+			ProcessInitializeOnLoadMethodAttributes (81ms)
+			AfterProcessingInitializeOnLoad (1ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (7ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 7.21 ms, found 7 plugins.
+		AwakeInstancesAfterBackupRestoration (6ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Refreshing native plugins compatible for Editor in 4.07 ms, found 7 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 147 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 6983 unused Assets / (24.3 MB). Loaded Objects now: 7499.
-Memory consumption went from 160.7 MB to 136.4 MB.
-Total: 25.576300 ms (FindLiveObjects: 5.337500 ms CreateObjectMapping: 2.644500 ms MarkObjects: 10.440700 ms  DeleteObjects: 7.152100 ms)
+Unloading 6983 unused Assets / (23.3 MB). Loaded Objects now: 7499.
+Memory consumption went from 160.5 MB to 137.2 MB.
+Total: 9.920400 ms (FindLiveObjects: 0.696100 ms CreateObjectMapping: 0.858200 ms MarkObjects: 5.117600 ms  DeleteObjects: 3.247400 ms)
 
 ========================================================================
 Received Import Request.
-  Time since last request: 84008.377070 seconds.
-  path: Assets/Resources/Panel_news.prefab
-  artifactKey: Guid(33409fdf4674e2341aa33989faf3780f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Panel_news.prefab using Guid(33409fdf4674e2341aa33989faf3780f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ece6470ceb6db2216c7d6afdc8467a67') in 0.2069028 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 60
+  Time since last request: 160565.218849 seconds.
+  path: Assets/Scenes/Student/GameStMl.unity
+  artifactKey: Guid(656bf58ae296a2f46aa1b05d268f3498) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Student/GameStMl.unity using Guid(656bf58ae296a2f46aa1b05d268f3498) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'acaaa1f552b7d660e49effb34eb063fb') in 0.0146876 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000042 seconds.
-  path: Assets/Resources/для преподов/новости для преподов.png
-  artifactKey: Guid(c98504d5c20e0784fad3b86cd57783a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/для преподов/новости для преподов.png using Guid(c98504d5c20e0784fad3b86cd57783a4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ac1b87cbb110acc7a2b2c30ef8ebd6bc') in 0.1826293 seconds
+  Time since last request: 2148.385183 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/-1.png
+  artifactKey: Guid(7a2a3eb1fcb0e4c4c918a7e7191fa81c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/-1.png using Guid(7a2a3eb1fcb0e4c4c918a7e7191fa81c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c69b7f7de175b4d2a56c401cba65a32e') in 0.1899432 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 4
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000041 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/01_00.png
+  artifactKey: Guid(aec4b67d4e112ee44bd00b79b1a4eeca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/01_00.png using Guid(aec4b67d4e112ee44bd00b79b1a4eeca) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a6c891f4348707aede295ff05474467d') in 0.0672125 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 8
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/01_00 красный.png
+  artifactKey: Guid(935e78e34cdc91f48ab91257eb8aaf0d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/01_00 красный.png using Guid(935e78e34cdc91f48ab91257eb8aaf0d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '74d6976701d06743d05972fffc36c67f') in 0.0658769 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 8
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/злодей.png
+  artifactKey: Guid(88d596ac3d0bee44ab99a12d308da4b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/злодей.png using Guid(88d596ac3d0bee44ab99a12d308da4b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '796ecf0e79c3b9523e91ae8874e6265c') in 0.0183899 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000108 seconds.
-  path: Assets/Resources/для преподов/ведомости назнач доб баллов.png
-  artifactKey: Guid(64bdf70ebeb195644a5190754ca2dbec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/для преподов/ведомости назнач доб баллов.png using Guid(64bdf70ebeb195644a5190754ca2dbec) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7540371e4a21a22ad4c1794c96b46bd0') in 0.0820813 seconds
+  Time since last request: 0.000047 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/кнопка удалить.png
+  artifactKey: Guid(291674a0421d36e4dbdd27e8effb6565) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/кнопка удалить.png using Guid(291674a0421d36e4dbdd27e8effb6565) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e8c75b56d8be56ff25049e73301bc337') in 0.0108281 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.001863 seconds.
-  path: Assets/Resources/для преподов/3 ведомости назнач доб баллов 3.png
-  artifactKey: Guid(729ed82cff4a761499b75120859f1f57) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/для преподов/3 ведомости назнач доб баллов 3.png using Guid(729ed82cff4a761499b75120859f1f57) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ae23b4f19f7e064a5ab03973f4dae0fe') in 0.0430681 seconds
+  Time since last request: 0.000034 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/рамка для очков.png
+  artifactKey: Guid(bfa537e0b50c600409207ccb5074b175) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/рамка для очков.png using Guid(bfa537e0b50c600409207ccb5074b175) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6f1d390f88c2c563f4f6082a16b1a0cb') in 0.0129636 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/кнопка пауза.png
+  artifactKey: Guid(663d8fc0b4f06ff4d959aab08cfd1a9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/кнопка пауза.png using Guid(663d8fc0b4f06ff4d959aab08cfd1a9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3d2a119625fc0da3bd164f1788845386') in 0.0105454 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000039 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/кнопка буква (прожатая - зел).png
+  artifactKey: Guid(4b2dc9e82ef86d54b965e09bc9d2391d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/кнопка буква (прожатая - зел).png using Guid(4b2dc9e82ef86d54b965e09bc9d2391d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '09713cd1169f1e40d6155ab803c243e8') in 0.0081551 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000067 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/кпока буква.png
+  artifactKey: Guid(ce4d5b32ac53e184f8dd65e973bd77f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/кпока буква.png using Guid(ce4d5b32ac53e184f8dd65e973bd77f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7eabd36c12b51ed23ff09a36be7dc566') in 0.0149472 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/пауза блок.png
+  artifactKey: Guid(c3314bc46d591bf4fad7737984e7ad1b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/пауза блок.png using Guid(c3314bc46d591bf4fad7737984e7ad1b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '05a84a882486ecaa9a9068cdb88e4363') in 0.0212985 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000038 seconds.
+  path: Assets/Resources/GameEngish/SpriteGameEnglish/очки.png
+  artifactKey: Guid(414db4b93dc6b9c41b1fcf30f6ed557a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/GameEngish/SpriteGameEnglish/очки.png using Guid(414db4b93dc6b9c41b1fcf30f6ed557a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '40347260b4707041a46d5314307976e5') in 0.0171501 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0
