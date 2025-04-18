@@ -8,22 +8,14 @@ public class EnemyController : MonoBehaviour
     public TextMeshProUGUI wordDisplay;
     public string targetWord;
     private string currentTyped = ""; 
-    private int hiddenLetterIndex; // ������ ������� �����
+    private int hiddenLetterIndex;
     private GameObject borderLine;
-    // ������� y = -343480
 
     private void Start()
     {
-        // �������� ��������� �����
         targetWord = GameManager.Instance.GetRandomWord().ToLower();
-
-        // �������� ��������� ����� ��� ������� (����� ������)
         hiddenLetterIndex = Random.Range(1, targetWord.Length);
-
-        // �������������� ����������� �����
         UpdateWordDisplay();
-
-        // ����������� TextMeshPro
         if (wordDisplay == null)
         {
             wordDisplay = GetComponentInChildren<TextMeshProUGUI>();
@@ -35,10 +27,8 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         if (PauseManager.Instance.IsGamePaused()) return;
-        // �������� ����
         transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
 
-        // ���� ���� ���� �� �����
         if (transform.position.y < borderLine.transform.position.y)
         {
             GameManager.Instance.WordMissed();
@@ -50,10 +40,9 @@ public class EnemyController : MonoBehaviour
     {
         key = char.ToLower(key);
 
-        // ���������, ������������� �� ������� ������� ������� �����
         if (targetWord[hiddenLetterIndex] == key)
         {
-            currentTyped = targetWord; // ������� ����� ���������
+            currentTyped = targetWord;
             UpdateWordDisplay();
             WordCompleted();
         }
@@ -64,10 +53,8 @@ public class EnemyController : MonoBehaviour
         string display = "";
         for (int i = 0; i < targetWord.Length; i++)
         {
-            // ���������� �����, ���� ��� ��� ������� ��� ��� �� ������� �����
             if (i < currentTyped.Length || i != hiddenLetterIndex)
             {
-                // ������������ ��� ��������� ����� �������
                 if (i < currentTyped.Length)
                     display += "<color=green>" + targetWord[i] + "</color>";
                 else
@@ -75,7 +62,7 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                display += "_"; // ������� �����
+                display += "_";
             }
         }
         wordDisplay.text = display;

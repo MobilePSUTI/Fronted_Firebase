@@ -30,11 +30,20 @@ EditorBuildSettings:
     path: Assets/Scenes/Student/GameModel/EngGame/MainGameEnglish.unity
     guid: ff3436fde97e45c4d8b6977744425cd4
   - enabled: 1
+    path: Assets/Scenes/Student/GameModel/LinuxGame/MainGameEnglish.unity
+    guid: 0d0a5e265f9f9dc4b9edf140fcf37ca9
+  - enabled: 1
     path: Assets/Scenes/Student/GameModel/EngGame/GameEnglish.unity
     guid: ebf0365f661457c41a7962e4aac20be8
   - enabled: 1
+    path: Assets/Scenes/Student/GameModel/LinuxGame/LinuxTest.unity
+    guid: e461f0dfd62f0b04ea28db2536c80de2
+  - enabled: 1
     path: Assets/Scenes/Student/GameModel/EngGame/GameOverEnglish.unity
     guid: b6ab3b5ba7d8b4f49b5d6d41b14f65ae
+  - enabled: 1
+    path: Assets/Scenes/Student/GameModel/LinuxGame/GameOverEnglish.unity
+    guid: c60b16d93d599984298a92c166938e4d
   - enabled: 1
     path: Assets/Scenes/Student/ChatsStMl.unity
     guid: 08731d559409e51449c2d996b8824181

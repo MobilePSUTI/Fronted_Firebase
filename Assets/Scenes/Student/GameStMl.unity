@@ -1023,10 +1023,10 @@ MonoBehaviour:
     facultyImage: {fileID: 172967320, guid: 736b8ca61a119394fb1c2db038eaf239, type: 3}
     gameDescription: "\u041C\u0438\u043D\u0438-\u0438\u0433\u0440\u0430 \u0424\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u0430
       2."
-    gameSceneName: GameEnglish
-    sceneBackground: {fileID: -6632348712927017059, guid: 87cff07e998b9344f952033a1682de27, type: 3}
+    gameSceneName: LinuxTest
+    sceneBackground: {fileID: -3571121484645727853, guid: 965078656910d1f46aa76677cbd6175e, type: 3}
     playButtonColor: {r: 1, g: 1, b: 1, a: 1}
-    playButtonBackground: {fileID: -6428306260546743081, guid: 6fd6e72a8d2630844a8912f757bc0122, type: 3}
+    playButtonBackground: {fileID: -1868128167393661279, guid: 08a5fb64e9ccc5a4f9622dcf015d717d, type: 3}
 --- !u!1 &1097309683
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,7 +1843,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -11.900002}
+  m_AnchoredPosition: {x: 0, y: -11.899994}
   m_SizeDelta: {x: 0, y: 23.800003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1930296866

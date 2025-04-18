@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2908899691361541314}
   - component: {fileID: 6287080835006711833}
   - component: {fileID: 98120238191168660}
+  - component: {fileID: 5198386031589426914}
   m_Layer: 5
   m_Name: Enemy
   m_TagString: Untagged
@@ -76,13 +77,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6516472124015661001, guid: 88d596ac3d0bee44ab99a12d308da4b8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4114a065a49363e4abeb7a590aa2cd94, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -92,6 +93,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!111 &5198386031589426914
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1198940380100882610}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: ca072750e3708fa4da6e28ee97104e39, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: ca072750e3708fa4da6e28ee97104e39, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &5912380610500720831
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +144,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -4069, y: -40579}
+  m_AnchoredPosition: {x: -387.2, y: 40725}
   m_SizeDelta: {x: 77292.39, y: 18068.064}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3233362600061156227
@@ -166,8 +184,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190335
-  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -10,7 +10,6 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
-
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnInterval)
         {
@@ -22,15 +21,28 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        // РљРѕРѕСЂРґРёРЅР°С‚С‹ РґР»СЏ СЃРїР°РІРЅР° РІ РІРµСЂС…РЅРµР№ С‡Р°СЃС‚Рё СЌРєСЂР°РЅР°
+        // Получаем границы области спавна
+        float spawnWidth = spawnArea.rect.width;
+        float spawnHeight = spawnArea.rect.height;
+
+        // Три позиции: лево (25% ширины), центр, право (75% ширины)
+        float[] spawnPositionsX = {
+            -spawnWidth * 0.25f,
+            0f,
+            spawnWidth * 0.25f
+        };
+
+        // Случайный выбор позиции
+        float randomX = spawnPositionsX[Random.Range(0, spawnPositionsX.Length)];
+
         Vector2 spawnPos = new Vector2(
-            Random.Range(-300f, 300f),
-            400f // РћС‚СЃС‚СѓРї СЃРІРµСЂС…Сѓ
+            randomX,
+            spawnHeight * 0.5f // Спавн в верхней половине области
         );
-    
+
         GameObject enemy = Instantiate(enemyPrefab, spawnArea.transform);
         RectTransform rt = enemy.GetComponent<RectTransform>();
         rt.anchoredPosition = spawnPos;
-        rt.localScale = Vector3.one; // Р’Р°Р¶РЅРѕ!
+        rt.localScale = Vector3.one;
     }
 }
