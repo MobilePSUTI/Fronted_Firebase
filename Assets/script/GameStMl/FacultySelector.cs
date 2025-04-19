@@ -15,7 +15,7 @@ public class FacultySelector : MonoBehaviour
         public string gameDescription;
         public string gameSceneName;
         public Sprite sceneBackground;
-        public Color playButtonColor = Color.white;
+        public Color playButtonColor = Color.black;
         public Sprite playButtonBackground;
     }
 

@@ -22,11 +22,11 @@ public class PrMenuModel : MonoBehaviour
         await firebaseManager.Initialize();
 
         await DebugCheckDatabaseStructure();
-
+       
         if (UserSession.CurrentUser != null && UserSession.CurrentUser.Role == "teacher")
         {
             Debug.Log($"Текущий пользователь: {UserSession.CurrentUser.Username}");
-            // Запускаем фоновую загрузку новостей если пользователь уже авторизован
+            // фоновая загрузка новостей чтобы сразу зайти в приложение даже без новостей
             StartCoroutine(LoadNewsInBackground());
         }
     }
@@ -77,8 +77,8 @@ public class PrMenuModel : MonoBehaviour
             if (UserSession.CurrentUser.Role == "teacher")
             {
                 errorText.text = "";
-                // Запускаем загрузку новостей в фоне
-                StartCoroutine(LoadNewsInBackground());
+                // Запускаем параллельную загрузку данных
+                StartCoroutine(LoadTeacherDataInBackground());
                 // Переходим на сцену преподавателя
                 yield return StartCoroutine(LoadTeacherSceneAsync());
             }
@@ -95,6 +95,32 @@ public class PrMenuModel : MonoBehaviour
 
         if (loadingIndicator != null)
             loadingIndicator.SetActive(false);
+    }
+
+    private IEnumerator LoadTeacherDataInBackground()
+    {
+        // Предзагрузка групп и студентов
+        var groupsTask = firebaseManager.GetAllGroups();
+        yield return new WaitUntil(() => groupsTask.IsCompleted);
+
+        if (groupsTask.IsCompletedSuccessfully)
+        {
+            // Можно сохранить группы в кеш
+            UserSession.CachedGroups = groupsTask.Result;
+
+            // Предзагрузка студентов для каждой группы
+            foreach (var group in groupsTask.Result)
+            {
+                var studentsTask = firebaseManager.GetStudentsByGroup(group.Id);
+                yield return new WaitUntil(() => studentsTask.IsCompleted);
+
+                // Сохраняем в кеш
+                if (studentsTask.IsCompletedSuccessfully)
+                {
+                    UserSession.CachedStudents[group.Id] = studentsTask.Result;
+                }
+            }
+        }
     }
 
     IEnumerator LoadNewsInBackground()

@@ -1,0 +1,10 @@
+Какой командой можно посмотреть список файлов в текущей директории?|ls|rm|mv|touch
+Как перейти в другую директорию?|cd|ls|pwd|mkdir
+Как создать пустой файл?|touch|ls|rm|cd
+Как очистить экран терминала?|clear|reset|delete|clean
+Как узнать текущую директорию?|pwd|cd|ls|dir
+Как вывести текст в терминал?|echo|cat|print|say
+Как завершить сеанс пользователя?|exit|quit|logout|stop
+Как создать новую директорию?|mkdir|touch|mkfile|newdir
+Как удалить файл?|rm|del|erase|rmdir
+Как отобразить дату и время?|date|time|now|clock

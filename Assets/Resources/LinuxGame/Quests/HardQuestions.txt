@@ -1,0 +1,10 @@
+Как найти файлы по имени?|find|grep|locate|search
+Как изменить права доступа к файлу?|chmod|chown|access|perm
+Как запустить команду от имени суперпользователя?|sudo|su|root|admin
+Как отобразить текущих пользователей в системе?|who|users|whoami|id
+Как посмотреть запущенные процессы?|ps|jobs|top|list
+Как изменить владельца файла?|chown|chmod|owner|user
+Как проверить свободное место на диске?|df|du|space|mem
+Как переключиться на другого пользователя?|su|sudo|switch|changeuser
+Как обновить список пакетов в Debian?|apt update|apt upgrade|apt install|apt clean
+Как завершить процесс по PID?|kill|stop|end|terminate

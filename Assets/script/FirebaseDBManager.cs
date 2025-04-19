@@ -7,8 +7,34 @@ using System;
 
 public class FirebaseDBManager : MonoBehaviour
 {
+    private static FirebaseDBManager _instance;
+    public static FirebaseDBManager Instance => _instance;
+
     private DatabaseReference databaseRef;
     private bool isInitialized = false;
+    public DatabaseReference DatabaseReference 
+    {
+        get 
+        {
+            if (!isInitialized)
+            {
+                Debug.LogError("FirebaseDBManager is not initialized!");
+                return null;
+            }
+            return databaseRef;
+        }
+    }
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this); // Уничтожаем только компонент, а не весь GameObject
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject); // Переносим только этот объект
+    }
 
     public async Task Initialize()
     {
@@ -93,7 +119,8 @@ public class FirebaseDBManager : MonoBehaviour
                             Last = userSnapshot.Child("last_name")?.Value?.ToString() ?? "",
                             Second = userSnapshot.Child("second_name")?.Value?.ToString() ?? "",
                             GroupName = await GetGroupName(userSnapshot.Child("group_id")?.Value?.ToString()),
-                            Role = role
+                            Role = role,
+                            // написать загрузку аватара при входе студента
                         };
                     }
                     else
@@ -114,18 +141,6 @@ public class FirebaseDBManager : MonoBehaviour
         }
     }
 
-    private DataSnapshot FindTableInSnapshot(DataSnapshot snapshot, string tableName)
-    {
-        foreach (DataSnapshot node in snapshot.Children)
-        {
-            if (node.HasChild("name") && node.Child("name").Value?.ToString() == tableName)
-            {
-                return node.Child("data");
-            }
-        }
-        return null;
-    }
-
     public async Task<string> GetGroupName(string groupId)
     {
         if (string.IsNullOrEmpty(groupId))
@@ -136,12 +151,11 @@ public class FirebaseDBManager : MonoBehaviour
 
         try
         {
-            // Получаем весь список групп
+            // Correct path to groups table
             DataSnapshot groupsSnapshot = await databaseRef.Child("6").Child("data").GetValueAsync();
 
             if (groupsSnapshot.Exists)
             {
-                // Ищем группу с нужным ID в массиве
                 foreach (DataSnapshot groupSnapshot in groupsSnapshot.Children)
                 {
                     string currentGroupId = groupSnapshot.Child("id")?.Value?.ToString();
@@ -422,13 +436,14 @@ public class FirebaseDBManager : MonoBehaviour
                     AvatarPath = snapshot.Child("avatar_path").Value?.ToString() ?? "",
                     Username = snapshot.Child("username").Value?.ToString() ?? "",
                     CreatedAt = snapshot.Child("created_at").Value?.ToString() ?? "",
-                    UpdatedAt = snapshot.Child("updated_at").Value?.ToString() ?? ""
+                    UpdatedAt = snapshot.Child("updated_at").Value?.ToString() ?? "",
+                    GroupName = await GetGroupName(snapshot.Child("group_id").Value?.ToString())
                 };
             }
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Ошибка загрузки данных студента: {ex.Message}");
+            Debug.LogError($"Error loading student data: {ex.Message}");
         }
         return null;
     }

@@ -63,20 +63,19 @@ public class VKGroup
 
 public class VKNewsLoad : MonoBehaviour
 {
-    public string accessToken = "2e1a194f2e1a194f2e1a194f0d2d3078ac22e1a2e1a194f49ac02415f6ad1570cce36f8"; // Ваш токен доступа ВКонтакте
-    public List<int> groupIds = new List<int> { 78711199, 188328031, 17785357 }; // ID групп
+    public string accessToken = "2e1a194f2e1a194f2e1a194f0d2d3078ac22e1a2e1a194f49ac02415f6ad1570cce36f8";
+    public List<int> groupIds = new List<int> { 78711199, 188328031, 17785357 };
 
-    public List<Post> allPosts = new List<Post>(); // Список всех постов
-    public Dictionary<long, VKGroup> groupDictionary = new Dictionary<long, VKGroup>(); // Словарь групп
+    public List<Post> allPosts = new List<Post>();
+    public Dictionary<long, VKGroup> groupDictionary = new Dictionary<long, VKGroup>();
 
-    public IEnumerator GetNewsFromVK(int offset = 0, int count = 100) // Загружаем сразу все новости
+    public IEnumerator GetNewsFromVK(int offset = 0, int count = 100)
     {
         allPosts.Clear();
         groupDictionary.Clear();
 
         foreach (var groupId in groupIds)
         {
-            // Формируем URL для запроса к API ВКонтакте
             string url = $"https://api.vk.com/method/wall.get?owner_id=-{groupId}&access_token={accessToken}&v=5.199&count={count}&offset={offset}&extended=1";
             UnityWebRequest request = UnityWebRequest.Get(url);
             yield return request.SendWebRequest();
@@ -87,12 +86,24 @@ public class VKNewsLoad : MonoBehaviour
             }
             else
             {
-                // Обрабатываем полученные данные
                 ProcessNews(request.downloadHandler.text);
             }
         }
 
-        // Сортируем посты по дате (от новых к старым)
+        // Сортируем только посты с валидными датами
+        allPosts.RemoveAll(post =>
+        {
+            try
+            {
+                new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(post.date);
+                return false;
+            }
+            catch
+            {
+                return true;
+            }
+        });
+
         allPosts.Sort((post1, post2) => post2.date.CompareTo(post1.date));
     }
 
@@ -104,23 +115,43 @@ public class VKNewsLoad : MonoBehaviour
             return;
         }
 
-        // Парсим JSON
-        var response = JsonUtility.FromJson<VKResponse>(json);
-
-        if (response?.response?.items == null || response.response.groups == null)
+        try
         {
-            Debug.LogError("Неверный JSON ответ или пустые данные.");
-            return;
-        }
+            var response = JsonUtility.FromJson<VKResponse>(json);
 
-        // Добавляем посты и группы в кэш
-        allPosts.AddRange(response.response.items);
-        foreach (var group in response.response.groups)
-        {
-            if (!groupDictionary.ContainsKey(group.id))
+            if (response?.response?.items == null || response.response.groups == null)
             {
-                groupDictionary.Add(group.id, group);
+                Debug.LogError("Неверный JSON ответ или пустые данные.");
+                return;
             }
+
+            // Добавляем только посты с валидными датами
+            foreach (var post in response.response.items)
+            {
+                try
+                {
+                    // Проверяем валидность даты
+                    var testDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+                        .AddSeconds(post.date);
+                    allPosts.Add(post);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Debug.LogWarning($"Пост с невалидной датой пропущен: {post.date}");
+                }
+            }
+
+            foreach (var group in response.response.groups)
+            {
+                if (!groupDictionary.ContainsKey(group.id))
+                {
+                    groupDictionary.Add(group.id, group);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Ошибка обработки новостей: {e}");
         }
     }
 }

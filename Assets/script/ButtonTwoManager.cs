@@ -3,48 +3,38 @@ using UnityEngine.UI;
 
 public class ButtonTwoManager : MonoBehaviour
 {
-    public Button[] buttons; // Массив кнопок
-    public GameObject[] contentPanels; // Массив панелей контента, соответствующих кнопкам
+    public Button[] buttons; // Main and Additional skills buttons
+    public GameObject[] contentPanels; // Main and Additional skills panels
 
-    private int activeButtonIndex = -1; // Индекс активной кнопки
+    private int activeButtonIndex = -1;
 
     void Start()
     {
-        // Назначаем обработчики для кнопок
+        // Assign click handlers
         for (int i = 0; i < buttons.Length; i++)
         {
             int index = i;
             buttons[i].onClick.AddListener(() => OnButtonClick(index));
         }
 
-        // Инициализация: отключаем все панели контента
+        // Show main skills by default
+        activeButtonIndex = 0;
         UpdateContentPanels();
     }
 
     void OnButtonClick(int index)
     {
-        // Если нажата уже активная кнопка, ничего не делаем
-        if (activeButtonIndex == index)
-            return;
+        if (activeButtonIndex == index) return;
 
         activeButtonIndex = index;
-
-        // Обновляем панели контента
         UpdateContentPanels();
     }
 
     void UpdateContentPanels()
     {
-        // Отключаем все панели контента
-        foreach (var panel in contentPanels)
+        for (int i = 0; i < contentPanels.Length; i++)
         {
-            panel.SetActive(false);
-        }
-
-        // Активируем только одну панель контента
-        if (activeButtonIndex >= 0 && activeButtonIndex < contentPanels.Length)
-        {
-            contentPanels[activeButtonIndex].SetActive(true);
+            contentPanels[i].SetActive(i == activeButtonIndex);
         }
     }
 }
