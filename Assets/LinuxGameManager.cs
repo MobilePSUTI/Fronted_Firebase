@@ -144,7 +144,7 @@ public class LinuxGameManager : MonoBehaviour
     IEnumerator ErrorAlert()
     {
         errorImage.gameObject.SetActive(true);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         errorImage.gameObject.SetActive(false);
     }
 
@@ -158,7 +158,7 @@ public class LinuxGameManager : MonoBehaviour
     {
         gameOver = true;
         PlayerPrefs.SetInt("FinalScore", score);
-        SceneManager.LoadScene("GameOverScene");
+        SceneManager.LoadScene("GameOverEnglish");
     }
 
     [System.Serializable]
