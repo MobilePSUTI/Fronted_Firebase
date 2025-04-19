@@ -1024,7 +1024,7 @@ MonoBehaviour:
     gameDescription: "\u041C\u0438\u043D\u0438-\u0438\u0433\u0440\u0430 \u0424\u0430\u043A\u0443\u043B\u044C\u0442\u0435\u0442\u0430
       2."
     gameSceneName: LinuxTest
-    sceneBackground: {fileID: -3571121484645727853, guid: 965078656910d1f46aa76677cbd6175e, type: 3}
+    sceneBackground: {fileID: -6654949813549139849, guid: 8c8a21b0207433c4796727bc7e8dac5e, type: 3}
     playButtonColor: {r: 1, g: 1, b: 1, a: 1}
     playButtonBackground: {fileID: -1868128167393661279, guid: 08a5fb64e9ccc5a4f9622dcf015d717d, type: 3}
 --- !u!1 &1097309683

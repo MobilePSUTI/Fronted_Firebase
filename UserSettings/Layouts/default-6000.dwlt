@@ -300,8 +300,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Simulator\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 350.4
-    y: 79.200005
+    x: 351.4
+    y: 24
     width: 716.4
     height: 510.8
   m_SerializedDataModeController:
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_UseMipMap: 0
   m_SimulatorState:
     controlPanelVisible: 0
-    controlPanelWidth: 0
+    controlPanelWidth: NaN
     controlPanelFoldoutKeys:
     - UnityEditor.AdaptivePerformance.Editor.AdaptivePerformanceUIExtension
     - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceGoogleUIExtension
@@ -380,7 +380,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 616
+    y: 560.8
     width: 1067.8
     height: 154
   m_SerializedDataModeController:
@@ -424,7 +424,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 454}
     m_SelectedIDs: fcd00000
     m_LastClickedID: 53500
-    m_ExpandedIDs: 0000000010d00000eed00000f0d00000f2d00000fcd00000fed0000018d5000000ca9a3b
+    m_ExpandedIDs: 00000000dcb60000deb60000e0b60000e2b60000e4b60000e6b60000e8b60000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -453,7 +453,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000010d00000
+    m_ExpandedIDs: 00000000dcb60000deb60000e0b60000e2b60000e4b60000e6b60000e8b60000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -532,8 +532,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1068.8
-    y: 79.200005
+    x: 1069.8
+    y: 24
     width: 466.19995
     height: 690.8
   m_SerializedDataModeController:
@@ -582,7 +582,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79.200005
+    y: 24
     width: 349.4
     height: 510.8
   m_SerializedDataModeController:
@@ -599,7 +599,7 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 02d10000
+      m_SelectedIDs: 
       m_LastClickedID: 0
       m_ExpandedIDs: 6882ffffa683ffffe883ffff4684ffffa087ffff1c88ffff348cffff8e8cffff6ca3ffff08fbffff68b400007cb40000eeb6000012b7000004f8000034f80000f8fb000002fc000022fc00003efc0000a8050100c2050100cc050100ec05010008060100
       m_RenameOverlay:

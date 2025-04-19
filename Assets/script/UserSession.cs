@@ -9,7 +9,7 @@ public static class UserSession
     private static string _selectedGroupName;
     private static List<Group> _cachedGroups = new List<Group>();
     private static Dictionary<string, List<Student>> _cachedStudents = new Dictionary<string, List<Student>>();
-
+    private static StudentProgressController.SkillsCache _cachedSkills;
     public static User CurrentUser
     {
         get => _currentUser;
@@ -69,6 +69,15 @@ public static class UserSession
             SaveSession();
         }
     }
+    public static StudentProgressController.SkillsCache CachedSkills
+    {
+        get => _cachedSkills;
+        set
+        {
+            _cachedSkills = value;
+            SaveSession();
+        }
+    }
 
     static UserSession()
     {
@@ -88,6 +97,10 @@ public static class UserSession
         if (_selectedStudent != null)
         {
             PlayerPrefs.SetString("UserSession_SelectedStudent", JsonUtility.ToJson(_selectedStudent));
+        }
+        if (_cachedSkills != null)
+        {
+            PlayerPrefs.SetString("UserSession_CachedSkills", JsonUtility.ToJson(_cachedSkills));
         }
 
         PlayerPrefs.Save();
@@ -110,6 +123,11 @@ public static class UserSession
         {
             _selectedStudent = JsonUtility.FromJson<Student>(PlayerPrefs.GetString("UserSession_SelectedStudent"));
         }
+        if (PlayerPrefs.HasKey("UserSession_CachedSkills"))
+        {
+            _cachedSkills = JsonUtility.FromJson<StudentProgressController.SkillsCache>(
+                PlayerPrefs.GetString("UserSession_CachedSkills"));
+        }
     }
 
     public static void ClearCache()
@@ -127,6 +145,7 @@ public static class UserSession
         _selectedStudent = null;
         _selectedGroupId = null;
         _selectedGroupName = null;
+        _cachedSkills = null;
         _cachedGroups.Clear();
         _cachedStudents.Clear();
 
@@ -134,6 +153,7 @@ public static class UserSession
         PlayerPrefs.DeleteKey("UserSession_SelectedStudent");
         PlayerPrefs.DeleteKey("UserSession_SelectedGroupId");
         PlayerPrefs.DeleteKey("UserSession_SelectedGroupName");
+        PlayerPrefs.DeleteKey("UserSession_CachedSkills");
         PlayerPrefs.Save();
     }
 }
