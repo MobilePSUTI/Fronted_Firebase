@@ -665,9 +665,9 @@ GameObject:
   - component: {fileID: 623022561}
   - component: {fileID: 623022570}
   - component: {fileID: 623022571}
-  - component: {fileID: 623022567}
   - component: {fileID: 623022568}
   - component: {fileID: 623022569}
+  - component: {fileID: 623022572}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -694,30 +694,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000053406, y: 0}
   m_SizeDelta: {x: 0.00012207, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &623022567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623022560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: -70
-    m_Bottom: 0
-  m_ChildAlignment: 1
-  m_StartCorner: 0
-  m_StartAxis: 1
-  m_CellSize: {x: 1180.67, y: 1264.48}
-  m_Spacing: {x: 0, y: -0.83}
-  m_Constraint: 1
-  m_ConstraintCount: 1
 --- !u!114 &623022568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -785,6 +761,32 @@ MonoBehaviour:
   newsContainer: {fileID: 623022561}
   scrollRect: {fileID: 1627235324}
   loadingIndicator: {fileID: 1344520084}
+--- !u!114 &623022572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623022560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 10
+    m_Right: 10
+    m_Top: 10
+    m_Bottom: 10
+  m_ChildAlignment: 0
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &652711808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,8 +1457,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.8113, y: -16.9}
-  m_SizeDelta: {x: 1196.4, y: 2006.5}
+  m_AnchoredPosition: {x: -1.8113, y: -0.012321}
+  m_SizeDelta: {x: 1196.4, y: 2395.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1344520086
 MonoBehaviour:
@@ -1975,6 +1977,7 @@ GameObject:
   - component: {fileID: 1627235324}
   - component: {fileID: 1627235322}
   - component: {fileID: 1627235325}
+  - component: {fileID: 1627235326}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -2083,6 +2086,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &1627235326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627235318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 447288fe9f1dbe84aac524d957dcfe29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textShort: {fileID: 0}
+  textFull: {fileID: 0}
+  showMoreButton: {fileID: 0}
+  previewLength: 150
 --- !u!1001 &2044607473
 PrefabInstance:
   m_ObjectHideFlags: 0

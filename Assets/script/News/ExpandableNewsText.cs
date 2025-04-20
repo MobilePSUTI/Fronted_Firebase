@@ -4,27 +4,37 @@ using TMPro;
 
 public class ExpandableNewsText : MonoBehaviour
 {
-    [SerializeField] public Text textShort;
-    [SerializeField] public Text textFull;
-    [SerializeField] public Button showMoreButton;
-    [SerializeField] public int previewLength = 100;
+    public Text textShort; // Используем Text
+    public Text textFull;  // Используем Text
+    public Button showMoreButton;
+    [SerializeField] private int previewLength = 100;
 
     private string fullText;
     private bool isExpanded = false;
-    private RectTransform imageRectTransform;
-    private float originalHeight;
-    private VerticalLayoutGroup layoutGroup;
+    private RectTransform imageRectTransform; // Контейнер (Image или back)
+    private VerticalLayoutGroup containerLayoutGroup; // VerticalLayoutGroup на Image/back
 
     private void Awake()
     {
         // Проверяем, что все необходимые компоненты привязаны
+        if (textShort == null)
+        {
+            Debug.LogError("textShort is not assigned in the Inspector!", this);
+        }
+        if (textFull == null)
+        {
+            Debug.LogError("textFull is not assigned in the Inspector!", this);
+        }
+        if (showMoreButton == null)
+        {
+            Debug.LogError("showMoreButton is not assigned in the Inspector!", this);
+        }
         if (textShort == null || textFull == null || showMoreButton == null)
         {
-            Debug.LogError("One or more required components (textShort, textFull, showMoreButton) are not assigned in the Inspector!", this);
             return;
         }
 
-        // Находим RectTransform объекта Image (родителя textShort и textFull)
+        // Находим RectTransform объекта Image или back (родителя textShort и textFull)
         imageRectTransform = textShort.transform.parent.GetComponent<RectTransform>();
         if (imageRectTransform == null)
         {
@@ -32,27 +42,19 @@ public class ExpandableNewsText : MonoBehaviour
             return;
         }
 
-        layoutGroup = GetComponent<VerticalLayoutGroup>();
-        if (layoutGroup == null)
+        // Находим VerticalLayoutGroup на контейнере (Image или back)
+        containerLayoutGroup = imageRectTransform.GetComponent<VerticalLayoutGroup>();
+        if (containerLayoutGroup == null)
         {
-            Debug.LogError("VerticalLayoutGroup component is missing on this GameObject!", this);
+            Debug.LogError("VerticalLayoutGroup component is missing on the parent of textShort (Image or back)!", imageRectTransform);
             return;
         }
-
-        // Сохраняем исходную высоту объекта Image
-        originalHeight = imageRectTransform.sizeDelta.y;
-    }
-
-    private void Start()
-    {
-        // Тестовый вызов для проверки
-        Initialize("Это тестовый текст, который должен быть достаточно длинным, чтобы показать кнопку 'Ещё'. Добавим побольше текста, чтобы точно превысить длину предпросмотра в 100 символов!");
     }
 
     public void Initialize(string text)
     {
         // Проверяем, что Awake завершился без ошибок
-        if (textShort == null || textFull == null || showMoreButton == null || imageRectTransform == null)
+        if (textShort == null || textFull == null || showMoreButton == null || imageRectTransform == null || containerLayoutGroup == null)
         {
             Debug.LogError("Cannot initialize due to missing components. Check the Awake method errors.", this);
             return;
@@ -78,6 +80,9 @@ public class ExpandableNewsText : MonoBehaviour
         // Удаляем предыдущие слушатели, чтобы избежать дублирования
         showMoreButton.onClick.RemoveAllListeners();
         showMoreButton.onClick.AddListener(ToggleText);
+
+        // Обновляем макет после инициализации
+        UpdateLayout();
     }
 
     private void ToggleText()
@@ -98,22 +103,26 @@ public class ExpandableNewsText : MonoBehaviour
             Debug.LogWarning("Button text (TextMeshProUGUI) component not found! Make sure the button has a TextMeshProUGUI child.", showMoreButton);
         }
 
-        // Изменяем размер Image в зависимости от состояния
+        // Обновляем макет
+        UpdateLayout();
+    }
+
+    private void UpdateLayout()
+    {
+        // Принудительно обновляем макет для активного текста
         if (isExpanded)
         {
-            // Устанавливаем высоту Image на основе размера полного текста
             LayoutRebuilder.ForceRebuildLayoutImmediate(textFull.rectTransform);
-            float fullTextHeight = textFull.preferredHeight;
-            imageRectTransform.sizeDelta = new Vector2(imageRectTransform.sizeDelta.x, fullTextHeight);
         }
         else
         {
-            // Возвращаем исходную высоту
-            imageRectTransform.sizeDelta = new Vector2(imageRectTransform.sizeDelta.x, originalHeight);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(textShort.rectTransform);
         }
 
-        // Обновляем макет
+        // Обновляем макет контейнера (Image или back), чтобы он подстроился под содержимое
         LayoutRebuilder.ForceRebuildLayoutImmediate(imageRectTransform);
+
+        // Обновляем макет корневого объекта (Panel_news или Panel_news_netPhoto)
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
     }
 }

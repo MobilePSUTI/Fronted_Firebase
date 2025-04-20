@@ -41,7 +41,7 @@ public class NewsSceneManager : MonoBehaviour
 
         // Всегда сначала показываем кэшированные данные, если они есть
         if (NewsDataCache.CachedPosts != null && NewsDataCache.CachedPosts.Count > 0 &&
-            NewsDataCache.CachedVKGroups != null && NewsDataCache.CachedVKGroups.Count > 0)
+        NewsDataCache.CachedVKGroups != null && NewsDataCache.CachedVKGroups.Count > 0)
         {
             StartCoroutine(DisplayCachedNews());
         }
@@ -62,6 +62,10 @@ public class NewsSceneManager : MonoBehaviour
             NewsDataCache.SaveCacheToPersistentStorage();
 
             yield return StartCoroutine(DisplayNews(vkNewsLoad.allPosts, vkNewsLoad.groupDictionary));
+        }
+        else
+        {
+            Debug.LogError("Не удалось загрузить новости: allPosts или groupDictionary равны null.");
         }
 
         if (loadingIndicator != null)
@@ -88,7 +92,11 @@ public class NewsSceneManager : MonoBehaviour
             if (!hasText && !hasImage) continue;
 
             var group = groups.ContainsKey(-post.owner_id) ? groups[-post.owner_id] : null;
-            if (group == null) continue;
+            if (group == null)
+            {
+                Debug.LogWarning($"Группа для поста с owner_id = {post.owner_id} не найдена.");
+                continue;
+            }
 
             // Определяем какой префаб использовать
             GameObject newsItemPrefab;
@@ -175,8 +183,8 @@ public class NewsSceneManager : MonoBehaviour
             yield return StartCoroutine(vkNewsLoad.GetNewsFromVK());
 
             var newPosts = vkNewsLoad.allPosts
-                .Where(p => p.date > lastUpdateTimestamp)
-                .ToList();
+            .Where(p => p.date > lastUpdateTimestamp)
+            .ToList();
 
             if (newPosts.Count > 0)
             {
@@ -192,7 +200,6 @@ public class NewsSceneManager : MonoBehaviour
             isUpdating = false;
         }
     }
-
 
     IEnumerator LoadNewsCoroutine(VKNewsLoad vkNewsLoad, System.Action<bool, List<Post>> callback)
     {
@@ -215,8 +222,8 @@ public class NewsSceneManager : MonoBehaviour
                 // Фильтруем посты
                 long lastUpdateTimestamp = new DateTimeOffset(lastUpdateTime).ToUnixTimeSeconds();
                 filteredPosts = vkNewsLoad.allPosts
-                    .Where(p => p.date > lastUpdateTimestamp)
-                    .ToList();
+                .Where(p => p.date > lastUpdateTimestamp)
+                .ToList();
                 success = true;
             }
             catch (Exception ex)
@@ -243,12 +250,12 @@ public class NewsSceneManager : MonoBehaviour
             if (!hasText && !hasImage) continue;
 
             var group = NewsDataCache.CachedVKGroups.ContainsKey(-post.owner_id) ?
-                       NewsDataCache.CachedVKGroups[-post.owner_id] : null;
+            NewsDataCache.CachedVKGroups[-post.owner_id] : null;
             if (group == null) continue;
 
             GameObject newsItemPrefab = hasText && hasImage ? newsItemWithPhotoPrefab :
-                                      hasText ? newsItemWithoutPhotoPrefab :
-                                      newsItemPhotoOnlyPrefab;
+            hasText ? newsItemWithoutPhotoPrefab :
+            newsItemPhotoOnlyPrefab;
 
             GameObject newsItem = GetNewsItemFromPool(newsItemPrefab);
             newsItem.transform.SetAsFirstSibling();
@@ -423,21 +430,58 @@ public class NewsSceneManager : MonoBehaviour
 
     void SetupNewsItem(GameObject newsItem, Post post, VKGroup group, bool hasText, bool hasImage)
     {
-        var nameGroup = newsItem.transform.Find("Name_group")?.GetComponent<Text>();
+        // Ищем Name_group внутри foto_group
+        var nameGroup = newsItem.transform.Find("foto_group/Name_group")?.GetComponent<Text>();
         var dateTimeText = newsItem.transform.Find("DateTimeText")?.GetComponent<Text>();
         var fotoGroup = newsItem.transform.Find("foto_group")?.GetComponent<RawImage>();
         var foto = newsItem.transform.Find("Foto")?.GetComponent<RawImage>();
 
-        if (nameGroup != null) nameGroup.text = group.name;
-        if (fotoGroup != null) StartCoroutine(LoadGroupImage(group.photo_200, fotoGroup));
+        // Отладка: проверяем данные группы
+        Debug.Log($"Настройка новости: group.name = {group.name}, group.photo_200 = {group.photo_200}");
+
+        if (nameGroup != null)
+        {
+            nameGroup.text = string.IsNullOrEmpty(group.name) ? "Неизвестная группа" : group.name;
+            nameGroup.gameObject.SetActive(true); // Убедимся, что объект активен
+            LayoutRebuilder.ForceRebuildLayoutImmediate(nameGroup.GetComponent<RectTransform>());
+        }
+        else
+        {
+            Debug.LogWarning($"Объект Name_group не найден в {newsItem.name}/foto_group");
+        }
+
+        if (fotoGroup != null)
+        {
+            // Убедимся, что RawImage активен и имеет ненулевые размеры
+            fotoGroup.gameObject.SetActive(true);
+            RectTransform fotoRect = fotoGroup.GetComponent<RectTransform>();
+            if (fotoRect.sizeDelta.x <= 0 || fotoRect.sizeDelta.y <= 0)
+            {
+                Debug.LogWarning($"Размеры foto_group в {newsItem.name} равны нулю. Устанавливаем стандартные размеры.");
+                fotoRect.sizeDelta = new Vector2(50, 50); // Установите подходящие размеры
+            }
+
+            if (!string.IsNullOrEmpty(group.photo_200))
+            {
+                StartCoroutine(LoadGroupImage(group.photo_200, fotoGroup));
+            }
+            else
+            {
+                Debug.LogWarning($"URL изображения группы пустой для {group.name}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Объект foto_group не найден в {newsItem.name}");
+        }
 
         System.DateTime dateTime;
         try
         {
             // Конвертируем Unix-время в DateTime с обработкой ошибок
             dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)
-                .AddSeconds(post.date)
-                .ToLocalTime();
+            .AddSeconds(post.date)
+            .ToLocalTime();
         }
         catch (ArgumentOutOfRangeException)
         {
@@ -449,7 +493,10 @@ public class NewsSceneManager : MonoBehaviour
         if (dateTimeText != null)
         {
             dateTimeText.text = dateTime.ToString("dd.MM.yyyy HH:mm");
+            dateTimeText.gameObject.SetActive(true);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(dateTimeText.GetComponent<RectTransform>());
         }
+
         // Настройка изображения
         if (hasImage && foto != null)
         {
@@ -460,19 +507,46 @@ public class NewsSceneManager : MonoBehaviour
             }
         }
 
-        // Инициализация расширяемого текста (если есть текст)
-        if (hasText)
+        // Инициализация расширяемого текста (только если есть текст и префаб поддерживает текст)
+        if (hasText && newsItem.name.StartsWith("Panel_news"))
         {
             var expandableText = newsItem.GetComponent<ExpandableNewsText>();
             if (expandableText == null)
             {
                 expandableText = newsItem.AddComponent<ExpandableNewsText>();
-                expandableText.textShort = newsItem.transform.Find("Text_Short")?.GetComponent<Text>();
-                expandableText.textFull = newsItem.transform.Find("Text_Full")?.GetComponent<Text>();
-                expandableText.showMoreButton = newsItem.transform.Find("Button_ShowMore")?.GetComponent<Button>();
+                expandableText.textShort = newsItem.transform.Find("Image/Text_Short")?.GetComponent<Text>();
+                expandableText.textFull = newsItem.transform.Find("Image/Text_Full")?.GetComponent<Text>();
+                expandableText.showMoreButton = newsItem.transform.Find("Image/Button_ShowMore")?.GetComponent<Button>();
             }
 
-            expandableText.Initialize(post.text);
+            if (expandableText.textShort != null && expandableText.textFull != null && expandableText.showMoreButton != null)
+            {
+                expandableText.Initialize(post.text);
+            }
+            else
+            {
+                Debug.LogWarning($"Не удалось инициализировать ExpandableNewsText для {newsItem.name}: компоненты не найдены.");
+            }
+        }
+        else if (hasText && newsItem.name.StartsWith("Panel_news_netPhoto"))
+        {
+            var expandableText = newsItem.GetComponent<ExpandableNewsText>();
+            if (expandableText == null)
+            {
+                expandableText = newsItem.AddComponent<ExpandableNewsText>();
+                expandableText.textShort = newsItem.transform.Find("back/Text_Short")?.GetComponent<Text>();
+                expandableText.textFull = newsItem.transform.Find("back/Text_Full")?.GetComponent<Text>();
+                expandableText.showMoreButton = newsItem.transform.Find("back/Button_ShowMore")?.GetComponent<Button>();
+            }
+
+            if (expandableText.textShort != null && expandableText.textFull != null && expandableText.showMoreButton != null)
+            {
+                expandableText.Initialize(post.text);
+            }
+            else
+            {
+                Debug.LogWarning($"Не удалось инициализировать ExpandableNewsText для {newsItem.name}: компоненты не найдены.");
+            }
         }
     }
 
@@ -483,7 +557,7 @@ public class NewsSceneManager : MonoBehaviour
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Ошибка загрузки: " + request.error);
+            Debug.LogError($"Ошибка загрузки изображения поста: {request.error}, URL: {url}");
             yield break;
         }
 
@@ -517,16 +591,24 @@ public class NewsSceneManager : MonoBehaviour
 
     IEnumerator LoadImage(string url, RawImage targetImage)
     {
+        if (string.IsNullOrEmpty(url))
+        {
+            Debug.LogWarning("URL для изображения пустой.");
+            yield break;
+        }
+
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("Ошибка: " + request.error);
+            Debug.LogError($"Ошибка загрузки изображения группы: {request.error}, URL: {url}");
         }
         else
         {
             targetImage.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            targetImage.gameObject.SetActive(true); // Убедимся, что RawImage активен
+            LayoutRebuilder.ForceRebuildLayoutImmediate(targetImage.GetComponent<RectTransform>());
         }
     }
 }
