@@ -42,7 +42,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Student/GameModel/EngGame/GameOverEnglish.unity
     guid: b6ab3b5ba7d8b4f49b5d6d41b14f65ae
   - enabled: 1
-    path: Assets/Scenes/Student/GameModel/LinuxGame/GameOverEnglish.unity
+    path: Assets/Scenes/Student/GameModel/LinuxGame/GameOverLinux.unity
     guid: c60b16d93d599984298a92c166938e4d
   - enabled: 1
     path: Assets/Scenes/Student/ChatsStMl.unity

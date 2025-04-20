@@ -36,6 +36,8 @@ public class LinuxGameManager : MonoBehaviour
     private Question currentQuestion;
     private bool gameOver = false;
 
+    public bool IsGameOver => gameOver;
+
     private void Awake()
     {
         if (Instance == null)
@@ -59,6 +61,11 @@ public class LinuxGameManager : MonoBehaviour
             int index = i; // Локальная переменная для замыкания
             answerButtons[i].onClick.AddListener(() => AnswerClicked(index));
         }
+    }
+    
+    public void SetGamePaused(bool paused)
+    {
+        gameOver = paused;
     }
 
     private void LoadQuestions()
@@ -119,7 +126,7 @@ public class LinuxGameManager : MonoBehaviour
 
     public void AnswerClicked(int index)
     {
-        if (gameOver) return;
+        if (gameOver || PauseManager.Instance.IsGamePaused()) return;
 
         string chosenAnswer = answerTexts[index].text;
         if (chosenAnswer == currentQuestion.CorrectAnswer)
@@ -158,7 +165,7 @@ public class LinuxGameManager : MonoBehaviour
     {
         gameOver = true;
         PlayerPrefs.SetInt("FinalScore", score);
-        SceneManager.LoadScene("GameOverEnglish");
+        SceneManager.LoadScene("GameOverLinux");
     }
 
     [System.Serializable]

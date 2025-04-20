@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 183145488}
   - component: {fileID: 183145490}
   - component: {fileID: 183145489}
+  - component: {fileID: 183145491}
   m_Layer: 5
   m_Name: PausePanel
   m_TagString: Untagged
@@ -332,6 +333,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 183145487}
   m_CullTransparentMesh: 1
+--- !u!114 &183145491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183145487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daf4b0127bd2e7458fa0adab3860c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pausePanel: {fileID: 183145487}
+  pauseButton: {fileID: 411476703}
+  continueButton: {fileID: 838099289}
+  exitButton: {fileID: 1704465391}
 --- !u!1 &248332928
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +525,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411476700}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -579,7 +596,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 411476704}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 183145491}
+        m_TargetAssemblyTypeName: LinuxPauseManager, Assembly-CSharp
+        m_MethodName: TogglePause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &411476704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1182,7 +1211,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 543138410}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7497a983bd2d1643b9db4aa80695230, type: 3}
+  m_Script: {fileID: 11500000, guid: 49842f9181947bb458b23126482eed84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   easyQuestionsFile: {fileID: 4900000, guid: e5c15c5fed49c7c48be163b3fc523c97, type: 3}
@@ -3368,12 +3397,12 @@ RectTransform:
   m_Children:
   - {fileID: 543138413}
   - {fileID: 1426889245}
-  - {fileID: 411476701}
-  - {fileID: 183145488}
   - {fileID: 1310787482}
   - {fileID: 1679457017}
   - {fileID: 1711177367}
+  - {fileID: 411476701}
   - {fileID: 519097502}
+  - {fileID: 183145488}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
