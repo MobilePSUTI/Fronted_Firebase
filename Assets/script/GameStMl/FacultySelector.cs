@@ -34,7 +34,7 @@ public class FacultySelector : MonoBehaviour
     [SerializeField] private Button noButton;
 
     [Header("Animation Settings")]
-    [SerializeField] private float switchDuration = 0.5f;
+    [SerializeField] private float switchDuration = 0.3f; // Уменьшено время анимации
     [SerializeField] private AnimationCurve fadeCurve;
 
     public List<FacultyGame> facultyGames;
@@ -107,25 +107,25 @@ public class FacultySelector : MonoBehaviour
     {
         isSwitching = true;
 
-        // Фаза исчезновения
+        // Фаза исчезновения (упрощена)
         float timer = 0;
         while (timer < switchDuration / 2)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime; // Используем unscaledDeltaTime для независимости от Time.timeScale
             float alpha = fadeCurve.Evaluate(timer / (switchDuration / 2));
             SetElementsAlpha(1 - alpha);
             yield return null;
         }
 
-        // Смена контента
+        // Смена контента (без задержки)
         currentIndex = (currentIndex + direction + facultyGames.Count) % facultyGames.Count;
         UpdateContent();
 
-        // Фаза появления
+        // Фаза появления (упрощена)
         timer = 0;
         while (timer < switchDuration / 2)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
             float alpha = fadeCurve.Evaluate(timer / (switchDuration / 2));
             SetElementsAlpha(alpha);
             yield return null;
@@ -137,10 +137,13 @@ public class FacultySelector : MonoBehaviour
 
     private void SetElementsAlpha(float alpha)
     {
+        // Изображения и фон с прозрачностью
         facultyImageDisplay.color = new Color(1, 1, 1, alpha);
-        descriptionText.color = new Color(1, 1, 1, alpha);
         sceneBackground.color = new Color(1, 1, 1, alpha);
         playButtonBackground.color = new Color(1, 1, 1, alpha);
+
+        // Текст всегда черный, только меняем прозрачность
+        descriptionText.color = new Color(0, 0, 0, alpha); // Черный цвет с изменяемой прозрачностью
     }
 
     private void UpdateContent()
@@ -152,6 +155,9 @@ public class FacultySelector : MonoBehaviour
         sceneBackground.sprite = current.sceneBackground;
         playButtonBackground.sprite = current.playButtonBackground;
         playButtonBackground.color = current.playButtonColor;
+
+        // Убедимся, что текст черный
+        descriptionText.color = Color.black;
     }
 
     private void UpdateDisplay()

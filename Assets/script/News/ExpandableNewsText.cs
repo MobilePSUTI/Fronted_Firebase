@@ -1,75 +1,119 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Добавляем пространство имен для TextMeshPro
+using TMPro;
 
 public class ExpandableNewsText : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public Text textShort;
-    public Text textFull;
-    public Button showMoreButton;
+    [SerializeField] public Text textShort;
+    [SerializeField] public Text textFull;
+    [SerializeField] public Button showMoreButton;
+    [SerializeField] public int previewLength = 100;
 
-    [Header("Settings")]
-    public int previewLength = 150;
-
+    private string fullText;
     private bool isExpanded = false;
-    private string fullText = "";
+    private RectTransform imageRectTransform;
+    private float originalHeight;
+    private VerticalLayoutGroup layoutGroup;
 
-    void Start()
+    private void Awake()
     {
-        if (showMoreButton != null)
+        // Проверяем, что все необходимые компоненты привязаны
+        if (textShort == null || textFull == null || showMoreButton == null)
         {
-            showMoreButton.onClick.AddListener(ToggleText);
+            Debug.LogError("One or more required components (textShort, textFull, showMoreButton) are not assigned in the Inspector!", this);
+            return;
         }
+
+        // Находим RectTransform объекта Image (родителя textShort и textFull)
+        imageRectTransform = textShort.transform.parent.GetComponent<RectTransform>();
+        if (imageRectTransform == null)
+        {
+            Debug.LogError("Parent of textShort does not have a RectTransform component!", textShort);
+            return;
+        }
+
+        layoutGroup = GetComponent<VerticalLayoutGroup>();
+        if (layoutGroup == null)
+        {
+            Debug.LogError("VerticalLayoutGroup component is missing on this GameObject!", this);
+            return;
+        }
+
+        // Сохраняем исходную высоту объекта Image
+        originalHeight = imageRectTransform.sizeDelta.y;
+    }
+
+    private void Start()
+    {
+        // Тестовый вызов для проверки
+        Initialize("Это тестовый текст, который должен быть достаточно длинным, чтобы показать кнопку 'Ещё'. Добавим побольше текста, чтобы точно превысить длину предпросмотра в 100 символов!");
     }
 
     public void Initialize(string text)
     {
-        if (textShort == null || textFull == null || showMoreButton == null)
+        // Проверяем, что Awake завершился без ошибок
+        if (textShort == null || textFull == null || showMoreButton == null || imageRectTransform == null)
         {
-            Debug.LogError("UI элементы не назначены в префабе!");
+            Debug.LogError("Cannot initialize due to missing components. Check the Awake method errors.", this);
             return;
         }
 
         fullText = text;
-
-        int length = Mathf.Min(previewLength, text.Length);
-        string previewText = text.Substring(0, length);
-        if (text.Length > length) previewText += "...";
-
-        textShort.text = previewText;
         textFull.text = fullText;
 
-        showMoreButton.gameObject.SetActive(text.Length > previewLength);
+        if (fullText.Length > previewLength)
+        {
+            textShort.text = fullText.Substring(0, previewLength) + "...";
+            showMoreButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            textShort.text = fullText;
+            showMoreButton.gameObject.SetActive(false);
+        }
 
         textShort.gameObject.SetActive(true);
         textFull.gameObject.SetActive(false);
-        UpdateButtonText();
+
+        // Удаляем предыдущие слушатели, чтобы избежать дублирования
+        showMoreButton.onClick.RemoveAllListeners();
+        showMoreButton.onClick.AddListener(ToggleText);
     }
 
     private void ToggleText()
     {
         isExpanded = !isExpanded;
+
         textShort.gameObject.SetActive(!isExpanded);
         textFull.gameObject.SetActive(isExpanded);
-        UpdateButtonText();
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
-    }
-
-    private void UpdateButtonText()
-    {
-        if (showMoreButton == null) return;
-
-        // Изменяем на поиск компонента TextMeshProUGUI
-        TextMeshProUGUI buttonText = showMoreButton.GetComponentInChildren<TextMeshProUGUI>();
+        // Обновляем текст кнопки (для TextMeshProUGUI)
+        var buttonText = showMoreButton.GetComponentInChildren<TextMeshProUGUI>();
         if (buttonText != null)
         {
             buttonText.text = isExpanded ? "Скрыть" : "Ещё";
         }
         else
         {
-            Debug.LogWarning("Не найден компонент TextMeshProUGUI на кнопке");
+            Debug.LogWarning("Button text (TextMeshProUGUI) component not found! Make sure the button has a TextMeshProUGUI child.", showMoreButton);
         }
+
+        // Изменяем размер Image в зависимости от состояния
+        if (isExpanded)
+        {
+            // Устанавливаем высоту Image на основе размера полного текста
+            LayoutRebuilder.ForceRebuildLayoutImmediate(textFull.rectTransform);
+            float fullTextHeight = textFull.preferredHeight;
+            imageRectTransform.sizeDelta = new Vector2(imageRectTransform.sizeDelta.x, fullTextHeight);
+        }
+        else
+        {
+            // Возвращаем исходную высоту
+            imageRectTransform.sizeDelta = new Vector2(imageRectTransform.sizeDelta.x, originalHeight);
+        }
+
+        // Обновляем макет
+        LayoutRebuilder.ForceRebuildLayoutImmediate(imageRectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
     }
 }
