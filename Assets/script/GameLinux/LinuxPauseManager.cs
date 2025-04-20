@@ -12,7 +12,7 @@ public class LinuxPauseManager : MonoBehaviour
     public Button continueButton;
     public Button exitButton;
 
-    private bool isPaused = false;
+    [SerializeField] private bool isPaused = false;
 
     private void Awake()
     {
@@ -51,16 +51,26 @@ public class LinuxPauseManager : MonoBehaviour
     {
         isPaused = !isPaused;
 
-        if (pausePanel != null)
-            pausePanel.SetActive(isPaused);
-
-        Time.timeScale = isPaused ? 0f : 1f;
+        if (isPaused)
+        {
+            Time.timeScale = 0f;
+            if (pausePanel != null)
+                pausePanel.SetActive(true);
+            Debug.Log("Game paused");
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            if (pausePanel != null)
+                pausePanel.SetActive(false);
+            Debug.Log("Game resumed");
+        }
     }
 
     public void ExitToMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu"); // ← поменяй на свою сцену
+        SceneManager.LoadScene("GameStMl"); // ← Замени на имя своей сцены
     }
 
     public bool IsGamePaused()

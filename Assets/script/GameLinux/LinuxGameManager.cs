@@ -51,6 +51,7 @@ public class LinuxGameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        GameSession.ResetSession();
     }
 
     // Присваиваем обработчики кнопкам
@@ -164,9 +165,15 @@ public class LinuxGameManager : MonoBehaviour
     private void GameOver()
     {
         gameOver = true;
-        PlayerPrefs.SetInt("FinalScore", score);
+    
+        // Сохраняем результаты сессии
+        GameSession.AddCoins(score);
+        GameSession.SetTime(Time.timeSinceLevelLoad);
+
         SceneManager.LoadScene("GameOverLinux");
     }
+
+
 
     [System.Serializable]
     public class Question

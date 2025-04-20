@@ -267,7 +267,6 @@ GameObject:
   - component: {fileID: 183145488}
   - component: {fileID: 183145490}
   - component: {fileID: 183145489}
-  - component: {fileID: 183145491}
   m_Layer: 5
   m_Name: PausePanel
   m_TagString: Untagged
@@ -333,22 +332,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 183145487}
   m_CullTransparentMesh: 1
---- !u!114 &183145491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 183145487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8daf4b0127bd2e7458fa0adab3860c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pausePanel: {fileID: 183145487}
-  pauseButton: {fileID: 411476703}
-  continueButton: {fileID: 838099289}
-  exitButton: {fileID: 1704465391}
 --- !u!1 &248332928
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,7 +580,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 183145491}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: LinuxPauseManager, Assembly-CSharp
         m_MethodName: TogglePause
         m_Mode: 1
@@ -1180,6 +1163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543138413}
   - component: {fileID: 543138414}
+  - component: {fileID: 543138415}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1231,6 +1215,23 @@ MonoBehaviour:
   - {fileID: 1375890019}
   - {fileID: 1632336508}
   - {fileID: 1018069500}
+--- !u!114 &543138415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543138410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daf4b0127bd2e7458fa0adab3860c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pausePanel: {fileID: 183145487}
+  pauseButton: {fileID: 411476703}
+  continueButton: {fileID: 838099289}
+  exitButton: {fileID: 1704465391}
+  isPaused: 0
 --- !u!1 &574349403
 GameObject:
   m_ObjectHideFlags: 0

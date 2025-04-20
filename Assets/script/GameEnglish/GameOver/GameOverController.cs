@@ -5,24 +5,19 @@ using UnityEngine.SceneManagement;
 public class GameOverController : MonoBehaviour
 {
     public TextMeshProUGUI coinsText;
-    public TextMeshProUGUI timeText;
+    public TextMeshProUGUI timeText; // Р”РѕР±Р°РІР»СЏРµРј РїРѕР»Рµ
 
     private void Start()
     {
-        // Получаем сохраненные результаты
-        int coins = PlayerPrefs.GetInt("FinalCoins", 0);
-        float time = PlayerPrefs.GetFloat("FinalTime", 0f);
+        coinsText.text = "РњРѕРЅРµС‚ Р·Р°СЂР°Р±РѕС‚Р°РЅРѕ: " + GameSession.SessionCoins;
 
-        // Отображаем результаты
-        coinsText.text = "Coins: " + coins;
-
-        int minutes = Mathf.FloorToInt(time / 60f);
-        int seconds = Mathf.FloorToInt(time % 60f);
-        timeText.text = string.Format("Time: {0:00}:{1:00}", minutes, seconds);
+        int minutes = Mathf.FloorToInt(GameSession.SessionTime / 60f);
+        int seconds = Mathf.FloorToInt(GameSession.SessionTime % 60f);
+        timeText.text = $"Р’СЂРµРјРµРЅРё РїРѕС‚СЂР°С‡РµРЅРѕ: {minutes:00}:{seconds:00}";
     }
-
+    
     public void ReturnToMainMenu()
     {
-        SceneManager.LoadScene(6); // Загружаем главную сцену
+        SceneManager.LoadScene(6);
     }
 }

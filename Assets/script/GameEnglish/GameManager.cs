@@ -62,12 +62,14 @@ public class GameManager : MonoBehaviour
             Instance = this;
             LoadWordsFromFiles();
             CheckWordListsNotEmpty();
+            GameSession.ResetSession(); // <--- Важно
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
 
     private void LoadWordsFromFiles()
     {
@@ -166,13 +168,13 @@ public class GameManager : MonoBehaviour
         gameOver = true;
         Debug.Log(isWin ? "You Win!" : "Game Over! Coins: " + coinsCollected);
 
-        PlayerPrefs.SetInt("FinalCoins", coinsCollected);
-        PlayerPrefs.SetFloat("FinalTime", gameTimer);
-        PlayerPrefs.SetInt("IsWin", isWin ? 1 : 0);
-        PlayerPrefs.Save();
+        GameSession.AddCoins(coinsCollected);
+        GameSession.SetTime(gameTimer);
 
         SceneManager.LoadScene("GameOverEnglish");
     }
+
+
 
     private void UpdateTimerUI()
     {
