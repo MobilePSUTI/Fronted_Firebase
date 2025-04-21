@@ -125,11 +125,14 @@ public class LinuxGameManager : MonoBehaviour
         if (chosenAnswer == currentQuestion.CorrectAnswer)
         {
             score += 5;
+            Debug.Log($"Correct answer! New score: {score}");
         }
         else
         {
             StartCoroutine(ErrorAlert());
             errors++;
+            Debug.Log($"Wrong answer! Errors: {errors}/3");
+
             if (errors >= 3)
             {
                 GameOver();
@@ -156,10 +159,15 @@ public class LinuxGameManager : MonoBehaviour
 
     private void GameOver()
     {
-        gameOver = true;
         PlayerPrefs.SetInt("FinalScore", score);
-        SceneManager.LoadScene("GameOverEnglish");
+        PlayerPrefs.SetInt("FinalErrors", errors);
+        PlayerPrefs.SetFloat("FinalTime", Time.timeSinceLevelLoad);
+        PlayerPrefs.Save();
+
+        SceneManager.LoadScene("GameOverLinux");
     }
+
+
 
     [System.Serializable]
     public class Question

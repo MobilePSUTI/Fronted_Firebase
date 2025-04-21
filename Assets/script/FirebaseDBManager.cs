@@ -11,7 +11,7 @@ public class FirebaseDBManager : MonoBehaviour
     public static FirebaseDBManager Instance => _instance;
 
     private DatabaseReference databaseRef;
-    private bool isInitialized = false;
+    public bool isInitialized = false;
     public DatabaseReference DatabaseReference 
     {
         get 
@@ -217,89 +217,240 @@ public class FirebaseDBManager : MonoBehaviour
             return "student"; // Default to student on error
         }
     }
-    
-    public async Task<bool> RegisterNewStudent(string email, string password, string firstName,
-    string lastName, string secondName, string groupId, byte[] avatar)
+
+    public async Task<bool> RegisterStudent(
+       string email,
+       string password,
+       string firstName,
+       string lastName,
+       string secondName,
+       string groupId,
+       byte[] avatar)
     {
-        if (!isInitialized) await Initialize();
+        if (!isInitialized)
+        {
+            Debug.LogError("Firebase not initialized");
+            return false;
+        }
 
         try
         {
-            Debug.Log($"[Register] Attempting to register: {email}");
-
-            // Проверка существования email
+            // 1. Проверка существования email
             if (await CheckEmailExists(email))
             {
-                Debug.Log($"[Register] Email already exists: {email}");
+                Debug.Log("Email already exists");
                 return false;
             }
 
-            // Создаем ID для пользователя
-            string userId = databaseRef.Child("users").Push().Key;
+            // 2. Получаем данные группы
+            DataSnapshot groupSnapshot = await databaseRef
+                .Child("6") // groups table
+                .Child("data")
+                .Child(groupId)
+                .GetValueAsync();
 
-            // Подготовка данных пользователя для таблицы users
+            if (!groupSnapshot.Exists)
+            {
+                Debug.LogError($"Group {groupId} not found");
+                return false;
+            }
+
+            string programId = groupSnapshot.Child("educational_program_id").Value?.ToString();
+            if (string.IsNullOrEmpty(programId))
+            {
+                Debug.LogError("Group has no educational program");
+                return false;
+            }
+
+            Debug.Log($"Group program ID: {programId}");
+
+            // 3. Получаем образовательную программу
+            DataSnapshot programSnapshot = await GetEducationalProgram(programId);
+            if (programSnapshot == null)
+            {
+                Debug.LogError($"Program {programId} not found");
+                return false;
+            }
+
+            string programTitle = programSnapshot.Child("title").Value?.ToString();
+            Debug.Log($"Found program: {programTitle}");
+
+            // 4. Получаем основные навыки программы
+            List<string> mainSkills = new List<string>();
+            DataSnapshot skillsNode = programSnapshot.Child("main_skills");
+            if (skillsNode.Exists)
+            {
+                foreach (var skill in skillsNode.Children)
+                {
+                    string skillId = skill.Value?.ToString();
+                    if (!string.IsNullOrEmpty(skillId))
+                    {
+                        mainSkills.Add(skillId);
+                    }
+                }
+            }
+
+            // 5. Создаем данные пользователя
+            string userId = databaseRef.Child("14").Child("data").Push().Key;
+
             var userData = new Dictionary<string, object>
-        {
-            {"id", userId},
-            {"email", email.ToLower().Trim()},
-            {"password", password.Trim()},
-            {"first_name", firstName.Trim()},
-            {"last_name", lastName.Trim()},
-            {"second_name", string.IsNullOrWhiteSpace(secondName) ? "" : secondName.Trim()},
-            {"group_id", groupId},
-            {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}, // MySQL datetime format
-            {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
-            {"avatar_path", avatar != null ? $"avatars/{userId}.png" : ""},
-            {"username", $"{firstName} {lastName}"},
-            {"skill_id", "0"} // Добавляем skill_id по умолчанию
-        };
+            {
+                {"id", userId},
+                {"email", email.ToLower().Trim()},
+                {"password", password.Trim()},
+                {"first_name", firstName.Trim()},
+                {"last_name", lastName.Trim()},
+                {"second_name", string.IsNullOrEmpty(secondName) ? "" : secondName.Trim()},
+                {"group_id", groupId},
+                {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
+                {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
+                {"avatar_path", avatar != null ? $"avatars/{userId}.png" : ""},
+                {"username", $"{firstName} {lastName}"},
+                {"skill_id", "0"},
+                {"game_stats_ref", userId}
+            };
 
-            // Подготовка данных для таблицы users_roles
+            // 6. Создаем роль студента
+            string roleId = databaseRef.Child("15").Child("data").Push().Key;
             var roleData = new Dictionary<string, object>
-        {
-            {"id", databaseRef.Child("users_roles").Push().Key},
-            {"role_id", "1"}, // 1 = student
-            {"student_id", userId},
-        };
+            {
+                {"id", roleId},
+                {"role_id", "1"}, // 1 = student
+                {"student_id", userId}
+            };
 
-            // Создаем атомарный набор обновлений
+            // 7. Инициализируем навыки
+            var skillsData = new Dictionary<string, object>
+            {
+                {"main_skills", new Dictionary<string, int>()},
+                {"additional_skills", new Dictionary<string, int>()}
+            };
+
+            foreach (string skillId in mainSkills)
+            {
+                ((Dictionary<string, int>)skillsData["main_skills"]).Add(skillId, 0);
+            }
+
+            // 8. Атомарная запись всех данных
             var updates = new Dictionary<string, object>
-        {
-            {$"14/data/{userId}", userData},
-            {$"15/data/{roleData["id"]}", roleData}
-        };
+            {
+                {$"14/data/{userId}", userData},    // users table
+                {$"15/data/{roleId}", roleData},    // users_roles table
+                {$"16/data/{userId}", skillsData}   // user_skills table
+            };
 
-            // Выполняем атомарную запись
             await databaseRef.UpdateChildrenAsync(updates);
 
-            Debug.Log($"[Register] Successfully registered user {userId}");
+            Debug.Log($"Student {email} registered successfully in program {programTitle}");
             return true;
         }
         catch (Exception ex)
         {
-            Debug.LogError($"[Register] Error: {ex.Message}");
+            Debug.LogError($"Registration failed: {ex.Message}\n{ex.StackTrace}");
             return false;
         }
     }
 
-    public async Task<bool> CheckEmailExists(string email)
+    private async Task<DataSnapshot> GetEducationalProgram(string programId)
     {
-        if (!isInitialized) await Initialize();
+        DataSnapshot programsSnapshot = await databaseRef
+            .Child("4") // educational_programs table
+            .Child("data")
+            .GetValueAsync();
 
+        if (!programsSnapshot.Exists) return null;
+
+        foreach (DataSnapshot program in programsSnapshot.Children)
+        {
+            string currentId = program.Child("id").Value?.ToString();
+            if (currentId == programId)
+            {
+                return program;
+            }
+        }
+
+        return null;
+    }
+
+    private async Task<bool> CheckEmailExists(string email)
+    {
+        DataSnapshot usersSnapshot = await databaseRef
+            .Child("14") // users table
+            .Child("data")
+            .GetValueAsync();
+
+        if (!usersSnapshot.Exists) return false;
+
+        foreach (DataSnapshot user in usersSnapshot.Children)
+        {
+            string userEmail = user.Child("email").Value?.ToString();
+            if (userEmail?.ToLower() == email.ToLower())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public async Task<List<string>> GetProgramSkills(string programId)
+    {
+        var skills = new List<string>();
         try
         {
-            var snapshot = await databaseRef.Child("users")
-                .OrderByChild("email")
-                .EqualTo(email.ToLower().Trim())
-                .GetValueAsync();
+            if (!isInitialized) await Initialize();
 
-            return snapshot.Exists;
+            // Получаем все программы
+            DataSnapshot programsSnapshot = await databaseRef.Child("4").Child("data").GetValueAsync();
+
+            if (programsSnapshot.Exists && programsSnapshot.HasChildren)
+            {
+                // Ищем программу с нужным ID в массиве
+                foreach (DataSnapshot programSnapshot in programsSnapshot.Children)
+                {
+                    string currentProgramId = programSnapshot.Child("id")?.Value?.ToString();
+                    if (currentProgramId == programId)
+                    {
+                        var skillsNode = programSnapshot.Child("main_skills");
+                        if (skillsNode.Exists && skillsNode.ChildrenCount > 0)
+                        {
+                            foreach (var skill in skillsNode.Children)
+                            {
+                                if (!string.IsNullOrEmpty(skill.Value?.ToString()))
+                                    skills.Add(skill.Value.ToString());
+                            }
+                        }
+                        break; // Нашли нужную программу, выходим из цикла
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {
-            Debug.LogError($"[EmailCheck] Error: {ex.Message}");
-            return false;
+            Debug.LogError($"Error getting program skills: {ex.Message}");
         }
+        return skills;
+    }
+    public async Task<Group> GetGroupDetails(string groupId)
+    {
+        try
+        {
+            DataSnapshot snapshot = await databaseRef.Child("6").Child("data").Child(groupId).GetValueAsync();
+            if (snapshot.Exists)
+            {
+                return new Group
+                {
+                    Id = groupId,
+                    Title = snapshot.Child("title").Value?.ToString() ?? "",
+                    Course = snapshot.Child("course").Value?.ToString() ?? "",
+                    ProgramId = snapshot.Child("educational_program_id").Value?.ToString() ?? ""
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error loading group details: {ex.Message}");
+        }
+        return null;
     }
 
     public async Task<byte[]> GetUserAvatar(string userId)
@@ -446,5 +597,88 @@ public class FirebaseDBManager : MonoBehaviour
             Debug.LogError($"Error loading student data: {ex.Message}");
         }
         return null;
+    }
+
+    public async Task UpdateStudentStats(string studentId, int coinsToAdd, float timeToAdd)
+    {
+        try
+        {
+            // Получаем текущие данные студента
+            DataSnapshot snapshot = await databaseRef.Child("14").Child("data").Child(studentId).GetValueAsync();
+
+            if (snapshot.Exists)
+            {
+                // Парсим текущие значения
+                int currentCoins = 0;
+                float currentTime = 0f;
+
+                if (snapshot.HasChild("total_coins"))
+                    int.TryParse(snapshot.Child("total_coins").Value?.ToString(), out currentCoins);
+
+                if (snapshot.HasChild("total_play_time"))
+                    float.TryParse(snapshot.Child("total_play_time").Value?.ToString(), out currentTime);
+
+                // Обновляем значения
+                var updates = new Dictionary<string, object>
+            {
+                {"total_coins", currentCoins + coinsToAdd},
+                {"total_play_time", currentTime + timeToAdd},
+                {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}
+            };
+
+                // Сохраняем обновления
+                await databaseRef.Child("14").Child("data").Child(studentId).UpdateChildrenAsync(updates);
+
+                Debug.Log($"Student stats updated: +{coinsToAdd} coins, +{timeToAdd} seconds");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error updating student stats: {ex.Message}");
+        }
+    }
+
+    public async Task<Dictionary<string, int>> GetStudentGameScores(string studentId)
+    {
+        var scores = new Dictionary<string, int>();
+
+        try
+        {
+            if (!isInitialized) await Initialize();
+            if (string.IsNullOrEmpty(studentId)) return scores;
+
+            DataSnapshot snapshot = await databaseRef.Child("game_results")
+                .OrderByChild("student_id")
+                .EqualTo(studentId)
+                .GetValueAsync();
+
+            if (snapshot.Exists)
+            {
+                foreach (DataSnapshot gameSnapshot in snapshot.Children)
+                {
+                    string gameName = gameSnapshot.Child("game_name")?.Value?.ToString() ?? "unknown";
+                    int coins = 0;
+                    if (gameSnapshot.Child("coins")?.Value != null)
+                    {
+                        int.TryParse(gameSnapshot.Child("coins").Value.ToString(), out coins);
+                    }
+
+                    if (scores.ContainsKey(gameName))
+                    {
+                        scores[gameName] += coins;
+                    }
+                    else
+                    {
+                        scores.Add(gameName, coins);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error getting student scores: {ex.Message}");
+        }
+
+        return scores;
     }
 }

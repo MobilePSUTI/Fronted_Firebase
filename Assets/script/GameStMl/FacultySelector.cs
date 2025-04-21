@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
+using TMPro;
 
 public class FacultySelector : MonoBehaviour
 {
@@ -10,17 +11,17 @@ public class FacultySelector : MonoBehaviour
     public class FacultyGame
     {
         public string facultyName;
-        public Sprite facultyImage;
         [TextArea(3, 5)]
         public string gameDescription;
         public string gameSceneName;
         public Sprite sceneBackground;
         public Color playButtonColor = Color.black;
         public Sprite playButtonBackground;
+        public Color facultyNameColor = Color.black;
     }
 
     // Основные UI элементы
-    [SerializeField] private Image facultyImageDisplay;
+    [SerializeField] private TMP_Text facultyNameDisplay; // Изменено с Image на Text
     [SerializeField] private Text descriptionText;
     [SerializeField] private Button leftButton;
     [SerializeField] private Button rightButton;
@@ -34,7 +35,7 @@ public class FacultySelector : MonoBehaviour
     [SerializeField] private Button noButton;
 
     [Header("Animation Settings")]
-    [SerializeField] private float switchDuration = 0.3f; // Уменьшено время анимации
+    [SerializeField] private float switchDuration = 0.3f;
     [SerializeField] private AnimationCurve fadeCurve;
 
     public List<FacultyGame> facultyGames;
@@ -44,7 +45,7 @@ public class FacultySelector : MonoBehaviour
     private void Awake()
     {
         // Инициализация всех компонентов
-        if (facultyImageDisplay == null) facultyImageDisplay = transform.Find("FacultyImage").GetComponent<Image>();
+        if (facultyNameDisplay == null) facultyNameDisplay = transform.Find("FacultyNameText").GetComponent<TMP_Text>();
         if (descriptionText == null) descriptionText = transform.Find("DescriptionText").GetComponent<Text>();
         // ... аналогично для других компонентов
     }
@@ -86,7 +87,6 @@ public class FacultySelector : MonoBehaviour
         HideConfirmation();
         if (!string.IsNullOrEmpty(facultyGames[currentIndex].gameSceneName))
         {
-            // Можно добавить эффект загрузки
             SceneManager.LoadScene(facultyGames[currentIndex].gameSceneName);
         }
     }
@@ -107,21 +107,21 @@ public class FacultySelector : MonoBehaviour
     {
         isSwitching = true;
 
-        // Фаза исчезновения (упрощена)
+        // Фаза исчезновения
         float timer = 0;
         while (timer < switchDuration / 2)
         {
-            timer += Time.unscaledDeltaTime; // Используем unscaledDeltaTime для независимости от Time.timeScale
+            timer += Time.unscaledDeltaTime;
             float alpha = fadeCurve.Evaluate(timer / (switchDuration / 2));
             SetElementsAlpha(1 - alpha);
             yield return null;
         }
 
-        // Смена контента (без задержки)
+        // Смена контента
         currentIndex = (currentIndex + direction + facultyGames.Count) % facultyGames.Count;
         UpdateContent();
 
-        // Фаза появления (упрощена)
+        // Фаза появления
         timer = 0;
         while (timer < switchDuration / 2)
         {
@@ -137,20 +137,21 @@ public class FacultySelector : MonoBehaviour
 
     private void SetElementsAlpha(float alpha)
     {
-        // Изображения и фон с прозрачностью
-        facultyImageDisplay.color = new Color(1, 1, 1, alpha);
+        // Тексты с прозрачностью
+        facultyNameDisplay.alpha = alpha;
+        descriptionText.color = new Color(0, 0, 0, alpha); // Черный цвет с изменяемой прозрачностью
+
+        // Фон и кнопки с прозрачностью
         sceneBackground.color = new Color(1, 1, 1, alpha);
         playButtonBackground.color = new Color(1, 1, 1, alpha);
-
-        // Текст всегда черный, только меняем прозрачность
-        descriptionText.color = new Color(0, 0, 0, alpha); // Черный цвет с изменяемой прозрачностью
     }
 
     private void UpdateContent()
     {
         FacultyGame current = facultyGames[currentIndex];
 
-        facultyImageDisplay.sprite = current.facultyImage;
+        facultyNameDisplay.text = current.facultyName;
+        facultyNameDisplay.color = current.facultyNameColor;// Устанавливаем текст вместо изображения
         descriptionText.text = current.gameDescription;
         sceneBackground.sprite = current.sceneBackground;
         playButtonBackground.sprite = current.playButtonBackground;

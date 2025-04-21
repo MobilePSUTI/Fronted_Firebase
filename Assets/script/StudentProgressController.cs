@@ -46,7 +46,7 @@ public class StudentProgressController : MonoBehaviour
 
     private void Awake()
     {
-        // Проверяем, есть ли кэшированные данные
+        // Check for cached data
         if (UserSession.CachedSkills != null)
         {
             LoadFromCache(UserSession.CachedSkills);
@@ -56,20 +56,16 @@ public class StudentProgressController : MonoBehaviour
 
     private async void Start()
     {
-        // Если есть кэш - сразу показываем данные
+        // If cache exists, show data immediately
         if (dataLoadedFromCache)
         {
             UpdateSkillUI();
         }
-        else
-        {
-  
-        }
 
-        // Загружаем свежие данные
+        // Load fresh data
         await LoadAllData();
 
-        // Обновляем UI и кэш
+        // Update UI and cache
         UpdateSkillUI();
         SaveToCache();
     }
@@ -90,25 +86,68 @@ public class StudentProgressController : MonoBehaviour
         }
     }
 
-    private async Task LoadAllSkills()
+    public async Task LoadAllSkills()
     {
         try
         {
-            DataSnapshot snapshot = await FirebaseDatabase.DefaultInstance.GetReference("11/data").GetValueAsync();
-
-            if (snapshot.Exists)
+            // Check Firebase initialization
+            if (!FirebaseDBManager.Instance.isInitialized)
             {
-                foreach (DataSnapshot skillSnapshot in snapshot.Children)
+                await FirebaseDBManager.Instance.Initialize();
+            }
+
+            // Get student ID
+            string studentId = UserSession.CurrentUser?.Id;
+            if (string.IsNullOrEmpty(studentId))
+            {
+                Debug.LogError("Student ID is null or empty");
+                return;
+            }
+
+            // Get student skills data
+            DataSnapshot skillsSnapshot = await FirebaseDBManager.Instance.DatabaseReference
+                .Child("16") // user_skills table
+                .Child("data")
+                .Child(studentId)
+                .GetValueAsync();
+
+            if (!skillsSnapshot.Exists)
+            {
+                Debug.LogWarning("No skills data found for student");
+                return;
+            }
+
+            // Get main and additional skills
+            DataSnapshot mainSkillsNode = skillsSnapshot.Child("main_skills");
+            DataSnapshot additionalSkillsNode = skillsSnapshot.Child("additional_skills");
+
+            // Initialize dictionaries
+            studentMainSkills = new Dictionary<string, int>();
+            studentAdditionalSkills = new Dictionary<string, int>();
+
+            // Load main skills
+            if (mainSkillsNode.Exists && mainSkillsNode.HasChildren)
+            {
+                foreach (DataSnapshot skill in mainSkillsNode.Children)
                 {
-                    SkillData skill = new SkillData
-                    {
-                        id = skillSnapshot.Child("id").Value.ToString(),
-                        title = skillSnapshot.Child("title").Value.ToString(),
-                        type = skillSnapshot.Child("type").Value.ToString()
-                    };
-                    allSkills[skill.id] = skill;
+                    string skillId = skill.Key;
+                    int skillValue = Convert.ToInt32(skill.Value);
+                    studentMainSkills[skillId] = skillValue;
                 }
             }
+
+            // Load additional skills
+            if (additionalSkillsNode.Exists && additionalSkillsNode.HasChildren)
+            {
+                foreach (DataSnapshot skill in additionalSkillsNode.Children)
+                {
+                    string skillId = skill.Key;
+                    int skillValue = Convert.ToInt32(skill.Value);
+                    studentAdditionalSkills[skillId] = skillValue;
+                }
+            }
+
+            Debug.Log($"Successfully loaded {studentMainSkills.Count} main skills and {studentAdditionalSkills.Count} additional skills");
         }
         catch (Exception ex)
         {
@@ -317,14 +356,26 @@ public class StudentProgressController : MonoBehaviour
         {
             foreach (DataSnapshot skillSnapshot in task.Result.Children)
             {
-                SkillData skill = new SkillData
+                // Check if the snapshot contains the required fields
+                if (skillSnapshot.HasChild("id") && skillSnapshot.HasChild("title") && skillSnapshot.HasChild("type"))
                 {
-                    id = skillSnapshot.Child("id").Value.ToString(),
-                    title = skillSnapshot.Child("title").Value.ToString(),
-                    type = skillSnapshot.Child("type").Value.ToString()
-                };
-                allSkills[skill.id] = skill;
+                    SkillData skill = new SkillData
+                    {
+                        id = skillSnapshot.Child("id").Value.ToString(),
+                        title = skillSnapshot.Child("title").Value.ToString(),
+                        type = skillSnapshot.Child("type").Value.ToString()
+                    };
+                    allSkills[skill.id] = skill;
+                }
+                else
+                {
+                    Debug.LogWarning($"Skipping invalid skill entry in snapshot: {skillSnapshot.Key}");
+                }
             }
+        }
+        else
+        {
+            Debug.LogWarning("No skills data found or task failed.");
         }
     }
 

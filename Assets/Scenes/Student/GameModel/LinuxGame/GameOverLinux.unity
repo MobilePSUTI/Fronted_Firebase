@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 751242800}
   - component: {fileID: 751242803}
   - component: {fileID: 751242802}
-  - component: {fileID: 751242801}
+  - component: {fileID: 751242804}
   m_Layer: 5
   m_Name: GameOver
   m_TagString: Untagged
@@ -470,20 +470,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.0005188, y: 0.0063477}
   m_SizeDelta: {x: 1197.7, y: 2635}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &751242801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 751242799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f0661beea4be6242b913543a60745ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coinsText: {fileID: 2030421434}
-  timeText: {fileID: 2111714690}
 --- !u!114 &751242802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,6 +508,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 751242799}
   m_CullTransparentMesh: 1
+--- !u!114 &751242804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751242799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab5fb1bb913933741bb079ab0f91423b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 2030421434}
+  timeText: {fileID: 2111714690}
 --- !u!1 &940772574
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,8 +605,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 751242801}
-        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
+      - m_Target: {fileID: 751242804}
+        m_TargetAssemblyTypeName: GameOverLinux, Assembly-CSharp
         m_MethodName: ReturnToMainMenu
         m_Mode: 1
         m_Arguments:

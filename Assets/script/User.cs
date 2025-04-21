@@ -1,4 +1,6 @@
-﻿public class User
+﻿using System.Collections.Generic;
+
+public class User
 {
     public string Id { get; set; }
     public string Username { get; set; }
@@ -17,6 +19,11 @@ public class Student : User
     public string GroupId { get; set; }
     public string GroupName { get; set; }
     public string SkillId { get; set; }
+    public int TotalCoins { get; set; }
+    public float TotalPlayTime { get; set; }
+
+    public Dictionary<string, int> MainSkills { get; set; }
+    public Dictionary<string, int> AdditionalSkills { get; set; }
 }
 
 public class Teacher : User
