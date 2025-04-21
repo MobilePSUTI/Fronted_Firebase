@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // Добавлено для TextMeshPro
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Firebase.Database;
@@ -11,15 +12,16 @@ public class PrSkillsManager : MonoBehaviour
     public Button additionalSkillsButton;
     public GameObject mainSkillsPanel;
     public GameObject additionalSkillsPanel;
-    public Text[] mainSkillTexts; // 7 main skills
-    public Text[] additionalSkillTexts; // 7 additional skills
-    public Button[] mainSkillButtons; // + main skills
-    public Button[] additionalSkillButtons; // + additional skills
+    public TextMeshProUGUI[] mainSkillTexts; // Изменено на TextMeshProUGUI
+    public TextMeshProUGUI[] additionalSkillTexts; // Изменено на TextMeshProUGUI
+    public Button[] mainSkillButtons;
+    public Button[] additionalSkillButtons;
 
     private Student currentStudent;
     private Dictionary<string, int> mainSkills = new Dictionary<string, int>();
     private Dictionary<string, int> additionalSkills = new Dictionary<string, int>();
     private List<string> currentMainSkillIds = new List<string>();
+    private Dictionary<string, string> skillNames = new Dictionary<string, string>();
 
     // Система ограничения нажатий
     private Dictionary<string, DateTime> lastClickTimes = new Dictionary<string, DateTime>();
@@ -37,14 +39,12 @@ public class PrSkillsManager : MonoBehaviour
 
         currentStudent = UserSession.SelectedStudent;
 
-        // Verify student data
         if (string.IsNullOrEmpty(currentStudent.GroupId))
         {
             Debug.LogError("Selected student has no group assigned!");
             return;
         }
 
-        // Initialize Firebase if needed
         var dbManager = FindObjectOfType<FirebaseDBManager>();
         if (dbManager == null)
         {
@@ -53,43 +53,31 @@ public class PrSkillsManager : MonoBehaviour
             await dbManager.Initialize();
         }
 
-        // Load group name if missing
         if (string.IsNullOrEmpty(currentStudent.GroupName))
         {
             currentStudent.GroupName = await dbManager.GetGroupName(currentStudent.GroupId);
         }
 
-        // Get main skill IDs for student's educational program
         await LoadEducationalProgramSkills();
-
-        // Load student skills
         await LoadStudentSkills();
-
-        // Load click counts from Firebase
         await LoadClickCounts();
 
-        // Setup button listeners
         mainSkillsButton.onClick.AddListener(() => ShowSkillsPanel(true));
         additionalSkillsButton.onClick.AddListener(() => ShowSkillsPanel(false));
 
-        // Setup + buttons for main skills
         for (int i = 0; i < mainSkillButtons.Length; i++)
         {
             int index = i;
             mainSkillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(index, true));
         }
 
-        // Setup + buttons for additional skills
         for (int i = 0; i < additionalSkillButtons.Length; i++)
         {
             int index = i;
             additionalSkillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(index, false));
         }
 
-        // Show main skills by default
         ShowSkillsPanel(true);
-
-        // Обновляем состояние всех кнопок
         UpdateAllButtonsState();
     }
 
@@ -97,7 +85,6 @@ public class PrSkillsManager : MonoBehaviour
     {
         DateTime today = DateTime.Now.Date;
 
-        // Обновляем состояние кнопок основных навыков
         for (int i = 0; i < mainSkillButtons.Length; i++)
         {
             string skillId = i < currentMainSkillIds.Count ? currentMainSkillIds[i] : (i + 1).ToString();
@@ -112,7 +99,6 @@ public class PrSkillsManager : MonoBehaviour
             }
         }
 
-        // Обновляем состояние кнопок дополнительных навыков
         for (int i = 0; i < additionalSkillButtons.Length; i++)
         {
             string skillId = (101 + i).ToString();
@@ -209,21 +195,27 @@ public class PrSkillsManager : MonoBehaviour
     {
         try
         {
+            // Initialize main skills
             for (int i = 0; i < 7; i++)
             {
                 string skillId = i < currentMainSkillIds.Count ? currentMainSkillIds[i] : (i + 1).ToString();
                 mainSkills[$"skill{i + 1}"] = 0;
                 string skillName = await GetSkillName(skillId);
+                skillNames[skillId] = skillName;
                 mainSkillTexts[i].text = $"{skillName}: 0";
             }
 
-            for (int i = 1; i <= 7; i++)
+            // Initialize additional skills
+            for (int i = 0; i < 7; i++)
             {
-                additionalSkills[$"add_skill{i}"] = 0;
-                string addSkillName = await GetAdditionalSkillName(i);
-                additionalSkillTexts[i - 1].text = $"{addSkillName}: 0";
+                string skillId = (101 + i).ToString();
+                additionalSkills[$"add_skill{i + 1}"] = 0;
+                string addSkillName = await GetSkillName(skillId);
+                skillNames[skillId] = addSkillName;
+                additionalSkillTexts[i].text = $"{addSkillName}: 0";
             }
 
+            // Load from Firebase
             DataSnapshot snapshot = await FirebaseDatabase.DefaultInstance
                 .GetReference("16")
                 .Child("data")
@@ -232,6 +224,7 @@ public class PrSkillsManager : MonoBehaviour
 
             if (snapshot.Exists)
             {
+                // Main skills
                 var mainSkillsData = snapshot.Child("main_skills").Value as Dictionary<string, object>;
                 if (mainSkillsData != null)
                 {
@@ -241,22 +234,24 @@ public class PrSkillsManager : MonoBehaviour
                         if (mainSkillsData.ContainsKey(skillId))
                         {
                             mainSkills[$"skill{i + 1}"] = int.Parse(mainSkillsData[skillId].ToString());
-                            string skillName = await GetSkillName(skillId);
+                            string skillName = skillNames[skillId];
                             mainSkillTexts[i].text = $"{skillName}: {mainSkills[$"skill{i + 1}"]}";
                         }
                     }
                 }
 
+                // Additional skills
                 var additionalSkillsData = snapshot.Child("additional_skills").Value as Dictionary<string, object>;
                 if (additionalSkillsData != null)
                 {
-                    for (int i = 1; i <= 7; i++)
+                    for (int i = 0; i < 7; i++)
                     {
-                        string skillKey = (100 + i).ToString();
-                        if (additionalSkillsData.ContainsKey(skillKey))
+                        string skillId = (101 + i).ToString();
+                        if (additionalSkillsData.ContainsKey(skillId))
                         {
-                            additionalSkills[$"add_skill{i}"] = int.Parse(additionalSkillsData[skillKey].ToString());
-                            string skillName = await GetAdditionalSkillName(i); 
+                            additionalSkills[$"add_skill{i + 1}"] = int.Parse(additionalSkillsData[skillId].ToString());
+                            string skillName = skillNames[skillId];
+                            additionalSkillTexts[i].text = $"{skillName}: {additionalSkills[$"add_skill{i + 1}"]}";
                         }
                     }
                 }
@@ -272,38 +267,43 @@ public class PrSkillsManager : MonoBehaviour
     {
         try
         {
+            if (skillNames.ContainsKey(skillId))
+            {
+                return skillNames[skillId];
+            }
+
             DataSnapshot snapshot = await FirebaseDatabase.DefaultInstance
-                .GetReference("skills")
-                .Child(skillId)
-                .Child("title")
+                .GetReference("11")
+                .Child("data")
                 .GetValueAsync();
 
-            return snapshot?.Value?.ToString() ?? $"Skill {skillId}";
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error loading skill name: {ex.Message}");
+            if (snapshot == null || !snapshot.Exists)
+            {
+                skillNames[skillId] = $"Skill {skillId}";
+                return $"Skill {skillId}";
+            }
+
+            foreach (DataSnapshot skillSnapshot in snapshot.Children)
+            {
+                string currentSkillId = skillSnapshot.Child("id").Value?.ToString();
+                if (currentSkillId == skillId)
+                {
+                    string skillName = skillSnapshot.Child("title").Value?.ToString();
+                    if (!string.IsNullOrEmpty(skillName))
+                    {
+                        skillNames[skillId] = skillName;
+                        return skillName;
+                    }
+                }
+            }
+
+            skillNames[skillId] = $"Skill {skillId}";
             return $"Skill {skillId}";
         }
-    }
-
-    private async Task<string> GetAdditionalSkillName(int index)
-    {
-        try
-        {
-            int skillId = 100 + index;
-            DataSnapshot snapshot = await FirebaseDatabase.DefaultInstance
-                .GetReference("skills")
-                .Child(skillId.ToString())
-                .Child("title")
-                .GetValueAsync();
-
-            return snapshot?.Value?.ToString() ?? $"Additional Skill {index}";
-        }
         catch (Exception ex)
         {
-            Debug.LogError($"Error loading additional skill name: {ex.Message}");
-            return $"Additional Skill {index}";
+            Debug.LogError($"Error loading skill name for ID {skillId}: {ex.Message}");
+            return $"Skill {skillId}";
         }
     }
 
@@ -324,17 +324,11 @@ public class PrSkillsManager : MonoBehaviour
 
             if (isMainSkill)
             {
-                if (skillIndex >= currentMainSkillIds.Count)
-                {
-                    Debug.LogError($"Main skill index out of range: {skillIndex}");
-                    return;
-                }
-
                 skillId = currentMainSkillIds[skillIndex];
                 skillKey = $"main_skills/{skillId}";
                 newValue = mainSkills[$"skill{skillIndex + 1}"] + 1;
                 mainSkills[$"skill{skillIndex + 1}"] = newValue;
-                string skillName = await GetSkillName(skillId);
+                string skillName = skillNames[skillId];
                 mainSkillTexts[skillIndex].text = $"{skillName}: {newValue}";
             }
             else
@@ -343,11 +337,10 @@ public class PrSkillsManager : MonoBehaviour
                 skillKey = $"additional_skills/{skillId}";
                 newValue = additionalSkills[$"add_skill{skillIndex + 1}"] + 1;
                 additionalSkills[$"add_skill{skillIndex + 1}"] = newValue;
-                string skillName = await GetAdditionalSkillName(skillIndex + 1);
+                string skillName = skillNames[skillId];
                 additionalSkillTexts[skillIndex].text = $"{skillName}: {newValue}";
             }
 
-            // Проверяем ограничение нажатий
             currentSkillKey = $"{currentStudent.Id}_{skillId}";
             DateTime now = DateTime.Now;
             DateTime today = now.Date;
@@ -361,7 +354,6 @@ public class PrSkillsManager : MonoBehaviour
             {
                 if (clickCounts.ContainsKey(currentSkillKey) && clickCounts[currentSkillKey] >= MAX_CLICKS_PER_DAY)
                 {
-                    Debug.LogWarning($"Daily click limit reached (5/day) for skill {skillId}");
                     ShowLimitExceededMessage(isMainSkill, skillIndex);
                     return;
                 }
@@ -371,7 +363,6 @@ public class PrSkillsManager : MonoBehaviour
                 lastClickTimes[currentSkillKey] = now;
             }
 
-            // Обновляем состояние кнопки
             if (isMainSkill)
             {
                 if (clickCounts[currentSkillKey] >= MAX_CLICKS_PER_DAY)
@@ -389,7 +380,6 @@ public class PrSkillsManager : MonoBehaviour
                 }
             }
 
-            // Обновляем в Firebase
             await FirebaseDatabase.DefaultInstance
                 .GetReference("16")
                 .Child("data")
@@ -397,10 +387,7 @@ public class PrSkillsManager : MonoBehaviour
                 .Child(skillKey)
                 .SetValueAsync(newValue);
 
-            // Сохраняем счетчик нажатий
             await SaveClickCount(currentSkillKey, clickCounts[currentSkillKey]);
-
-            Debug.Log($"Skill updated. Clicks today: {clickCounts[currentSkillKey]}/{MAX_CLICKS_PER_DAY}");
         }
         catch (Exception ex)
         {
