@@ -11,7 +11,7 @@ public class GameOverController : MonoBehaviour
     public TextMeshProUGUI timeText;
     private FirebaseDBManager firebaseManager;
 
-    // Статические поля для хранения данных между сценами
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public static int LastScore { get; private set; }
     public static float LastTime { get; private set; }
     public static bool LastIsWin { get; private set; }
@@ -27,19 +27,19 @@ public class GameOverController : MonoBehaviour
     {
         firebaseManager = FirebaseDBManager.Instance;
 
-        // Получаем сохраненные результаты
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         int score = LastScore;
         float time = LastTime;
         bool isWin = LastIsWin;
 
-        // Отображаем результаты
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         scoreText.text = $"Score: {score} ({(isWin ? "WIN" : "LOSE")})";
 
         int minutes = Mathf.FloorToInt(time / 60f);
         int seconds = Mathf.FloorToInt(time % 60f);
         timeText.text = string.Format("Time: {0:00}:{1:00}", minutes, seconds);
 
-        // Сохраняем в Firebase
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ Firebase
         if (UserSession.CurrentUser != null)
         {
             SaveGameResults(UserSession.CurrentUser.Id, score, time, isWin);
@@ -67,7 +67,6 @@ public class GameOverController : MonoBehaviour
                 {"game_name", "EnglishMiniGame"},
                 {"score", score},
                 {"time", time},
-                {"is_win", isWin},
                 {"timestamp", System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
                 {"game_version", Application.version}
             };
