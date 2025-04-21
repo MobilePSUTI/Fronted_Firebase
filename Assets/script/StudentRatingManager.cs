@@ -34,7 +34,7 @@ public class StudentRatingManager : MonoBehaviour
     {
         if (isLoading)
         {
-            DebugLog("Rating load already in progress");
+            DebugLog("Ratingkeeper load already in progress");
             return;
         }
 
@@ -43,12 +43,26 @@ public class StudentRatingManager : MonoBehaviour
 
         try
         {
+            // First, display cached data if available
+            if (UserSession.CachedRatingData != null && UserSession.CachedRatingData.Count > 0)
+            {
+                DebugLog("Using cached rating data for initial display...");
+                allUsers = UserSession.CachedRatingData.Select(data => new UserRatingData
+                {
+                    User = data.User,
+                    TotalPoints = data.TotalPoints,
+                    GroupName = data.GroupName
+                }).ToList();
+                await DisplayRating();
+            }
+
+            // Then, load fresh data in the background and update the UI
             await LoadAllUsersWithPoints();
-            DisplayRating();
+            await DisplayRating();
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"Rating error: {ex.Message}");
+            Debug.LogError($"Rating error: {ex.Message}\n{ex.StackTrace}");
         }
         finally
         {
@@ -112,10 +126,26 @@ public class StudentRatingManager : MonoBehaviour
             int points = await CalculateTotalPoints(userId);
             DebugLog($"User {userId} has {points} points");
 
-            if (points > 0) // Only include users with points
+            if (points > 0) // Only include users with points in the main ranking list
             {
                 string groupId = userSnapshot.Child("group_id")?.Value?.ToString();
-                groupNames.TryGetValue(groupId, out string groupName);
+                string groupName;
+
+                // Check if groupId is null before calling TryGetValue
+                if (string.IsNullOrEmpty(groupId))
+                {
+                    DebugLog($"User {userId} has no group_id or group_id is null");
+                    groupName = "N/A";
+                }
+                else
+                {
+                    groupNames.TryGetValue(groupId, out groupName);
+                    if (string.IsNullOrEmpty(groupName))
+                    {
+                        DebugLog($"Group ID {groupId} not found in groupNames for user {userId}");
+                        groupName = "N/A";
+                    }
+                }
 
                 var user = new User
                 {
@@ -132,13 +162,22 @@ public class StudentRatingManager : MonoBehaviour
                     GroupName = groupName ?? "N/A"
                 });
 
-                DebugLog($"Added to rating: {user.Last} {user.First} - {points} points");
+                DebugLog($"Added to rating: {user.Last} {user.First} - {points} points, Group: {groupName}");
             }
         }
 
         // Sort by points descending
         allUsers = allUsers.OrderByDescending(u => u.TotalPoints).ToList();
         DebugLog($"Total users with points: {allUsers.Count}");
+
+        // Update the cache with the fresh data
+        UserSession.CachedRatingData = allUsers.Select(data => new UserSession.UserRatingData
+        {
+            User = data.User,
+            TotalPoints = data.TotalPoints,
+            GroupName = data.GroupName
+        }).ToList();
+        DebugLog("Updated cached rating data with fresh data");
     }
 
     private async Task<int> CalculateTotalPoints(string userId)
@@ -191,14 +230,14 @@ public class StudentRatingManager : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"Error calculating points: {ex.Message}");
+            Debug.LogError($"Error calculating points for user {userId}: {ex.Message}");
         }
 
         DebugLog($"Final points for {userId}: {totalPoints}");
         return totalPoints;
     }
 
-    private void DisplayRating()
+    private async Task DisplayRating()
     {
         if (ratingItems == null || ratingItems.Length == 0)
         {
@@ -229,42 +268,27 @@ public class StudentRatingManager : MonoBehaviour
             ratingItems[i].SetActive(false);
         }
 
-        // Find current user
+        // Find current user in the ranking list (if they have points > 0)
         UserRatingData currentUserData = null;
         if (UserSession.CurrentUser != null)
         {
             currentUserData = allUsers.FirstOrDefault(u => u.User.Id == UserSession.CurrentUser.Id);
             DebugLog(currentUserData != null ?
-                $"Current user found at position {allUsers.IndexOf(currentUserData) + 1}" :
-                "Current user not found in rating");
+                $"Current user found at position {allUsers.IndexOf(currentUserData) + 1} in ranking" :
+                "Current user not found in ranking (likely has 0 points)");
         }
 
-        // Determine who to show
+        // Display top 10 users in the main list
         var usersToShow = new List<UserRatingData>();
-        int displayCount = Mathf.Min(10, allUsers.Count);
+        int topUsersToShow = Mathf.Min(10, allUsers.Count);
 
-        bool showCurrentUserSeparately = currentUserData != null &&
-                                      allUsers.IndexOf(currentUserData) >= 10;
-
-        int topUsersToShow = showCurrentUserSeparately ?
-            Mathf.Min(9, allUsers.Count) :
-            displayCount;
-
-        // Add top users
         for (int i = 0; i < topUsersToShow; i++)
         {
             usersToShow.Add(allUsers[i]);
             DebugLog($"Added top user {i + 1}: {allUsers[i].User.Last} {allUsers[i].User.First}");
         }
 
-        // Add current user if needed
-        if (showCurrentUserSeparately)
-        {
-            usersToShow.Add(currentUserData);
-            DebugLog($"Added current user separately at position {usersToShow.Count}");
-        }
-
-        // Display users
+        // Display users in the main list
         for (int i = 0; i < usersToShow.Count; i++)
         {
             if (i >= ratingItems.Length || ratingItems[i] == null)
@@ -288,11 +312,11 @@ public class StudentRatingManager : MonoBehaviour
                 DebugLog($"Displaying at position {i}: " +
                          $"{actualPosition}. {userData.User.Last} {userData.User.First} - {userData.TotalPoints} pts");
 
-                // Highlight current user
+                // Highlight current user if they are in the top 10
                 if (currentUserData != null && userData.User.Id == currentUserData.User.Id)
                 {
                     HighlightPosition(ratingItems[i]);
-                    DebugLog($"Highlighting current user at position {i}");
+                    DebugLog($"Highlighting current user at position {i} in main list");
                 }
             }
             else
@@ -301,33 +325,72 @@ public class StudentRatingManager : MonoBehaviour
             }
         }
 
-        // Current user special display
-        if (currentUserRatingItem != null)
+        // Always display the current user in the "Current User Rating" section
+        if (currentUserRatingItem != null && UserSession.CurrentUser != null)
         {
-            bool shouldShowCurrentUser = currentUserData != null &&
-                                      (allUsers.IndexOf(currentUserData) >= 10 ||
-                                       allUsers.IndexOf(currentUserData) == -1);
-
-            if (shouldShowCurrentUser)
+            var texts = currentUserRatingItem.GetComponentsInChildren<Text>(true);
+            if (texts.Length >= 3)
             {
-                var texts = currentUserRatingItem.GetComponentsInChildren<Text>(true);
-                if (texts.Length >= 3)
-                {
-                    int position = allUsers.IndexOf(currentUserData) + 1;
-                    texts[0].text = position > 0 ? position.ToString() : "-";
-                    texts[1].text = $"{currentUserData.User.Last} {currentUserData.User.First}";
-                    texts[2].text = currentUserData.TotalPoints.ToString();
-                    HighlightPosition(currentUserRatingItem);
+                int position = -1;
+                int currentUserPoints = 0;
+                string groupName = "N/A";
 
-                    DebugLog($"Displaying current user separately: " +
-                             $"{position}. {currentUserData.User.Last} {currentUserData.User.First}");
+                // If the current user is in the ranking list, use their data
+                if (currentUserData != null)
+                {
+                    position = allUsers.IndexOf(currentUserData) + 1;
+                    currentUserPoints = currentUserData.TotalPoints;
+                    groupName = currentUserData.GroupName;
                 }
-                currentUserRatingItem.SetActive(true);
+                else
+                {
+                    // Otherwise, calculate their points and fetch their group name
+                    currentUserPoints = await CalculateTotalPoints(UserSession.CurrentUser.Id);
+                    DebugLog($"Current user points (calculated separately): {currentUserPoints}");
+
+                    // Fetch the current user's group name
+                    DataSnapshot userSnapshot = await FirebaseDatabase.DefaultInstance
+                        .GetReference("14")
+                        .Child("data")
+                        .Child(UserSession.CurrentUser.Id)
+                        .GetValueAsync();
+
+                    if (userSnapshot.Exists)
+                    {
+                        string groupId = userSnapshot.Child("group_id")?.Value?.ToString();
+                        if (!string.IsNullOrEmpty(groupId))
+                        {
+                            var dbManager = FindObjectOfType<FirebaseDBManager>();
+                            if (dbManager != null)
+                            {
+                                groupName = await dbManager.GetGroupName(groupId);
+                                if (string.IsNullOrEmpty(groupName))
+                                {
+                                    DebugLog($"Group ID {groupId} not found for current user");
+                                    groupName = "N/A";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                texts[0].text = position > 0 ? position.ToString() : "-";
+                texts[1].text = $"{UserSession.CurrentUser.Last} {UserSession.CurrentUser.First}";
+                texts[2].text = currentUserPoints.ToString();
+                HighlightPosition(currentUserRatingItem);
+
+                DebugLog($"Displaying current user in Current User Rating section: " +
+                         $"{(position > 0 ? position.ToString() : "-")}. " +
+                         $"{UserSession.CurrentUser.Last} {UserSession.CurrentUser.First} - {currentUserPoints} pts, Group: {groupName}");
             }
-            else
+            currentUserRatingItem.SetActive(true);
+        }
+        else
+        {
+            if (currentUserRatingItem != null)
             {
                 currentUserRatingItem.SetActive(false);
-                DebugLog("Current user is in top 10, hiding separate display");
+                DebugLog("No current user logged in or currentUserRatingItem is null, hiding Current User Rating section");
             }
         }
     }

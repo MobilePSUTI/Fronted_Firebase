@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         set
         {
             coinsCollected = Mathf.Min(value, MAX_COINS);
-            coinsText.text = "Coins: " + coinsCollected;
+            coinsText.text = ""+coinsCollected;
 
             if (coinsCollected >= MAX_COINS && !gameOver)
             {
