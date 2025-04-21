@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9eedc48d-cec1-485b-a551-eb7833e71933" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/ExternalDependencyManager/Editor/1.2.185/Google.IOSResolver.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ExternalDependencyManager/Editor/1.2.185/Google.JarResolver.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ExternalDependencyManager/Editor/1.2.185/Google.PackageManagerResolver.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ExternalDependencyManager/Editor/1.2.185/Google.VersionHandlerImpl.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ExternalDependencyManager/Editor/Google.VersionHandler.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Editor/Firebase.Editor.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/Firebase.App.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/Firebase.Auth.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/Firebase.Database.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/Firebase.Platform.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/Firebase.TaskExtension.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/iOS/Firebase.App.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/iOS/Firebase.Auth.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Firebase/Plugins/iOS/Firebase.Database.pdb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/footer.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/footer.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/footer_menu_st 1.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/footer_menu_st 1.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Panel_news.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Panel_news.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/dezain/назнач доп баллов/фон ведомости назнач доб баллов.png" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/dezain/назнач доп баллов/фон ведомости назнач доб баллов.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainAuthPr.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainAuthPr.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainAuthSt.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainAuthSt.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrChats.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrChats.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrGroupsSt.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrGroupsSt.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrInfoSt.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrInfoSt.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrListStudents.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrListStudents.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrSkillsStudent.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrSkillsStudent.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrVedomosti.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrVedomosti.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrepodModel.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prepod/PrepodModel.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Student/ChatsStMl.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Student/ChatsStMl.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Student/GameModel/EngGame/GameEnglish.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Student/GameModel/EngGame/GameEnglish.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Student/GameModel/LinuxGame/GameOverLinux.unity.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Student/GameModel/LinuxGame/GameOverLinux.unity.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Student/GameStMl.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Student/GameStMl.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Student/LkStudentsModel.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Student/LkStudentsModel.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Student/StudentsScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Student/StudentsScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Oswald Bold SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/script/GameEnglish/EnemyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/script/GameEnglish/EnemyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2w1miEdXyAIktkYClsuhof6Kvvu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging dev",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.112" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9eedc48d-cec1-485b-a551-eb7833e71933" name="Changes" comment="" />
+      <created>1745217579776</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1745217579776</updated>
+      <workItem from="1745217581908" duration="5000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
