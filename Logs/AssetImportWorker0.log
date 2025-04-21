@@ -285,3 +285,69 @@ Received Import Request.
 Start importing Assets/Scenes/Student/LkStudentsModel.unity using Guid(890a59555b23ae948aca653b90391686) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3a743c10453b4befbc8acf3380461537') in 0.0739562 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
 
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 15.07 ms, found 7 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 32 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6940 unused Assets / (5.3 MB). Loaded Objects now: 7515.
+Memory consumption went from 133.9 MB to 128.6 MB.
+Total: 251.391800 ms (FindLiveObjects: 8.694100 ms CreateObjectMapping: 0.543600 ms MarkObjects: 234.530800 ms  DeleteObjects: 7.620800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 386.922264 seconds.
+  path: Assets/Scenes/Student/ChatsStMl.unity
+  artifactKey: Guid(08731d559409e51449c2d996b8824181) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Student/ChatsStMl.unity using Guid(08731d559409e51449c2d996b8824181) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4e292187538c3e96e992cdb819e109a9') in 0.2093744 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 58.124385 seconds.
+  path: Assets/Scenes/Student/GameStMl.unity
+  artifactKey: Guid(656bf58ae296a2f46aa1b05d268f3498) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Student/GameStMl.unity using Guid(656bf58ae296a2f46aa1b05d268f3498) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '91197a4eb5f809cb1d5fa103870430f0') in 0.0018038 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.166581 seconds.
+  path: Assets/Scenes/Student/StRaiting.unity
+  artifactKey: Guid(46a848d37bd2cbd4c9d98e720665c4c3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Student/StRaiting.unity using Guid(46a848d37bd2cbd4c9d98e720665c4c3) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '1f82922f1f82fe66665216dfd5fc6399') in 0.0008613 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.615144 seconds.
+  path: Assets/Scenes/Student/PrsStMl.unity
+  artifactKey: Guid(ceb848044d512f64ea6f19acd8446684) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Student/PrsStMl.unity using Guid(ceb848044d512f64ea6f19acd8446684) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '204b0c4d9c1c9628f55a0289405b406a') in 0.0007204 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.657036 seconds.
+  path: Assets/Scenes/Student/StRegistr.unity
+  artifactKey: Guid(a40b32bb4f5dcc54e8a0c7b18fa7b8be) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Student/StRegistr.unity using Guid(a40b32bb4f5dcc54e8a0c7b18fa7b8be) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '12da4f615fe7f005da30599e6febb244') in 0.0006548 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.724639 seconds.
+  path: Assets/Scenes/Student/StudentsScene.unity
+  artifactKey: Guid(acc14b09460dc0e43967087c182ab885) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Student/StudentsScene.unity using Guid(acc14b09460dc0e43967087c182ab885) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '9369740aa377f647352e8e05ccb11de3') in 0.0006575 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 35.160337 seconds.
+  path: Assets/script/GameLinux/LinuxGameOverController.cs
+  artifactKey: Guid(016de17f10eb25548b7af87d11a7da44) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/script/GameLinux/LinuxGameOverController.cs using Guid(016de17f10eb25548b7af87d11a7da44) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '69040716db15601f8c678ddf58ec85e8') in 0.002452 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
