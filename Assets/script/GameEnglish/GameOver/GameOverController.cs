@@ -7,18 +7,30 @@ using System.Collections.Generic;
 
 public class GameOverController : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText; // Переименовали coinsText в scoreText
+    public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timeText;
     private FirebaseDBManager firebaseManager;
+
+    // Статические поля для хранения данных между сценами
+    public static int LastScore { get; private set; }
+    public static float LastTime { get; private set; }
+    public static bool LastIsWin { get; private set; }
+
+    public static void SetGameResults(int score, float time, bool isWin)
+    {
+        LastScore = score;
+        LastTime = time;
+        LastIsWin = isWin;
+    }
 
     private void Start()
     {
         firebaseManager = FirebaseDBManager.Instance;
 
-        // Получаем сохраненные результаты из GameManager
-        int score = GameManager.Instance != null ? GameManager.Instance.CoinsCollected : PlayerPrefs.GetInt("FinalCoins", 0);
-        float time = GameManager.Instance != null ? GameManager.Instance.gameTimer : PlayerPrefs.GetFloat("FinalTime", 0f);
-        bool isWin = GameManager.Instance != null ? (GameManager.Instance.CoinsCollected >= GameManager.MAX_COINS) : (PlayerPrefs.GetInt("IsWin", 0) == 1);
+        // Получаем сохраненные результаты
+        int score = LastScore;
+        float time = LastTime;
+        bool isWin = LastIsWin;
 
         // Отображаем результаты
         scoreText.text = $"Score: {score} ({(isWin ? "WIN" : "LOSE")})";
@@ -27,7 +39,7 @@ public class GameOverController : MonoBehaviour
         int seconds = Mathf.FloorToInt(time % 60f);
         timeText.text = string.Format("Time: {0:00}:{1:00}", minutes, seconds);
 
-        // Сохраняем результаты в Firebase
+        // Сохраняем в Firebase
         if (UserSession.CurrentUser != null)
         {
             SaveGameResults(UserSession.CurrentUser.Id, score, time, isWin);
@@ -49,28 +61,25 @@ public class GameOverController : MonoBehaviour
 
         try
         {
-            string gameName = "EnglishMiniGame"; // Фиксированное имя игры
-            string timestamp = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
-
             var gameResult = new Dictionary<string, object>
             {
                 {"student_id", studentId},
-                {"game_name", gameName},
+                {"game_name", "EnglishMiniGame"},
                 {"score", score},
                 {"time", time},
                 {"is_win", isWin},
-                {"timestamp", timestamp},
+                {"timestamp", System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
                 {"game_version", Application.version}
             };
 
             DatabaseReference gameResultsRef = firebaseManager.DatabaseReference.Child("game_results").Push();
             await gameResultsRef.SetValueAsync(gameResult);
 
-            Debug.Log("English game results saved successfully for student: " + studentId);
+            Debug.Log("Game results saved successfully");
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("Failed to save English game results: " + ex.Message);
+            Debug.LogError("Failed to save game results: " + ex.Message);
         }
     }
 }

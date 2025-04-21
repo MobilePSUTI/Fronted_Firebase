@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using System;
+using TMPro; // Для TextMeshPro, если используется
 
 public class StudentListManager : MonoBehaviour
 {
     public GameObject studentPrefab;
     public Transform studentParent;
     public GameObject loadingIndicator;
+    public Text groupNameText; // Ссылка на компонент Text для отображения названия группы
+    public TextMeshProUGUI groupNameTextTMP; // Ссылка на TextMeshProUGUI (если используется)
 
     private FirebaseDBManager _dbManager;
 
@@ -32,6 +35,26 @@ public class StudentListManager : MonoBehaviour
 
         try
         {
+            // Убедимся, что Firebase инициализирован
+            await _dbManager.Initialize();
+
+            // Получаем название группы из базы данных
+            string groupName = await _dbManager.GetGroupName(UserSession.SelectedGroupId);
+
+            // Обновляем текстовый элемент с названием группы
+            if (groupNameText != null)
+            {
+                groupNameText.text = string.IsNullOrEmpty(groupName) ? "Группа не найдена" : $"Группа: {groupName}";
+            }
+            else if (groupNameTextTMP != null)
+            {
+                groupNameTextTMP.text = string.IsNullOrEmpty(groupName) ? "Группа не найдена" : $"Группа: {groupName}";
+            }
+            else
+            {
+                Debug.LogWarning("Не указан компонент текста для отображения названия группы!");
+            }
+
             // Проверяем кеш в UserSession
             if (UserSession.CachedStudents.TryGetValue(UserSession.SelectedGroupId, out var cachedStudents))
             {
@@ -41,9 +64,7 @@ public class StudentListManager : MonoBehaviour
                 return;
             }
 
-            // Убедимся, что Firebase инициализирован
-            await _dbManager.Initialize();
-
+            // Загружаем студентов
             var students = await _dbManager.GetStudentsByGroup(UserSession.SelectedGroupId);
 
             if (students != null && students.Count > 0)
@@ -55,7 +76,7 @@ public class StudentListManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Ошибка при загрузке студентов: {ex.Message}");
+            Debug.LogError($"Ошибка при загрузке данных: {ex.Message}");
         }
         finally
         {

@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
 
         GameSession.AddCoins(coinsCollected);
         GameSession.SetTime(gameTimer);
-
+        GameOverController.SetGameResults(coinsCollected, gameTimer, isWin);
         SceneManager.LoadScene("GameOverEnglish");
     }
 
