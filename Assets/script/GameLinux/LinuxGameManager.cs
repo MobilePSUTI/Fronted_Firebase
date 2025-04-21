@@ -36,8 +36,6 @@ public class LinuxGameManager : MonoBehaviour
     private Question currentQuestion;
     private bool gameOver = false;
 
-    public bool IsGameOver => gameOver;
-
     private void Awake()
     {
         if (Instance == null)
@@ -51,7 +49,6 @@ public class LinuxGameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        GameSession.ResetSession();
     }
 
     // Присваиваем обработчики кнопкам
@@ -62,11 +59,6 @@ public class LinuxGameManager : MonoBehaviour
             int index = i; // Локальная переменная для замыкания
             answerButtons[i].onClick.AddListener(() => AnswerClicked(index));
         }
-    }
-    
-    public void SetGamePaused(bool paused)
-    {
-        gameOver = paused;
     }
 
     private void LoadQuestions()
@@ -127,17 +119,20 @@ public class LinuxGameManager : MonoBehaviour
 
     public void AnswerClicked(int index)
     {
-        if (gameOver || PauseManager.Instance.IsGamePaused()) return;
+        if (gameOver) return;
 
         string chosenAnswer = answerTexts[index].text;
         if (chosenAnswer == currentQuestion.CorrectAnswer)
         {
             score += 5;
+            Debug.Log($"Correct answer! New score: {score}");
         }
         else
         {
             StartCoroutine(ErrorAlert());
             errors++;
+            Debug.Log($"Wrong answer! Errors: {errors}/3");
+
             if (errors >= 3)
             {
                 GameOver();
@@ -164,11 +159,10 @@ public class LinuxGameManager : MonoBehaviour
 
     private void GameOver()
     {
-        gameOver = true;
-    
-        // Сохраняем результаты сессии
-        GameSession.AddCoins(score);
-        GameSession.SetTime(Time.timeSinceLevelLoad);
+        PlayerPrefs.SetInt("FinalScore", score);
+        PlayerPrefs.SetInt("FinalErrors", errors);
+        PlayerPrefs.SetFloat("FinalTime", Time.timeSinceLevelLoad);
+        PlayerPrefs.Save();
 
         SceneManager.LoadScene("GameOverLinux");
     }

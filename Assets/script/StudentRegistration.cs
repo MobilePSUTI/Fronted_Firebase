@@ -356,7 +356,7 @@ public class StudentRegistration : MonoBehaviour
         bool success = false;
         string error = "";
 
-        var registerTask = firebaseManager.RegisterNewStudent(
+        var registerTask = firebaseManager.RegisterStudent(
             email, password, firstName, lastName, secondName, groupId, avatarBytes);
         yield return new WaitUntil(() => registerTask.IsCompleted);
 
