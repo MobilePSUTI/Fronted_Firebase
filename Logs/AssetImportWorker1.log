@@ -15,7 +15,7 @@ D:/Unity/Progect/Fronted_Firebase
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-55329
+51539
 -job-worker-count
 5
 -background-job-worker-count
@@ -59,14 +59,14 @@ D:/Unity/Progect/Fronted_Firebase
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [27172]  Target information:
+Player connection [34752]  Target information:
 
-Player connection [27172]  * "[IP] 192.168.0.106 [Port] 0 [Flags] 2 [Guid] 356567723 [EditorId] 356567723 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [34752]  * "[IP] 192.168.0.106 [Port] 0 [Flags] 2 [Guid] 3500752451 [EditorId] 3500752451 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [27172]  * "[IP] 26.175.8.104 [Port] 0 [Flags] 2 [Guid] 356567723 [EditorId] 356567723 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [34752]  * "[IP] 26.175.8.104 [Port] 0 [Flags] 2 [Guid] 3500752451 [EditorId] 3500752451 [Version] 1048832 [Id] WindowsEditor(7,DanilaBulgakov) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [27172] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [27172] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [34752] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [34752] Host joined alternative multi-casting on [225.0.0.222:34997]...
 JobSystem: Creating JobQueue using job-worker-count value 5
 Input System module state changed to: Initialized.
 [Physics::Module] Initialized fallback backend.
@@ -78,7 +78,7 @@ Library Redirect Path: Library/
 [Physics::Module] SDK Version: 4.1.2
 [Physics::Module] Integration Version: 1.0.0
 [Physics::Module] Threading Mode: Multi-Threaded
-Refreshing native plugins compatible for Editor in 5.33 ms, found 7 plugins.
+Refreshing native plugins compatible for Editor in 13.54 ms, found 7 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.0.38f1 (82314a941f2d)
 [Subsystems] Discovering subsystems at path D:/Unity/6000.0.38f1/Editor/Data/Resources/UnitySubsystems
@@ -94,50 +94,50 @@ Initialize mono
 Mono path[0] = 'D:/Unity/6000.0.38f1/Editor/Data/Managed'
 Mono path[1] = 'D:/Unity/6000.0.38f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'D:/Unity/6000.0.38f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56832
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56224
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: D:/Unity/6000.0.38f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
 Register platform support module: D:/Unity/6000.0.38f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: D:/Unity/6000.0.38f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
-Registered in 0.016073 seconds.
-- Loaded All Assemblies, in  0.724 seconds
+Registered in 0.016301 seconds.
+- Loaded All Assemblies, in  0.739 seconds
 [usbmuxd] Start listen thread
 [usbmuxd] Listen thread started
 Native extension for iOS target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 558 ms
+Android Extension - Scanning For ADB Devices 531 ms
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.997 seconds
-Domain Reload Profiling: 1721ms
-	BeginReloadAssembly (423ms)
+- Finished resetting the current domain, in  0.993 seconds
+Domain Reload Profiling: 1732ms
+	BeginReloadAssembly (434ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (37ms)
+	RebuildCommonClasses (38ms)
 	RebuildNativeTypeToScriptingClass (11ms)
 	initialDomainReloadingComplete (71ms)
-	LoadAllAssembliesAndSetupDomain (181ms)
-		LoadAssemblies (424ms)
+	LoadAllAssembliesAndSetupDomain (184ms)
+		LoadAssemblies (434ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (177ms)
-			TypeCache.Refresh (175ms)
-				TypeCache.ScanAssembly (161ms)
+		AnalyzeDomain (180ms)
+			TypeCache.Refresh (177ms)
+				TypeCache.ScanAssembly (156ms)
 			BuildScriptInfoCaches (0ms)
-			ResolveRequiredComponents (0ms)
-	FinalizeReload (997ms)
+			ResolveRequiredComponents (2ms)
+	FinalizeReload (994ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (949ms)
+		SetupLoadedEditorAssemblies (942ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (661ms)
-			SetLoadedEditorAssemblies (4ms)
-			BeforeProcessingInitializeOnLoad (55ms)
-			ProcessInitializeOnLoadAttributes (161ms)
-			ProcessInitializeOnLoadMethodAttributes (68ms)
+			InitializePlatformSupportModulesInManaged (657ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (59ms)
+			ProcessInitializeOnLoadAttributes (154ms)
+			ProcessInitializeOnLoadMethodAttributes (67ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -146,12 +146,12 @@ Domain Reload Profiling: 1721ms
 Worker process is ready to serve import requests
 Import Worker Mode flag is 0x00
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  1.704 seconds
-Refreshing native plugins compatible for Editor in 6.68 ms, found 7 plugins.
+- Loaded All Assemblies, in  1.648 seconds
+Refreshing native plugins compatible for Editor in 5.58 ms, found 7 plugins.
 Native extension for iOS target not found
 Native extension for Android target not found
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 8.87 ms, found 7 plugins.
+Refreshing native plugins compatible for Editor in 9.22 ms, found 7 plugins.
 Mono: successfully reloaded assembly
 Package Manager log level set to [2]
 [Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
@@ -160,144 +160,64 @@ Package Manager log level set to [2]
 [Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] Unable to send message (not connected to server process).
 [Package Manager] Cannot connect to Unity Package Manager local server
-- Finished resetting the current domain, in  0.960 seconds
-Domain Reload Profiling: 2663ms
-	BeginReloadAssembly (191ms)
+- Finished resetting the current domain, in  0.920 seconds
+Domain Reload Profiling: 2568ms
+	BeginReloadAssembly (182ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (6ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (35ms)
-	RebuildCommonClasses (43ms)
-	RebuildNativeTypeToScriptingClass (13ms)
-	initialDomainReloadingComplete (45ms)
-	LoadAllAssembliesAndSetupDomain (1410ms)
-		LoadAssemblies (1179ms)
+		CreateAndSetChildDomain (32ms)
+	RebuildCommonClasses (37ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (37ms)
+	LoadAllAssembliesAndSetupDomain (1380ms)
+		LoadAssemblies (1122ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (352ms)
-			TypeCache.Refresh (257ms)
-				TypeCache.ScanAssembly (234ms)
-			BuildScriptInfoCaches (77ms)
-			ResolveRequiredComponents (13ms)
-	FinalizeReload (960ms)
+		AnalyzeDomain (369ms)
+			TypeCache.Refresh (263ms)
+				TypeCache.ScanAssembly (241ms)
+			BuildScriptInfoCaches (88ms)
+			ResolveRequiredComponents (14ms)
+	FinalizeReload (921ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (830ms)
+		SetupLoadedEditorAssemblies (787ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (15ms)
-			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (137ms)
-			ProcessInitializeOnLoadAttributes (586ms)
-			ProcessInitializeOnLoadMethodAttributes (87ms)
+			InitializePlatformSupportModulesInManaged (17ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (122ms)
+			ProcessInitializeOnLoadAttributes (565ms)
+			ProcessInitializeOnLoadMethodAttributes (77ms)
 			AfterProcessingInitializeOnLoad (2ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (5ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.07 seconds
-Refreshing native plugins compatible for Editor in 5.30 ms, found 7 plugins.
+		AwakeInstancesAfterBackupRestoration (7ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
+Refreshing native plugins compatible for Editor in 6.67 ms, found 7 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 147 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 6991 unused Assets / (7.6 MB). Loaded Objects now: 7507.
-Memory consumption went from 160.5 MB to 152.9 MB.
-Total: 14.190800 ms (FindLiveObjects: 1.928000 ms CreateObjectMapping: 1.036000 ms MarkObjects: 5.825600 ms  DeleteObjects: 5.398500 ms)
+Unloading 6988 unused Assets / (6.5 MB). Loaded Objects now: 7504.
+Memory consumption went from 160.7 MB to 154.2 MB.
+Total: 15.526100 ms (FindLiveObjects: 1.511200 ms CreateObjectMapping: 0.834300 ms MarkObjects: 7.183900 ms  DeleteObjects: 5.995000 ms)
 
 ========================================================================
-Received Import Request.
-  Time since last request: 54526.632581 seconds.
-  path: Assets/Resources/Panel_newPhoto.prefab
-  artifactKey: Guid(89a8fcec9646da44a80d26c6bff32d4c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Panel_newPhoto.prefab using Guid(89a8fcec9646da44a80d26c6bff32d4c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'b617b720ed5346cf9a9fe43fa798dbed') in 0.1240078 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 31
+Received Prepare
+Refreshing native plugins compatible for Editor in 5.19 ms, found 7 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 32 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6931 unused Assets / (6.6 MB). Loaded Objects now: 7504.
+Memory consumption went from 131.9 MB to 125.3 MB.
+Total: 10.768900 ms (FindLiveObjects: 0.613900 ms CreateObjectMapping: 0.533200 ms MarkObjects: 6.396900 ms  DeleteObjects: 3.222900 ms)
 
+Prepare: number of updated asset objects reloaded= 0
 ========================================================================
-Received Import Request.
-  Time since last request: 0.000032 seconds.
-  path: Assets/Resources/Panel_news.prefab
-  artifactKey: Guid(33409fdf4674e2341aa33989faf3780f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Panel_news.prefab using Guid(33409fdf4674e2341aa33989faf3780f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '7fb54850c8d1d7649a5e5907ac607055') in 0.0683852 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 64
+Received Prepare
+Refreshing native plugins compatible for Editor in 7.03 ms, found 7 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 32 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6930 unused Assets / (7.7 MB). Loaded Objects now: 7503.
+Memory consumption went from 131.8 MB to 124.1 MB.
+Total: 291.778500 ms (FindLiveObjects: 1.990500 ms CreateObjectMapping: 1.202100 ms MarkObjects: 282.881900 ms  DeleteObjects: 5.699600 ms)
 
-========================================================================
-Received Import Request.
-  Time since last request: 4.579841 seconds.
-  path: Assets/Resources/1.1 пгути/для студентов/1_выбор/кнопка я - преподаватель.png
-  artifactKey: Guid(cf907db2b35b8d94abd2a750c20d9048) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для студентов/1_выбор/кнопка я - преподаватель.png using Guid(cf907db2b35b8d94abd2a750c20d9048) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8f6c1d57375a70270f703ab00d69c62f') in 0.114755 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Resources/1.1 пгути/для студентов/1_выбор/фон без лого.png
-  artifactKey: Guid(91a6f6d221ea937429d4db61109f53a5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для студентов/1_выбор/фон без лого.png using Guid(91a6f6d221ea937429d4db61109f53a5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '17b1974e30faafb97a5c74de0b9102c7') in 0.0649009 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 7.255410 seconds.
-  path: Assets/Resources/1.1 пгути/для студентов/личный кабинет/кнопка повысить уровень.png
-  artifactKey: Guid(14cb2f4cbffb9ec47b77c2483a285940) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для студентов/личный кабинет/кнопка повысить уровень.png using Guid(14cb2f4cbffb9ec47b77c2483a285940) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e828b304782d0418d17c885268f95864') in 0.0304009 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000026 seconds.
-  path: Assets/Resources/1.1 пгути/для студентов/личный кабинет/портфолио.png
-  artifactKey: Guid(7da3ee2cb554342468bb65e741c70cc8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для студентов/личный кабинет/портфолио.png using Guid(7da3ee2cb554342468bb65e741c70cc8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '56262c2faf48a7656507f5c3241fdbab') in 0.0243007 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000131 seconds.
-  path: Assets/Resources/1.1 пгути/для студентов/личный кабинет/настройки.png
-  artifactKey: Guid(8288842b50ea3304493e91f1bcdc4449) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для студентов/личный кабинет/настройки.png using Guid(8288842b50ea3304493e91f1bcdc4449) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'f1e697714bb3b5a65511c787f1e679da') in 0.0321431 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000030 seconds.
-  path: Assets/Resources/1.1 пгути/для студентов/личный кабинет/рейтинг игроков.png
-  artifactKey: Guid(4fdd0d0ba00b32541b4ad4ca5c940497) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для студентов/личный кабинет/рейтинг игроков.png using Guid(4fdd0d0ba00b32541b4ad4ca5c940497) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '33edbde5ebc0f4b1d174fdd4357fbd3f') in 0.0177555 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000051 seconds.
-  path: Assets/Resources/1.1 пгути/для студентов/личный кабинет/тень перса.png
-  artifactKey: Guid(d8ae1ae893c89d04d880ddef7584400a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для студентов/личный кабинет/тень перса.png using Guid(d8ae1ae893c89d04d880ddef7584400a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'f9b3cdc514ec999907783168cc3cd34f') in 0.0293002 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 39.887943 seconds.
-  path: Assets/Resources/рейтинг/РЕЙТИНГ.png
-  artifactKey: Guid(0f1a0e46f5bf48b4696213853c0dc17d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/рейтинг/РЕЙТИНГ.png using Guid(0f1a0e46f5bf48b4696213853c0dc17d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0501cf0517ecef8fcaaa9f65843ddf3e') in 0.0307627 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 5.124174 seconds.
-  path: Assets/Resources/1.1 пгути/для преподов/ВЕДОМ_НАЗНАЧ ДОП БАЛЛОВ_ВЫБОР СКИЛЛА (ОСНОВЫЕ)/+.png
-  artifactKey: Guid(de4756cda8c120243a5a99a2bc2d41c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для преподов/ВЕДОМ_НАЗНАЧ ДОП БАЛЛОВ_ВЫБОР СКИЛЛА (ОСНОВЫЕ)/+.png using Guid(de4756cda8c120243a5a99a2bc2d41c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'cde57c3552793e6e62ecd25400ccaf0c') in 0.0108579 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
-
-========================================================================
-Received Import Request.
-  Time since last request: 24.424116 seconds.
-  path: Assets/Resources/1.1 пгути/для преподов/ведомости/значок ПГУТИ черный 6.png
-  artifactKey: Guid(4421404024e5a9e47805664bb702053e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/1.1 пгути/для преподов/ведомости/значок ПГУТИ черный 6.png using Guid(4421404024e5a9e47805664bb702053e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '507048821f7d0b75e980f3c559c07687') in 0.0561751 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 8
-
-Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
-AssetImportWorker is now disconnected from the server
-Process exiting
-Exiting without the bug reporter. Application will terminate with return code 0
+Prepare: number of updated asset objects reloaded= 0
