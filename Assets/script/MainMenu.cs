@@ -83,6 +83,7 @@ public class MainMenu : MonoBehaviour
                 errorText.text = "";
                 // Запускаем предзагрузку данных студента
                 yield return StartCoroutine(PreloadStudentData());
+                yield return StartCoroutine(LoadStudentAvatar(UserSession.CurrentUser.Id));
                 // Запускаем загрузку новостей в фоне
                 StartCoroutine(LoadNewsInBackground());
                 // Переходим на сцену студентов
@@ -101,6 +102,19 @@ public class MainMenu : MonoBehaviour
 
         if (loadingIndicator != null)
             loadingIndicator.SetActive(false);
+    }
+    private IEnumerator LoadStudentAvatar(string userId)
+    {
+        var task = firebaseManager.GetUserAvatar(userId);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        byte[] avatarData = task.Result;
+        if (avatarData != null && avatarData.Length > 0)
+        {
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(avatarData);
+            UserSession.CachedAvatar = texture;
+        }
     }
 
     IEnumerator LoadNewsInBackground()

@@ -44,8 +44,6 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = isPaused ? 0f : 1f;
 
         // ���������/�������� ������ UI �������� ��� �����
-        if (LinuxGameManager.Instance != null)
-            LinuxGameManager.Instance.SetGamePaused(isPaused);
     }
 
     private void ContinueGame()

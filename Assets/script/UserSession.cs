@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public static class UserSession
 {
@@ -10,6 +11,7 @@ public static class UserSession
     private static List<Group> _cachedGroups = new List<Group>();
     private static Dictionary<string, List<Student>> _cachedStudents = new Dictionary<string, List<Student>>();
     private static StudentProgressController.SkillsCache _cachedSkills;
+    private static Texture2D _cachedAvatar; //аватарка в кэш при входе в систему
     public static User CurrentUser
     {
         get => _currentUser;
@@ -46,6 +48,15 @@ public static class UserSession
         set
         {
             _selectedGroupName = value;
+            SaveSession();
+        }
+    }
+    public static Texture2D CachedAvatar
+    {
+        get => _cachedAvatar;
+        set
+        {
+            _cachedAvatar = value;
             SaveSession();
         }
     }
@@ -102,6 +113,11 @@ public static class UserSession
         {
             PlayerPrefs.SetString("UserSession_CachedSkills", JsonUtility.ToJson(_cachedSkills));
         }
+        if (_cachedAvatar != null)
+        {
+            string avatarBase64 = Convert.ToBase64String(_cachedAvatar.EncodeToPNG());
+            PlayerPrefs.SetString("UserSession_CachedAvatar", avatarBase64);
+        }
 
         PlayerPrefs.Save();
     }
@@ -128,6 +144,14 @@ public static class UserSession
             _cachedSkills = JsonUtility.FromJson<StudentProgressController.SkillsCache>(
                 PlayerPrefs.GetString("UserSession_CachedSkills"));
         }
+        if (PlayerPrefs.HasKey("UserSession_CachedAvatar"))
+        {
+            string avatarBase64 = PlayerPrefs.GetString("UserSession_CachedAvatar");
+            byte[] avatarData = Convert.FromBase64String(avatarBase64);
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(avatarData);
+            _cachedAvatar = texture;
+        }
     }
 
     public static void ClearCache()
@@ -146,6 +170,7 @@ public static class UserSession
         _selectedGroupId = null;
         _selectedGroupName = null;
         _cachedSkills = null;
+        _cachedAvatar = null;
         _cachedGroups.Clear();
         _cachedStudents.Clear();
 
@@ -154,6 +179,7 @@ public static class UserSession
         PlayerPrefs.DeleteKey("UserSession_SelectedGroupId");
         PlayerPrefs.DeleteKey("UserSession_SelectedGroupName");
         PlayerPrefs.DeleteKey("UserSession_CachedSkills");
+        PlayerPrefs.DeleteKey("UserSession_CachedAvatar");
         PlayerPrefs.Save();
     }
 }

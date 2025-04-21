@@ -120,7 +120,7 @@ public class FirebaseDBManager : MonoBehaviour
                             Second = userSnapshot.Child("second_name")?.Value?.ToString() ?? "",
                             GroupName = await GetGroupName(userSnapshot.Child("group_id")?.Value?.ToString()),
                             Role = role,
-                            // написать загрузку аватара при входе студента
+                            AvatarPath = userSnapshot.Child("avatar_path")?.Value?.ToString() ?? ""
                         };
                     }
                     else
@@ -219,13 +219,13 @@ public class FirebaseDBManager : MonoBehaviour
     }
 
     public async Task<bool> RegisterStudent(
-       string email,
-       string password,
-       string firstName,
-       string lastName,
-       string secondName,
-       string groupId,
-       byte[] avatar)
+    string email,
+    string password,
+    string firstName,
+    string lastName,
+    string secondName,
+    string groupId,
+    byte[] avatar)
     {
         if (!isInitialized)
         {
@@ -243,26 +243,29 @@ public class FirebaseDBManager : MonoBehaviour
             }
 
             // 2. Получаем данные группы
+            Debug.Log($"[RegisterStudent] Attempting to retrieve group with ID: {groupId}");
             DataSnapshot groupSnapshot = await databaseRef
                 .Child("6") // groups table
                 .Child("data")
-                .Child(groupId)
                 .GetValueAsync();
 
-            if (!groupSnapshot.Exists)
+            if (!groupSnapshot.Exists || !groupSnapshot.HasChild(groupId))
             {
-                Debug.LogError($"Group {groupId} not found");
+                Debug.LogError($"Group {groupId} not found in groups table");
                 return false;
             }
 
-            string programId = groupSnapshot.Child("educational_program_id").Value?.ToString();
+            DataSnapshot targetGroup = groupSnapshot.Child(groupId);
+            string groupTitle = targetGroup.Child("title").Value?.ToString() ?? "Unknown";
+            string programId = targetGroup.Child("educational_program_id").Value?.ToString();
+
             if (string.IsNullOrEmpty(programId))
             {
-                Debug.LogError("Group has no educational program");
+                Debug.LogError($"Group {groupId} ({groupTitle}) has no educational program");
                 return false;
             }
 
-            Debug.Log($"Group program ID: {programId}");
+            Debug.Log($"[RegisterStudent] Group ID: {groupId}, Title: {groupTitle}, Program ID: {programId}");
 
             // 3. Получаем образовательную программу
             DataSnapshot programSnapshot = await GetEducationalProgram(programId);
@@ -273,7 +276,7 @@ public class FirebaseDBManager : MonoBehaviour
             }
 
             string programTitle = programSnapshot.Child("title").Value?.ToString();
-            Debug.Log($"Found program: {programTitle}");
+            Debug.Log($"[RegisterStudent] Found program: {programTitle} (ID: {programId})");
 
             // 4. Получаем основные навыки программы
             List<string> mainSkills = new List<string>();
@@ -290,54 +293,77 @@ public class FirebaseDBManager : MonoBehaviour
                 }
             }
 
-            // 5. Создаем данные пользователя
+            // 5. Получаем все дополнительные навыки из таблицы skills
+            List<string> additionalSkills = new List<string>();
+            DataSnapshot allSkillsSnapshot = await databaseRef.Child("11").Child("data").GetValueAsync();
+            if (allSkillsSnapshot.Exists)
+            {
+                foreach (DataSnapshot skillSnapshot in allSkillsSnapshot.Children)
+                {
+                    if (skillSnapshot.HasChild("type") && skillSnapshot.Child("type").Value?.ToString() == "additional")
+                    {
+                        string skillId = skillSnapshot.Child("id").Value?.ToString();
+                        if (!string.IsNullOrEmpty(skillId))
+                        {
+                            additionalSkills.Add(skillId);
+                        }
+                    }
+                }
+            }
+
+            // 6. Создаем данные пользователя
             string userId = databaseRef.Child("14").Child("data").Push().Key;
 
             var userData = new Dictionary<string, object>
-            {
-                {"id", userId},
-                {"email", email.ToLower().Trim()},
-                {"password", password.Trim()},
-                {"first_name", firstName.Trim()},
-                {"last_name", lastName.Trim()},
-                {"second_name", string.IsNullOrEmpty(secondName) ? "" : secondName.Trim()},
-                {"group_id", groupId},
-                {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
-                {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
-                {"avatar_path", avatar != null ? $"avatars/{userId}.png" : ""},
-                {"username", $"{firstName} {lastName}"},
-                {"skill_id", "0"},
-                {"game_stats_ref", userId}
-            };
+        {
+            {"id", userId},
+            {"email", email.ToLower().Trim()},
+            {"password", password.Trim()},
+            {"first_name", firstName.Trim()},
+            {"last_name", lastName.Trim()},
+            {"second_name", string.IsNullOrEmpty(secondName) ? "" : secondName.Trim()},
+            {"group_id", groupId},
+            {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
+            {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
+            {"avatar_path", avatar != null ? $"avatars/{userId}.png" : ""},
+            {"username", $"{firstName} {lastName}"},
+            {"skill_id", "0"},
+            {"game_stats_ref", userId}
+        };
 
-            // 6. Создаем роль студента
+            // 7. Создаем роль студента
             string roleId = databaseRef.Child("15").Child("data").Push().Key;
             var roleData = new Dictionary<string, object>
-            {
-                {"id", roleId},
-                {"role_id", "1"}, // 1 = student
-                {"student_id", userId}
-            };
+        {
+            {"id", roleId},
+            {"role_id", "1"}, // 1 = student
+            {"student_id", userId}
+        };
 
-            // 7. Инициализируем навыки
+            // 8. Инициализируем навыки (основные и дополнительные)
             var skillsData = new Dictionary<string, object>
-            {
-                {"main_skills", new Dictionary<string, int>()},
-                {"additional_skills", new Dictionary<string, int>()}
-            };
+        {
+            {"main_skills", new Dictionary<string, int>()},
+            {"additional_skills", new Dictionary<string, int>()}
+        };
 
             foreach (string skillId in mainSkills)
             {
                 ((Dictionary<string, int>)skillsData["main_skills"]).Add(skillId, 0);
             }
 
-            // 8. Атомарная запись всех данных
-            var updates = new Dictionary<string, object>
+            foreach (string skillId in additionalSkills)
             {
-                {$"14/data/{userId}", userData},    // users table
-                {$"15/data/{roleId}", roleData},    // users_roles table
-                {$"16/data/{userId}", skillsData}   // user_skills table
-            };
+                ((Dictionary<string, int>)skillsData["additional_skills"]).Add(skillId, 0);
+            }
+
+            // 9. Атомарная запись всех данных
+            var updates = new Dictionary<string, object>
+        {
+            {$"14/data/{userId}", userData},    // users table
+            {$"15/data/{roleId}", roleData},    // users_roles table
+            {$"16/data/{userId}", skillsData}   // user_skills table
+        };
 
             await databaseRef.UpdateChildrenAsync(updates);
 

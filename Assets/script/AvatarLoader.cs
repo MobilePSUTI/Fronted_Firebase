@@ -10,17 +10,33 @@ public class AvatarLoader : MonoBehaviour
 
     void Start()
     {
-        firebaseManager = gameObject.AddComponent<FirebaseDBManager>();
-        _ = firebaseManager.Initialize();
-
         if (UserSession.CurrentUser != null)
         {
-            LoadAvatar(UserSession.CurrentUser.Id); // Теперь Id - string
+            if (UserSession.CachedAvatar != null)
+            {
+                DisplayAvatar(UserSession.CachedAvatar);
+            }
+            else
+            {
+                LoadAvatar(UserSession.CurrentUser.Id);
+            }
         }
         else
         {
             Debug.LogWarning("Текущий пользователь не определен");
         }
+    }
+    private void DisplayAvatar(Texture2D texture)
+    {
+        avatarImage.sprite = Sprite.Create(
+            texture,
+            new Rect(0, 0, texture.width, texture.height),
+            new Vector2(0.5f, 0.5f)
+        );
+        avatarImage.gameObject.SetActive(true);
+
+        if (loadingIndicator != null)
+            loadingIndicator.SetActive(false);
     }
 
     public void LoadAvatar(string userId) // Изменено на string
