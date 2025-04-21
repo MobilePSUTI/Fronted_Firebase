@@ -14,19 +14,30 @@ public class StudentButton : MonoBehaviour
 
     private async void OnStudentSelected()
     {
-        // «агружаем полные данные студента перед переходом
         var dbManager = FindObjectOfType<FirebaseDBManager>();
-        if (dbManager != null)
+        if (dbManager == null)
         {
-            UserSession.SelectedStudent = await dbManager.GetStudentDetails(studentData.Id);
-        }
-        else
-        {
-            Debug.LogError("FirebaseDBManager не найден!");
-            UserSession.SelectedStudent = studentData; // »спользуем хот€ бы базовые данные
+            Debug.LogError("FirebaseDBManager not found!");
+            return;
         }
 
-        UserSession.SelectedStudent = studentData;
+        // Load complete student data
+        UserSession.SelectedStudent = await dbManager.GetStudentDetails(studentData.Id);
+
+        // Verify critical data exists
+        if (string.IsNullOrEmpty(UserSession.SelectedStudent.GroupId))
+        {
+            Debug.LogError("Student has no group assigned!");
+            return;
+        }
+
+        // Load group name if missing
+        if (string.IsNullOrEmpty(UserSession.SelectedStudent.GroupName))
+        {
+            UserSession.SelectedStudent.GroupName =
+                await dbManager.GetGroupName(UserSession.SelectedStudent.GroupId);
+        }
+
         SceneManager.LoadScene("PrSkillsStudent");
     }
 }

@@ -26,7 +26,22 @@ public class MainMenu : MonoBehaviour
         if (UserSession.CurrentUser != null && UserSession.CurrentUser.Role == "student")
         {
             Debug.Log($"Текущий пользователь: {UserSession.CurrentUser.Username}");
+            // Начинаем фоновую загрузку данных при старте, если пользователь уже авторизован
+            StartCoroutine(PreloadStudentData());
         }
+    }
+
+    private IEnumerator PreloadStudentData()
+    {
+        // Создаем временный объект для предзагрузки
+        var loaderObject = new GameObject("StudentDataPreloader");
+        var progressController = loaderObject.AddComponent<StudentProgressController>();
+
+        // Загружаем данные
+        yield return progressController.PreloadSkillsCoroutine();
+
+        // После загрузки уничтожаем временный объект
+        Destroy(loaderObject);
     }
 
     private async Task DebugCheckDatabaseStructure()
@@ -66,9 +81,12 @@ public class MainMenu : MonoBehaviour
             if (UserSession.CurrentUser.Role == "student")
             {
                 errorText.text = "";
+                // Запускаем предзагрузку данных студента
+                yield return StartCoroutine(PreloadStudentData());
+                yield return StartCoroutine(LoadStudentAvatar(UserSession.CurrentUser.Id));
                 // Запускаем загрузку новостей в фоне
                 StartCoroutine(LoadNewsInBackground());
-                // Переходим сразу на сцену студентов
+                // Переходим на сцену студентов
                 yield return StartCoroutine(LoadStudentsSceneAsync());
             }
             else
@@ -84,6 +102,19 @@ public class MainMenu : MonoBehaviour
 
         if (loadingIndicator != null)
             loadingIndicator.SetActive(false);
+    }
+    private IEnumerator LoadStudentAvatar(string userId)
+    {
+        var task = firebaseManager.GetUserAvatar(userId);
+        yield return new WaitUntil(() => task.IsCompleted);
+
+        byte[] avatarData = task.Result;
+        if (avatarData != null && avatarData.Length > 0)
+        {
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(avatarData);
+            UserSession.CachedAvatar = texture;
+        }
     }
 
     IEnumerator LoadNewsInBackground()

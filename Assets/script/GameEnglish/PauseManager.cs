@@ -30,7 +30,7 @@ public class PauseManager : MonoBehaviour
     {
         pausePanel.SetActive(false);
 
-        // Назначаем обработчики кнопок
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         pauseButton.onClick.AddListener(TogglePause);
         continueButton.onClick.AddListener(ContinueGame);
         exitButton.onClick.AddListener(ExitToMenu);
@@ -43,8 +43,7 @@ public class PauseManager : MonoBehaviour
         pausePanel.SetActive(isPaused);
         Time.timeScale = isPaused ? 0f : 1f;
 
-        // Отключаем/включаем другие UI элементы при паузе
-        GameManager.Instance.gameOver = isPaused;
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ UI пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     }
 
     private void ContinueGame()
@@ -54,8 +53,8 @@ public class PauseManager : MonoBehaviour
 
     private void ExitToMenu()
     {
-        Time.timeScale = 1f; // Восстанавливаем время
-        SceneManager.LoadScene(6); // Замените на вашу сцену меню
+        Time.timeScale = 1f; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+        SceneManager.LoadScene(6); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     }
 
     public bool IsGamePaused()

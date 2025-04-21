@@ -8,28 +8,47 @@ public class GroupButtonCreator : MonoBehaviour
 {
     public GameObject buttonPrefab;
     public Transform buttonParent;
+    public GameObject loadingIndicator;
     private FirebaseDBManager firebaseManager;
 
     async void Start()
     {
-        firebaseManager = gameObject.AddComponent<FirebaseDBManager>();
-        await firebaseManager.Initialize();
+        if (loadingIndicator != null) loadingIndicator.SetActive(true);
 
-        var task = firebaseManager.GetAllGroups();
-        await task;
-
-        if (task.IsCompletedSuccessfully)
+        try
         {
-            CreateButtons(task.Result);
+            // Проверяем кеш
+            if (UserSession.CachedGroups.Count > 0)
+            {
+                CreateButtons(UserSession.CachedGroups);
+                return;
+            }
+
+            firebaseManager = gameObject.AddComponent<FirebaseDBManager>();
+            await firebaseManager.Initialize();
+
+            List<Group> groups = await firebaseManager.GetAllGroups();
+            UserSession.CachedGroups = groups; // Сохраняем в кеш
+            CreateButtons(groups);
         }
-        else
+        catch (System.Exception ex)
         {
-            Debug.LogError("Ошибка при загрузке групп");
+            Debug.LogError($"Ошибка загрузки групп: {ex.Message}");
+        }
+        finally
+        {
+            if (loadingIndicator != null) loadingIndicator.SetActive(false);
         }
     }
 
-    public void CreateButtons(List<Group> groups)
+    void CreateButtons(List<Group> groups)
     {
+        // Очистка предыдущих кнопок
+        foreach (Transform child in buttonParent)
+        {
+            Destroy(child.gameObject);
+        }
+
         if (groups == null || groups.Count == 0)
         {
             Debug.LogWarning("Список групп пуст");
@@ -44,19 +63,15 @@ public class GroupButtonCreator : MonoBehaviour
             Group currentGroup = group;
             button.GetComponent<Button>().onClick.AddListener(() =>
             {
-                OnGroupButtonClick(currentGroup.Title, currentGroup.Id); // Id теперь string
+                OnGroupButtonClick(currentGroup.Title, currentGroup.Id);
             });
         }
     }
 
-    void OnGroupButtonClick(string groupName, string groupId) // Изменено на string
+    void OnGroupButtonClick(string groupName, string groupId)
     {
-        Debug.Log($"Выбрана группа: {groupName} (ID: {groupId})");
-
         UserSession.SelectedGroupId = groupId;
         UserSession.SelectedGroupName = groupName;
-
         SceneManager.LoadScene("PrListStudents");
     }
-
 }

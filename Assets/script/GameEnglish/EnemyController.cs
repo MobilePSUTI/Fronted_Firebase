@@ -3,40 +3,33 @@ using TMPro;
 
 public class EnemyController : MonoBehaviour
 {
-    [Header("Настройки")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     public float moveSpeed = 2f;
     public TextMeshProUGUI wordDisplay;
     public string targetWord;
-    private string currentTyped = "";
-    private int hiddenLetterIndex; // Индекс скрытой буквы
-    // позиция y = -343480
+    private string currentTyped = ""; 
+    private int hiddenLetterIndex;
+    private GameObject borderLine;
 
     private void Start()
     {
-        // Получаем случайное слово
         targetWord = GameManager.Instance.GetRandomWord().ToLower();
-
-        // Выбираем случайную букву для скрытия (кроме первой)
         hiddenLetterIndex = Random.Range(1, targetWord.Length);
-
-        // Инициализируем отображение слова
         UpdateWordDisplay();
-
-        // Настраиваем TextMeshPro
         if (wordDisplay == null)
         {
             wordDisplay = GetComponentInChildren<TextMeshProUGUI>();
         }
+        
+        borderLine = GameObject.Find("BorderLine");
     }
 
     private void Update()
     {
         if (PauseManager.Instance.IsGamePaused()) return;
-        // Движение вниз
         transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
 
-        // Если враг ушел за экран
-        if (transform.position.y < -5f)
+        if (transform.position.y < borderLine.transform.position.y + 0.8f)
         {
             GameManager.Instance.WordMissed();
             Destroy(gameObject);
@@ -47,10 +40,9 @@ public class EnemyController : MonoBehaviour
     {
         key = char.ToLower(key);
 
-        // Проверяем, соответствует ли нажатая клавиша скрытой букве
         if (targetWord[hiddenLetterIndex] == key)
         {
-            currentTyped = targetWord; // Считаем слово угаданным
+            currentTyped = targetWord;
             UpdateWordDisplay();
             WordCompleted();
         }
@@ -61,10 +53,8 @@ public class EnemyController : MonoBehaviour
         string display = "";
         for (int i = 0; i < targetWord.Length; i++)
         {
-            // Показываем букву, если она уже введена или это не скрытая буква
             if (i < currentTyped.Length || i != hiddenLetterIndex)
             {
-                // Подсвечиваем уже введенные буквы зеленым
                 if (i < currentTyped.Length)
                     display += "<color=green>" + targetWord[i] + "</color>";
                 else
@@ -72,7 +62,7 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                display += "_"; // Скрытая буква
+                display += "_";
             }
         }
         wordDisplay.text = display;

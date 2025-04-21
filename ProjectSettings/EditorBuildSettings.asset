@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/MainScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/Scenes/MainAuthSt.unity
+    guid: eef34901e470dc340a6478368fc4b700
+  - enabled: 1
+    path: Assets/Scenes/MainAuthPr.unity
+    guid: 95201061dcb4d184b832a95fe051d84c
+  - enabled: 1
     path: Assets/Scenes/Student/StRegistr.unity
     guid: a40b32bb4f5dcc54e8a0c7b18fa7b8be
   - enabled: 1
@@ -27,14 +33,23 @@ EditorBuildSettings:
     path: Assets/Scenes/Student/GameStMl.unity
     guid: 656bf58ae296a2f46aa1b05d268f3498
   - enabled: 1
-    path: Assets/Scenes/Student/GameModel/MainGameEnglish.unity
+    path: Assets/Scenes/Student/GameModel/EngGame/MainGameEnglish.unity
     guid: ff3436fde97e45c4d8b6977744425cd4
   - enabled: 1
-    path: Assets/Scenes/Student/GameModel/GameEnglish.unity
+    path: Assets/Scenes/Student/GameModel/LinuxGame/MainGameEnglish.unity
+    guid: 0d0a5e265f9f9dc4b9edf140fcf37ca9
+  - enabled: 1
+    path: Assets/Scenes/Student/GameModel/EngGame/GameEnglish.unity
     guid: ebf0365f661457c41a7962e4aac20be8
   - enabled: 1
-    path: Assets/Scenes/Student/GameModel/GameOverEnglish.unity
+    path: Assets/Scenes/Student/GameModel/LinuxGame/LinuxTest.unity
+    guid: e461f0dfd62f0b04ea28db2536c80de2
+  - enabled: 1
+    path: Assets/Scenes/Student/GameModel/EngGame/GameOverEnglish.unity
     guid: b6ab3b5ba7d8b4f49b5d6d41b14f65ae
+  - enabled: 1
+    path: Assets/Scenes/Student/GameModel/LinuxGame/GameOverLinux.unity
+    guid: c60b16d93d599984298a92c166938e4d
   - enabled: 1
     path: Assets/Scenes/Student/ChatsStMl.unity
     guid: 08731d559409e51449c2d996b8824181
@@ -50,6 +65,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Prepod/PrVedomosti.unity
     guid: e7baf8d0284338f409048a1acb0145f8
+  - enabled: 1
+    path: Assets/Scenes/Prepod/PrGroupsSt.unity
+    guid: 99cbb87e745f1f747bd0baa19e2bdf7c
   - enabled: 1
     path: Assets/Scenes/Prepod/PrListStudents.unity
     guid: df9d06c07f7f7864b86dbbaba48b03be

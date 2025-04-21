@@ -7,6 +7,7 @@ public class PrSkillsStudent : MonoBehaviour
 {
     public Text studentNameText;
     public Text studentGroupText;
+    public PrSkillsManager skillsManager;
 
     async void Start()
     {
@@ -17,18 +18,16 @@ public class PrSkillsStudent : MonoBehaviour
             return;
         }
 
-        // Ищем FirebaseDBManager в сцене
+        // Initialize FirebaseDBManager if needed
         var dbManager = FindObjectOfType<FirebaseDBManager>();
-
-        // Если не найден, создаём новый
         if (dbManager == null)
         {
             GameObject firebaseObj = new GameObject("FirebaseDBManager");
             dbManager = firebaseObj.AddComponent<FirebaseDBManager>();
-            await dbManager.Initialize(); // Инициализируем
+            await dbManager.Initialize();
         }
 
-        // Догружаем GroupName, если его нет
+        // Load group name if needed
         if (string.IsNullOrEmpty(UserSession.SelectedStudent.GroupName))
         {
             UserSession.SelectedStudent.GroupName =
@@ -36,6 +35,9 @@ public class PrSkillsStudent : MonoBehaviour
         }
 
         DisplayStudentInfo(UserSession.SelectedStudent);
+
+        // Initialize skills manager
+        await skillsManager.Initialize();
     }
 
     private void DisplayStudentInfo(Student student)
