@@ -2447,7 +2447,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &827338486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2617,8 +2617,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 684284531}
   - {fileID: 1800061327}
+  - {fileID: 684284531}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2649,8 +2649,11 @@ MonoBehaviour:
   registrationPanel: {fileID: 684284530}
   avatarSelectionPanel: {fileID: 1800061324}
   avatarOptions:
-  - {fileID: 160541403}
+  - {fileID: 179110787}
+  - {fileID: 631360915}
   - {fileID: 31958988}
+  - {fileID: 160541403}
+  - {fileID: 2128581411}
   selectedAvatarImage: {fileID: 2128581411}
   registrationContentPanel: {fileID: 684284531}
   scrollRect: {fileID: 684284534}
@@ -3240,7 +3243,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 299.73, y: -1067.3}
+  m_AnchoredPosition: {x: 299.33, y: -774.54}
   m_SizeDelta: {x: 598.67, y: 502.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1104620034

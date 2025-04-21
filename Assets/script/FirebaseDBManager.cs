@@ -219,13 +219,13 @@ public class FirebaseDBManager : MonoBehaviour
     }
 
     public async Task<bool> RegisterStudent(
-    string email,
-    string password,
-    string firstName,
-    string lastName,
-    string secondName,
-    string groupId,
-    byte[] avatar)
+        string email,
+        string password,
+        string firstName,
+        string lastName,
+        string secondName,
+        string groupId,
+        byte[] avatar)
     {
         if (!isInitialized)
         {
@@ -235,17 +235,15 @@ public class FirebaseDBManager : MonoBehaviour
 
         try
         {
-            // 1. Проверка существования email
             if (await CheckEmailExists(email))
             {
                 Debug.Log("Email already exists");
                 return false;
             }
 
-            // 2. Получаем данные группы
             Debug.Log($"[RegisterStudent] Attempting to retrieve group with ID: {groupId}");
             DataSnapshot groupSnapshot = await databaseRef
-                .Child("6") // groups table
+                .Child("6")
                 .Child("data")
                 .GetValueAsync();
 
@@ -267,7 +265,6 @@ public class FirebaseDBManager : MonoBehaviour
 
             Debug.Log($"[RegisterStudent] Group ID: {groupId}, Title: {groupTitle}, Program ID: {programId}");
 
-            // 3. Получаем образовательную программу
             DataSnapshot programSnapshot = await GetEducationalProgram(programId);
             if (programSnapshot == null)
             {
@@ -278,7 +275,6 @@ public class FirebaseDBManager : MonoBehaviour
             string programTitle = programSnapshot.Child("title").Value?.ToString();
             Debug.Log($"[RegisterStudent] Found program: {programTitle} (ID: {programId})");
 
-            // 4. Получаем основные навыки программы
             List<string> mainSkills = new List<string>();
             DataSnapshot skillsNode = programSnapshot.Child("main_skills");
             if (skillsNode.Exists)
@@ -293,7 +289,6 @@ public class FirebaseDBManager : MonoBehaviour
                 }
             }
 
-            // 5. Получаем все дополнительные навыки из таблицы skills
             List<string> additionalSkills = new List<string>();
             DataSnapshot allSkillsSnapshot = await databaseRef.Child("11").Child("data").GetValueAsync();
             if (allSkillsSnapshot.Exists)
@@ -311,7 +306,6 @@ public class FirebaseDBManager : MonoBehaviour
                 }
             }
 
-            // 6. Создаем данные пользователя
             string userId = databaseRef.Child("14").Child("data").Push().Key;
 
             // Преобразуем аватар в Base64, если он есть
@@ -320,40 +314,50 @@ public class FirebaseDBManager : MonoBehaviour
             {
                 avatarBase64 = Convert.ToBase64String(avatar);
                 Debug.Log($"[RegisterStudent] Avatar converted to Base64: {avatarBase64.Length} characters");
+
+                // Проверка валидности Base64
+                try
+                {
+                    Convert.FromBase64String(avatarBase64);
+                    Debug.Log($"[RegisterStudent] Base64 string is valid for user {userId}");
+                }
+                catch (FormatException ex)
+                {
+                    Debug.LogError($"[RegisterStudent] Generated Base64 string is invalid for user {userId}: {ex.Message}");
+                    avatarBase64 = ""; // Сбрасываем, чтобы не сохранять невалидные данные
+                }
             }
 
             var userData = new Dictionary<string, object>
-        {
-            {"id", userId},
-            {"email", email.ToLower().Trim()},
-            {"password", password.Trim()},
-            {"first_name", firstName.Trim()},
-            {"last_name", lastName.Trim()},
-            {"second_name", string.IsNullOrEmpty(secondName) ? "" : secondName.Trim()},
-            {"group_id", groupId},
-            {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
-            {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
-            {"avatar_path", avatarBase64}, // Сохраняем Base64-строку
-            {"username", $"{firstName} {lastName}"},
-            {"skill_id", "0"},
-            {"game_stats_ref", userId}
-        };
+            {
+                {"id", userId},
+                {"email", email.ToLower().Trim()},
+                {"password", password.Trim()},
+                {"first_name", firstName.Trim()},
+                {"last_name", lastName.Trim()},
+                {"second_name", string.IsNullOrEmpty(secondName) ? "" : secondName.Trim()},
+                {"group_id", groupId},
+                {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
+                {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
+                {"avatar_path", avatarBase64},
+                {"username", $"{firstName} {lastName}"},
+                {"skill_id", "0"},
+                {"game_stats_ref", userId}
+            };
 
-            // 7. Создаем роль студента
             string roleId = databaseRef.Child("15").Child("data").Push().Key;
             var roleData = new Dictionary<string, object>
-        {
-            {"id", roleId},
-            {"role_id", "1"}, // 1 = student
-            {"student_id", userId}
-        };
+            {
+                {"id", roleId},
+                {"role_id", "1"},
+                {"student_id", userId}
+            };
 
-            // 8. Инициализируем навыки (основные и дополнительные)
             var skillsData = new Dictionary<string, object>
-        {
-            {"main_skills", new Dictionary<string, int>()},
-            {"additional_skills", new Dictionary<string, int>()}
-        };
+            {
+                {"main_skills", new Dictionary<string, int>()},
+                {"additional_skills", new Dictionary<string, int>()}
+            };
 
             foreach (string skillId in mainSkills)
             {
@@ -365,13 +369,12 @@ public class FirebaseDBManager : MonoBehaviour
                 ((Dictionary<string, int>)skillsData["additional_skills"]).Add(skillId, 0);
             }
 
-            // 9. Атомарная запись всех данных
             var updates = new Dictionary<string, object>
-        {
-            {$"14/data/{userId}", userData},    // users table
-            {$"15/data/{roleId}", roleData},    // users_roles table
-            {$"16/data/{userId}", skillsData}   // user_skills table
-        };
+            {
+                {$"14/data/{userId}", userData},
+                {$"15/data/{roleId}", roleData},
+                {$"16/data/{userId}", skillsData}
+            };
 
             await databaseRef.UpdateChildrenAsync(updates);
 
