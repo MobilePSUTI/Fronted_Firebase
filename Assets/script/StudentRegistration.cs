@@ -371,9 +371,16 @@ public class StudentRegistration : MonoBehaviour
         }
 
         if (!string.IsNullOrEmpty(error))
+        {
             errorText.text = error;
+            // Возвращаем пользователя на панель ввода данных
+            avatarSelectionPanel.SetActive(false);
+            registrationPanel.SetActive(true);
+        }
         else if (success)
+        {
             SceneManager.LoadScene("MainScene");
+        }
 
         if (loadingIndicator != null)
             loadingIndicator.SetActive(false);
