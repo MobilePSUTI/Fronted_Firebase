@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4e67ec013050138429117dbf52834410
+guid: 3e8f234cd4a9f7141ab311198812130e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6289400406434053163
-    second: "\u043F\u0435\u0440\u0441 \u0431\u0435\u0437 \u043F\u043E\u0434\u0441\u0432\u0435\u0442\u043A\u0438_0"
+      213: -4690807979520262601
+    second: "4 \u0430\u0432\u0430\u0442\u0430\u0440_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,17 +109,43 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u043F\u0435\u0440\u0441 \u0431\u0435\u0437 \u043F\u043E\u0434\u0441\u0432\u0435\u0442\u043A\u0438_0"
+      name: "4 \u0430\u0432\u0430\u0442\u0430\u0440_0"
       rect:
         serializedVersion: 2
-        x: 0
+        x: 34
         y: 0
-        width: 470
-        height: 680
+        width: 1023
+        height: 1449
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5d30d4c27af87b8a0800000000000000
-      internalID: -6289400406434053163
+      spriteID: 73e702fdef6e6eeb0800000000000000
+      internalID: -4690807979520262601
       vertices: []
       indices: 
       edges: []
@@ -148,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "\u043F\u0435\u0440\u0441 \u0431\u0435\u0437 \u043F\u043E\u0434\u0441\u0432\u0435\u0442\u043A\u0438_0": -6289400406434053163
+      "4 \u0430\u0432\u0430\u0442\u0430\u0440_0": -4690807979520262601
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
