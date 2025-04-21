@@ -5,8 +5,17 @@ using System.Collections;
 public class AvatarLoader : MonoBehaviour
 {
     public Image avatarImage;
-    public GameObject loadingIndicator;
     private FirebaseDBManager firebaseManager;
+
+    void Awake()
+    {
+        // Инициализируем firebaseManager через Singleton
+        firebaseManager = FirebaseDBManager.Instance;
+        if (firebaseManager == null)
+        {
+            Debug.LogError("FirebaseDBManager не найден! Убедитесь, что он инициализирован в сцене.");
+        }
+    }
 
     void Start()
     {
@@ -26,50 +35,58 @@ public class AvatarLoader : MonoBehaviour
             Debug.LogWarning("Текущий пользователь не определен");
         }
     }
+
     private void DisplayAvatar(Texture2D texture)
     {
+        if (avatarImage == null)
+        {
+            Debug.LogError("avatarImage не назначен в инспекторе!");
+            return;
+        }
+
         avatarImage.sprite = Sprite.Create(
             texture,
             new Rect(0, 0, texture.width, texture.height),
             new Vector2(0.5f, 0.5f)
         );
         avatarImage.gameObject.SetActive(true);
-
-        if (loadingIndicator != null)
-            loadingIndicator.SetActive(false);
     }
 
-    public void LoadAvatar(string userId) // Изменено на string
+    public async void LoadAvatar(string userId)
     {
-        StartCoroutine(LoadAvatarCoroutine(userId));
-    }
+        if (string.IsNullOrEmpty(userId))
+        {
+            Debug.LogWarning("userId пустой или null");
+            return;
+        }
 
-    IEnumerator LoadAvatarCoroutine(string userId) // Изменено на string
-    {
-        if (loadingIndicator != null)
-            loadingIndicator.SetActive(true);
+        if (firebaseManager == null)
+        {
+            Debug.LogError("firebaseManager не инициализирован!");
+            return;
+        }
 
         avatarImage.gameObject.SetActive(false);
 
         try
         {
-            var task = firebaseManager.GetUserAvatar(userId);
-            yield return new WaitUntil(() => task.IsCompleted);
-
-            byte[] avatarData = task.Result;
+            byte[] avatarData = await firebaseManager.GetUserAvatar(userId);
 
             if (avatarData == null || avatarData.Length == 0)
             {
                 Debug.LogWarning("Аватар не найден или пустой");
-                yield break;
+                return;
             }
 
             Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             if (!texture.LoadImage(avatarData))
             {
                 Debug.LogError("Не удалось загрузить текстуру из байтов");
-                yield break;
+                return;
             }
+
+            // Кэшируем аватар
+            UserSession.CachedAvatar = texture;
 
             avatarImage.sprite = Sprite.Create(
                 texture,
@@ -80,10 +97,9 @@ public class AvatarLoader : MonoBehaviour
             avatarImage.gameObject.SetActive(true);
             Debug.Log("Аватар успешно загружен и отображен");
         }
-        finally
+        catch (System.Exception ex)
         {
-            if (loadingIndicator != null)
-                loadingIndicator.SetActive(false);
+            Debug.LogError($"Ошибка при загрузке аватара: {ex.Message}");
         }
     }
 }

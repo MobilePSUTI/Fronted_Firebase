@@ -314,6 +314,14 @@ public class FirebaseDBManager : MonoBehaviour
             // 6. Создаем данные пользователя
             string userId = databaseRef.Child("14").Child("data").Push().Key;
 
+            // Преобразуем аватар в Base64, если он есть
+            string avatarBase64 = "";
+            if (avatar != null && avatar.Length > 0)
+            {
+                avatarBase64 = Convert.ToBase64String(avatar);
+                Debug.Log($"[RegisterStudent] Avatar converted to Base64: {avatarBase64.Length} characters");
+            }
+
             var userData = new Dictionary<string, object>
         {
             {"id", userId},
@@ -325,7 +333,7 @@ public class FirebaseDBManager : MonoBehaviour
             {"group_id", groupId},
             {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
             {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
-            {"avatar_path", avatar != null ? $"avatars/{userId}.png" : ""},
+            {"avatar_path", avatarBase64}, // Сохраняем Base64-строку
             {"username", $"{firstName} {lastName}"},
             {"skill_id", "0"},
             {"game_stats_ref", userId}
@@ -485,16 +493,36 @@ public class FirebaseDBManager : MonoBehaviour
 
         try
         {
-            DataSnapshot snapshot = await databaseRef.Child("users")
+            // Путь к данным пользователя в таблице users (14)
+            DataSnapshot snapshot = await databaseRef
+                .Child("14") // Таблица users
+                .Child("data")
                 .Child(userId)
-                .Child("avatar")
                 .GetValueAsync();
 
-            if (snapshot.Exists && snapshot.Value != null)
+            if (snapshot.Exists && snapshot.HasChild("avatar_path"))
             {
-                string base64Avatar = snapshot.Value.ToString();
-                return Convert.FromBase64String(base64Avatar);
+                string avatarBase64 = snapshot.Child("avatar_path").Value?.ToString();
+                if (string.IsNullOrEmpty(avatarBase64))
+                {
+                    Debug.LogWarning($"[Avatar] Avatar path for user {userId} is empty");
+                    return null;
+                }
+
+                try
+                {
+                    byte[] avatarData = Convert.FromBase64String(avatarBase64);
+                    Debug.Log($"[Avatar] Successfully decoded Base64 avatar for user {userId}, size: {avatarData.Length} bytes");
+                    return avatarData;
+                }
+                catch (FormatException ex)
+                {
+                    Debug.LogError($"[Avatar] Failed to decode Base64 string for user {userId}: {ex.Message}");
+                    return null;
+                }
             }
+
+            Debug.LogWarning($"[Avatar] Avatar not found for user {userId}");
             return null;
         }
         catch (Exception ex)
