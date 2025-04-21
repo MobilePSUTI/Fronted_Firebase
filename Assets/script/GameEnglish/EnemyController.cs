@@ -29,7 +29,7 @@ public class EnemyController : MonoBehaviour
         if (PauseManager.Instance.IsGamePaused()) return;
         transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
 
-        if (transform.position.y < borderLine.transform.position.y)
+        if (transform.position.y < borderLine.transform.position.y + 0.8f)
         {
             GameManager.Instance.WordMissed();
             Destroy(gameObject);
