@@ -1,39 +1,44 @@
 using UnityEngine;
 using Firebase;
 using Firebase.Database;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class FirebaseDBManager : MonoBehaviour
 {
-    private static FirebaseDBManager _instance;
+    public static FirebaseDBManager _instance;
     public static FirebaseDBManager Instance => _instance;
 
-    private DatabaseReference databaseRef;
-    public bool isInitialized = false;
-    public DatabaseReference DatabaseReference 
+    public DatabaseReference databaseRef;
+    public bool isInitialized;
+    private const int MaxRetries = 3;
+    private const float RetryDelayBase = 1f;
+
+    public DatabaseReference DatabaseReference
     {
-        get 
+        get
         {
             if (!isInitialized)
             {
-                Debug.LogError("FirebaseDBManager is not initialized!");
+                Debug.LogError("[Firebase] Not initialized");
                 return null;
             }
             return databaseRef;
         }
     }
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
         {
-            Destroy(this); // Уничтожаем только компонент, а не весь GameObject
+            Destroy(gameObject);
             return;
         }
 
         _instance = this;
-        DontDestroyOnLoad(gameObject); // Переносим только этот объект
+        DontDestroyOnLoad(gameObject);
     }
 
     public async Task Initialize()
@@ -44,11 +49,10 @@ public class FirebaseDBManager : MonoBehaviour
         {
             var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
             if (dependencyStatus != DependencyStatus.Available)
-            {
-                throw new Exception($"Could not resolve dependencies: {dependencyStatus}");
-            }
+                throw new Exception($"[Firebase] Could not resolve dependencies: {dependencyStatus}");
 
             FirebaseApp app = FirebaseApp.DefaultInstance;
+            FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(true);
             databaseRef = FirebaseDatabase.GetInstance(app).RootReference;
             isInitialized = true;
             Debug.Log("[Firebase] Initialized successfully");
@@ -66,77 +70,79 @@ public class FirebaseDBManager : MonoBehaviour
 
         try
         {
-            Debug.Log($"[Auth] Starting authentication for: {email}");
+            Debug.Log($"[Auth] Authenticating: {email}");
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef
+                .Child("14/data")
+                .OrderByChild("email")
+                .EqualTo(email.ToLower().Trim())
+                .GetValueAsync());
 
-            DataSnapshot dbSnapshot = await databaseRef.GetValueAsync();
-
-            if (!dbSnapshot.Exists)
+            if (!snapshot.Exists || !snapshot.HasChildren)
             {
-                Debug.LogError("[Auth] Database is empty");
+                Debug.LogError("[Auth] User not found");
                 return null;
             }
 
-            // Find users table
-            DataSnapshot usersTable = null;
-            foreach (DataSnapshot node in dbSnapshot.Children)
+            var userData = snapshot.Children.First();
+            if (userData.Child("email")?.Value?.ToString()?.ToLower().Trim() != email.ToLower().Trim())
             {
-                if (node.HasChild("name") && node.Child("name").Value?.ToString() == "users")
-                {
-                    usersTable = node.Child("data");
-                    break;
-                }
-            }
-
-            if (usersTable == null)
-            {
-                Debug.LogError("[Auth] Users table not found");
+                Debug.LogError("[Auth] Email mismatch");
                 return null;
             }
 
-            foreach (DataSnapshot userSnapshot in usersTable.Children)
+            if (userData.Child("password")?.Value?.ToString() != password.Trim())
             {
-                string userEmail = userSnapshot.Child("email")?.Value?.ToString();
-                Debug.Log($"[Auth] Checking user: {userEmail}");
-
-                if (userEmail?.ToLower().Trim() == email.ToLower().Trim())
-                {
-                    string storedPass = userSnapshot.Child("password")?.Value?.ToString();
-                    Debug.Log($"[Auth] Password check for: {userEmail}");
-
-                    if (storedPass == password.Trim())
-                    {
-                        string userId = userSnapshot.Child("id")?.Value?.ToString() ?? userSnapshot.Key;
-                        string role = await GetUserRole(userId);
-
-                        Debug.Log($"[Auth] Authentication successful! Role: {role}");
-
-                        return new Student
-                        {
-                            Id = userId,
-                            Username = userSnapshot.Child("username")?.Value?.ToString() ?? "",
-                            Email = email,
-                            First = userSnapshot.Child("first_name")?.Value?.ToString() ?? "",
-                            Last = userSnapshot.Child("last_name")?.Value?.ToString() ?? "",
-                            Second = userSnapshot.Child("second_name")?.Value?.ToString() ?? "",
-                            GroupName = await GetGroupName(userSnapshot.Child("group_id")?.Value?.ToString()),
-                            Role = role,
-                            AvatarPath = userSnapshot.Child("avatar_path")?.Value?.ToString() ?? ""
-                        };
-                    }
-                    else
-                    {
-                        Debug.Log("[Auth] Password incorrect");
-                        return null;
-                    }
-                }
+                Debug.LogError("[Auth] Password incorrect");
+                return null;
             }
 
-            Debug.LogError("[Auth] User not found in database");
-            return null;
+            string userId = userData.Key;
+            string role = await GetUserRole(userId);
+
+            // Создаем объект в зависимости от роли
+            if (role == "teacher")
+            {
+                Debug.Log($"[Auth] Success! Role: {role}");
+                return new Teacher
+                {
+                    Id = userId,
+                    Username = userData.Child("username")?.Value?.ToString() ?? "",
+                    Email = email,
+                    First = userData.Child("first_name")?.Value?.ToString() ?? "",
+                    Last = userData.Child("last_name")?.Value?.ToString() ?? "",
+                    Second = userData.Child("second_name")?.Value?.ToString() ?? "",
+                    Role = role,
+                    AvatarPath = userData.Child("avatar_path")?.Value?.ToString() ?? "",
+                    CreatedAt = userData.Child("created_at")?.Value?.ToString() ?? "",
+                    UpdatedAt = userData.Child("updated_at")?.Value?.ToString() ?? ""
+                };
+            }
+            else
+            {
+                string groupId = userData.Child("group_id")?.Value?.ToString();
+                string groupName = await GetGroupName(groupId);
+
+                Debug.Log($"[Auth] Success! Role: {role}");
+                return new Student
+                {
+                    Id = userId,
+                    Username = userData.Child("username")?.Value?.ToString() ?? "",
+                    Email = email,
+                    First = userData.Child("first_name")?.Value?.ToString() ?? "",
+                    Last = userData.Child("last_name")?.Value?.ToString() ?? "",
+                    Second = userData.Child("second_name")?.Value?.ToString() ?? "",
+                    GroupId = groupId,
+                    GroupName = groupName,
+                    Role = role,
+                    AvatarPath = userData.Child("avatar_path")?.Value?.ToString() ?? "",
+                    CreatedAt = userData.Child("created_at")?.Value?.ToString() ?? "",
+                    UpdatedAt = userData.Child("updated_at")?.Value?.ToString() ?? ""
+                };
+            }
         }
         catch (Exception ex)
         {
-            Debug.LogError($"[Auth] Critical error: {ex.Message}\n{ex.StackTrace}");
+            Debug.LogError($"[Auth] Error: {ex.Message}");
             return null;
         }
     }
@@ -144,38 +150,39 @@ public class FirebaseDBManager : MonoBehaviour
     public async Task<string> GetGroupName(string groupId)
     {
         if (string.IsNullOrEmpty(groupId))
-        {
-            Debug.LogWarning("GroupId is null or empty!");
             return "Группа не указана";
-        }
+
+        var cachedGroup = UserSession.CachedGroups.Find(g => g.Id == groupId);
+        if (cachedGroup != null)
+            return cachedGroup.Title;
 
         try
         {
-            // Correct path to groups table
-            DataSnapshot groupsSnapshot = await databaseRef.Child("6").Child("data").GetValueAsync();
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef
+                .Child("6/data")
+                .Child(groupId)
+                .GetValueAsync());
 
-            if (groupsSnapshot.Exists)
+            if (snapshot.Exists)
             {
-                foreach (DataSnapshot groupSnapshot in groupsSnapshot.Children)
+                string groupName = snapshot.Child("title")?.Value?.ToString() ?? "Группа не найдена";
+                UserSession.CachedGroups.Add(new Group
                 {
-                    string currentGroupId = groupSnapshot.Child("id")?.Value?.ToString();
-                    if (currentGroupId == groupId)
-                    {
-                        string groupName = groupSnapshot.Child("title")?.Value?.ToString();
-                        if (!string.IsNullOrEmpty(groupName))
-                        {
-                            return groupName;
-                        }
-                    }
-                }
+                    Id = groupId,
+                    Title = groupName,
+                    Course = snapshot.Child("course")?.Value?.ToString() ?? "",
+                    ProgramId = snapshot.Child("educational_program_id")?.Value?.ToString() ?? ""
+                });
+                UserSession.SaveSession();
+                return groupName;
             }
 
-            Debug.LogWarning($"Группа с ID {groupId} не найдена в Firebase");
+            Debug.LogWarning($"[Group] Group {groupId} not found");
             return "Группа не найдена";
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Ошибка при загрузке группы: {ex.Message}");
+            Debug.LogError($"[Group] Error: {ex.Message}");
             return "Ошибка загрузки";
         }
     }
@@ -184,149 +191,81 @@ public class FirebaseDBManager : MonoBehaviour
     {
         try
         {
-            DataSnapshot dbSnapshot = await databaseRef.GetValueAsync();
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef
+                .Child("14/data")
+                .Child(userId)
+                .GetValueAsync());
 
-            // Find the users_roles table
-            DataSnapshot rolesTable = null;
-            foreach (DataSnapshot node in dbSnapshot.Children)
+            if (snapshot.Exists && snapshot.HasChild("role"))
             {
-                if (node.HasChild("name") && node.Child("name").Value?.ToString() == "users_roles")
-                {
-                    rolesTable = node.Child("data");
-                    break;
-                }
+                return snapshot.Child("role").Value.ToString();
             }
 
-            if (rolesTable != null)
-            {
-                foreach (DataSnapshot roleSnapshot in rolesTable.Children)
-                {
-                    string studentId = roleSnapshot.Child("student_id")?.Value?.ToString();
-                    string roleId = roleSnapshot.Child("role_id")?.Value?.ToString();
+            snapshot = await RetryQuery(() => databaseRef
+                .Child("15/data")
+                .OrderByChild("student_id")
+                .EqualTo(userId)
+                .GetValueAsync());
 
-                    if (studentId == userId)
-                    {
-                        return roleId == "2" ? "teacher" : "student";
-                    }
-                }
-            }
-            return "student"; // Default to student if role not found
+            if (snapshot.Exists && snapshot.HasChildren)
+                return snapshot.Children.First().Child("role_id")?.Value?.ToString() == "2" ? "teacher" : "student";
+            return "student";
         }
-        catch
+        catch (Exception ex)
         {
-            return "student"; // Default to student on error
+            Debug.LogError($"[Role] Error: {ex.Message}");
+            return "student";
         }
     }
 
-    public async Task<bool> RegisterStudent(
-        string email,
-        string password,
-        string firstName,
-        string lastName,
-        string secondName,
-        string groupId,
-        byte[] avatar)
+    public async Task<bool> RegisterStudent(string email, string password, string firstName, string lastName, string secondName, string groupId, byte[] avatar)
     {
-        if (!isInitialized)
-        {
-            Debug.LogError("Firebase not initialized");
-            return false;
-        }
+        if (!isInitialized) await Initialize();
 
         try
         {
             if (await CheckEmailExists(email))
             {
-                Debug.Log("Email already exists");
+                Debug.Log("[Register] Email already exists");
                 return false;
             }
 
-            Debug.Log($"[RegisterStudent] Attempting to retrieve group with ID: {groupId}");
-            DataSnapshot groupSnapshot = await databaseRef
-                .Child("6")
-                .Child("data")
-                .GetValueAsync();
-
-            if (!groupSnapshot.Exists || !groupSnapshot.HasChild(groupId))
+            DataSnapshot groupSnapshot = await RetryQuery(() => databaseRef.Child("6/data").Child(groupId).GetValueAsync());
+            if (!groupSnapshot.Exists)
             {
-                Debug.LogError($"Group {groupId} not found in groups table");
+                Debug.LogError($"[Register] Group {groupId} not found");
                 return false;
             }
 
-            DataSnapshot targetGroup = groupSnapshot.Child(groupId);
-            string groupTitle = targetGroup.Child("title").Value?.ToString() ?? "Unknown";
-            string programId = targetGroup.Child("educational_program_id").Value?.ToString();
-
+            string groupTitle = groupSnapshot.Child("title")?.Value?.ToString() ?? "Unknown";
+            string programId = groupSnapshot.Child("educational_program_id")?.Value?.ToString();
             if (string.IsNullOrEmpty(programId))
             {
-                Debug.LogError($"Group {groupId} ({groupTitle}) has no educational program");
+                Debug.LogError($"[Register] Group {groupId} has no program");
                 return false;
             }
-
-            Debug.Log($"[RegisterStudent] Group ID: {groupId}, Title: {groupTitle}, Program ID: {programId}");
 
             DataSnapshot programSnapshot = await GetEducationalProgram(programId);
             if (programSnapshot == null)
             {
-                Debug.LogError($"Program {programId} not found");
+                Debug.LogError($"[Register] Program {programId} not found");
                 return false;
             }
 
-            string programTitle = programSnapshot.Child("title").Value?.ToString();
-            Debug.Log($"[RegisterStudent] Found program: {programTitle} (ID: {programId})");
+            List<string> mainSkills = programSnapshot.Child("main_skills")?.Children
+                .Select(s => s.Value?.ToString())
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToList() ?? new List<string>();
 
-            List<string> mainSkills = new List<string>();
-            DataSnapshot skillsNode = programSnapshot.Child("main_skills");
-            if (skillsNode.Exists)
-            {
-                foreach (var skill in skillsNode.Children)
-                {
-                    string skillId = skill.Value?.ToString();
-                    if (!string.IsNullOrEmpty(skillId))
-                    {
-                        mainSkills.Add(skillId);
-                    }
-                }
-            }
+            List<string> additionalSkills = (await databaseRef.Child("11/data").GetValueAsync())
+                .Children
+                .Where(s => s.Child("type")?.Value?.ToString() == "additional")
+                .Select(s => s.Child("id")?.Value?.ToString())
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToList();
 
-            List<string> additionalSkills = new List<string>();
-            DataSnapshot allSkillsSnapshot = await databaseRef.Child("11").Child("data").GetValueAsync();
-            if (allSkillsSnapshot.Exists)
-            {
-                foreach (DataSnapshot skillSnapshot in allSkillsSnapshot.Children)
-                {
-                    if (skillSnapshot.HasChild("type") && skillSnapshot.Child("type").Value?.ToString() == "additional")
-                    {
-                        string skillId = skillSnapshot.Child("id").Value?.ToString();
-                        if (!string.IsNullOrEmpty(skillId))
-                        {
-                            additionalSkills.Add(skillId);
-                        }
-                    }
-                }
-            }
-
-            string userId = databaseRef.Child("14").Child("data").Push().Key;
-
-            // Преобразуем аватар в Base64, если он есть
-            string avatarBase64 = "";
-            if (avatar != null && avatar.Length > 0)
-            {
-                avatarBase64 = Convert.ToBase64String(avatar);
-                Debug.Log($"[RegisterStudent] Avatar converted to Base64: {avatarBase64.Length} characters");
-
-                // Проверка валидности Base64
-                try
-                {
-                    Convert.FromBase64String(avatarBase64);
-                    Debug.Log($"[RegisterStudent] Base64 string is valid for user {userId}");
-                }
-                catch (FormatException ex)
-                {
-                    Debug.LogError($"[RegisterStudent] Generated Base64 string is invalid for user {userId}: {ex.Message}");
-                    avatarBase64 = ""; // Сбрасываем, чтобы не сохранять невалидные данные
-                }
-            }
+            string userId = databaseRef.Child("14/data").Push().Key;
+            string avatarBase64 = avatar != null && avatar.Length > 0 ? Convert.ToBase64String(avatar) : "";
 
             var userData = new Dictionary<string, object>
             {
@@ -335,7 +274,7 @@ public class FirebaseDBManager : MonoBehaviour
                 {"password", password.Trim()},
                 {"first_name", firstName.Trim()},
                 {"last_name", lastName.Trim()},
-                {"second_name", string.IsNullOrEmpty(secondName) ? "" : secondName.Trim()},
+                {"second_name", secondName?.Trim() ?? ""},
                 {"group_id", groupId},
                 {"created_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
                 {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")},
@@ -345,7 +284,7 @@ public class FirebaseDBManager : MonoBehaviour
                 {"game_stats_ref", userId}
             };
 
-            string roleId = databaseRef.Child("15").Child("data").Push().Key;
+            string roleId = databaseRef.Child("15/data").Push().Key;
             var roleData = new Dictionary<string, object>
             {
                 {"id", roleId},
@@ -355,19 +294,9 @@ public class FirebaseDBManager : MonoBehaviour
 
             var skillsData = new Dictionary<string, object>
             {
-                {"main_skills", new Dictionary<string, int>()},
-                {"additional_skills", new Dictionary<string, int>()}
+                {"main_skills", mainSkills.ToDictionary(s => s, _ => 0)},
+                {"additional_skills", additionalSkills.ToDictionary(s => s, _ => 0)}
             };
-
-            foreach (string skillId in mainSkills)
-            {
-                ((Dictionary<string, int>)skillsData["main_skills"]).Add(skillId, 0);
-            }
-
-            foreach (string skillId in additionalSkills)
-            {
-                ((Dictionary<string, int>)skillsData["additional_skills"]).Add(skillId, 0);
-            }
 
             var updates = new Dictionary<string, object>
             {
@@ -377,365 +306,240 @@ public class FirebaseDBManager : MonoBehaviour
             };
 
             await databaseRef.UpdateChildrenAsync(updates);
-
-            Debug.Log($"Student {email} registered successfully in program {programTitle}");
+            Debug.Log($"[Register] Student {email} registered");
             return true;
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Registration failed: {ex.Message}\n{ex.StackTrace}");
+            Debug.LogError($"[Register] Error: {ex.Message}");
             return false;
         }
     }
 
     private async Task<DataSnapshot> GetEducationalProgram(string programId)
     {
-        DataSnapshot programsSnapshot = await databaseRef
-            .Child("4") // educational_programs table
-            .Child("data")
-            .GetValueAsync();
-
-        if (!programsSnapshot.Exists) return null;
-
-        foreach (DataSnapshot program in programsSnapshot.Children)
-        {
-            string currentId = program.Child("id").Value?.ToString();
-            if (currentId == programId)
-            {
-                return program;
-            }
-        }
-
-        return null;
+        DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("4/data").GetValueAsync());
+        return snapshot.Children.FirstOrDefault(p => p.Child("id")?.Value?.ToString() == programId);
     }
 
     private async Task<bool> CheckEmailExists(string email)
     {
-        DataSnapshot usersSnapshot = await databaseRef
-            .Child("14") // users table
-            .Child("data")
-            .GetValueAsync();
-
-        if (!usersSnapshot.Exists) return false;
-
-        foreach (DataSnapshot user in usersSnapshot.Children)
-        {
-            string userEmail = user.Child("email").Value?.ToString();
-            if (userEmail?.ToLower() == email.ToLower())
-            {
-                return true;
-            }
-        }
-
-        return false;
+        DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("14/data").GetValueAsync());
+        return snapshot.Children.Any(u => u.Child("email")?.Value?.ToString()?.ToLower() == email.ToLower());
     }
+
     public async Task<List<string>> GetProgramSkills(string programId)
     {
-        var skills = new List<string>();
         try
         {
             if (!isInitialized) await Initialize();
-
-            // Получаем все программы
-            DataSnapshot programsSnapshot = await databaseRef.Child("4").Child("data").GetValueAsync();
-
-            if (programsSnapshot.Exists && programsSnapshot.HasChildren)
-            {
-                // Ищем программу с нужным ID в массиве
-                foreach (DataSnapshot programSnapshot in programsSnapshot.Children)
-                {
-                    string currentProgramId = programSnapshot.Child("id")?.Value?.ToString();
-                    if (currentProgramId == programId)
-                    {
-                        var skillsNode = programSnapshot.Child("main_skills");
-                        if (skillsNode.Exists && skillsNode.ChildrenCount > 0)
-                        {
-                            foreach (var skill in skillsNode.Children)
-                            {
-                                if (!string.IsNullOrEmpty(skill.Value?.ToString()))
-                                    skills.Add(skill.Value.ToString());
-                            }
-                        }
-                        break; // Нашли нужную программу, выходим из цикла
-                    }
-                }
-            }
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("4/data").GetValueAsync());
+            var program = snapshot.Children.FirstOrDefault(p => p.Child("id")?.Value?.ToString() == programId);
+            return program?.Child("main_skills")?.Children
+                .Select(s => s.Value?.ToString())
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToList() ?? new List<string>();
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error getting program skills: {ex.Message}");
+            Debug.LogError($"[Skills] Error: {ex.Message}");
+            return new List<string>();
         }
-        return skills;
     }
+
     public async Task<Group> GetGroupDetails(string groupId)
     {
         try
         {
-            DataSnapshot snapshot = await databaseRef.Child("6").Child("data").Child(groupId).GetValueAsync();
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("6/data").Child(groupId).GetValueAsync());
             if (snapshot.Exists)
-            {
                 return new Group
                 {
                     Id = groupId,
-                    Title = snapshot.Child("title").Value?.ToString() ?? "",
-                    Course = snapshot.Child("course").Value?.ToString() ?? "",
-                    ProgramId = snapshot.Child("educational_program_id").Value?.ToString() ?? ""
+                    Title = snapshot.Child("title")?.Value?.ToString() ?? "",
+                    Course = snapshot.Child("course")?.Value?.ToString() ?? "",
+                    ProgramId = snapshot.Child("educational_program_id")?.Value?.ToString() ?? ""
                 };
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Error loading group details: {ex.Message}");
-        }
-        return null;
-    }
-
-    public async Task<byte[]> GetUserAvatar(string userId)
-    {
-        if (!isInitialized) await Initialize();
-
-        try
-        {
-            // Путь к данным пользователя в таблице users (14)
-            DataSnapshot snapshot = await databaseRef
-                .Child("14") // Таблица users
-                .Child("data")
-                .Child(userId)
-                .GetValueAsync();
-
-            if (snapshot.Exists && snapshot.HasChild("avatar_path"))
-            {
-                string avatarBase64 = snapshot.Child("avatar_path").Value?.ToString();
-                if (string.IsNullOrEmpty(avatarBase64))
-                {
-                    Debug.LogWarning($"[Avatar] Avatar path for user {userId} is empty");
-                    return null;
-                }
-
-                try
-                {
-                    byte[] avatarData = Convert.FromBase64String(avatarBase64);
-                    Debug.Log($"[Avatar] Successfully decoded Base64 avatar for user {userId}, size: {avatarData.Length} bytes");
-                    return avatarData;
-                }
-                catch (FormatException ex)
-                {
-                    Debug.LogError($"[Avatar] Failed to decode Base64 string for user {userId}: {ex.Message}");
-                    return null;
-                }
-            }
-
-            Debug.LogWarning($"[Avatar] Avatar not found for user {userId}");
             return null;
         }
         catch (Exception ex)
         {
-            Debug.LogError($"[Avatar] Error loading avatar: {ex.Message}");
+            Debug.LogError($"[Group] Error: {ex.Message}");
+            return null;
+        }
+    }
+
+    public async Task<byte[]> GetUserAvatar(string userId)
+    {
+        try
+        {
+            if (!isInitialized) await Initialize();
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("14/data").Child(userId).GetValueAsync());
+            string avatarBase64 = snapshot.Child("avatar_path")?.Value?.ToString();
+            if (string.IsNullOrEmpty(avatarBase64))
+                return null;
+
+            return Convert.FromBase64String(avatarBase64);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Avatar] Error: {ex.Message}");
             return null;
         }
     }
 
     public async Task<List<Group>> GetAllGroups()
     {
-        List<Group> groups = new List<Group>();
         try
         {
             if (!isInitialized) await Initialize();
-
-            Debug.Log("[Firebase] Loading groups...");
-
-            // Получаем данные из узла 
-            DataSnapshot groupsSnapshot = await databaseRef.Child("6").Child("data").GetValueAsync();
-
-            Debug.Log($"Raw groups data: {groupsSnapshot.GetRawJsonValue()}");
-
-            if (groupsSnapshot.Exists && groupsSnapshot.HasChildren)
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("6/data").GetValueAsync());
+            return snapshot.Children.Select(g => new Group
             {
-                foreach (DataSnapshot groupSnapshot in groupsSnapshot.Children)
-                {
-                    // Для структуры с таблицами и данными
-                    var groupData = groupSnapshot.Child("data").Exists
-                        ? groupSnapshot.Child("data")
-                        : groupSnapshot;
-
-                    groups.Add(new Group
-                    {
-                        Id = groupData.Child("id").Value?.ToString() ?? groupSnapshot.Key,
-                        Title = groupData.Child("title").Value?.ToString() ?? "Название не указано",
-                        Course = groupData.Child("course").Value?.ToString() ?? "",
-                        ProgramId = groupData.Child("educational_program_id").Value?.ToString() ?? ""
-                    });
-                }
-                Debug.Log($"[Firebase] Loaded {groups.Count} groups");
-            }
-            else
-            {
-                Debug.LogWarning("[Firebase] No groups found in database");
-            }
+                Id = g.Key,
+                Title = g.Child("title")?.Value?.ToString() ?? "Название не указано",
+                Course = g.Child("course")?.Value?.ToString() ?? "",
+                ProgramId = g.Child("educational_program_id")?.Value?.ToString() ?? ""
+            }).ToList();
         }
         catch (Exception ex)
         {
-            Debug.LogError($"[Firebase] Error loading groups: {ex.Message}");
+            Debug.LogError($"[Groups] Error: {ex.Message}");
+            return new List<Group>();
         }
-
-        return groups;
     }
 
     public async Task<List<Student>> GetStudentsByGroup(string groupId)
     {
-        List<Student> students = new List<Student>();
         try
         {
             if (!isInitialized) await Initialize();
-
-            // Получаем данные из таблицы users (у вас это узел 14)
-            DataSnapshot usersSnapshot = await databaseRef.Child("14").Child("data").GetValueAsync();
-
-            if (usersSnapshot.Exists)
-            {
-                foreach (DataSnapshot userSnapshot in usersSnapshot.Children)
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("14/data").GetValueAsync());
+            return (await Task.WhenAll(snapshot.Children
+                .Where(u => u.Child("group_id")?.Value?.ToString() == groupId)
+                .Select(async u => new Student
                 {
-                    string userGroupId = userSnapshot.Child("group_id")?.Value?.ToString();
-
-                    // Проверяем, что группа совпадает и поле group_id не пустое
-                    if (!string.IsNullOrEmpty(userGroupId) && userGroupId == groupId)
-                    {
-                        var student = new Student
-                        {
-                            Id = userSnapshot.Key,
-                            Username = userSnapshot.Child("username").Value?.ToString() ?? "",
-                            First = userSnapshot.Child("first_name").Value?.ToString() ?? "",
-                            Last = userSnapshot.Child("last_name").Value?.ToString() ?? "",
-                            Second = userSnapshot.Child("second_name").Value?.ToString() ?? "",
-                            GroupId = groupId,
-                            GroupName = await GetGroupName(groupId),
-                            Email = userSnapshot.Child("email").Value?.ToString() ?? ""
-                        };
-                        students.Add(student);
-                    }
-                }
-            }
-
-            Debug.Log($"Найдено студентов: {students.Count} для группы {groupId}");
+                    Id = u.Key,
+                    Username = u.Child("username")?.Value?.ToString() ?? "",
+                    First = u.Child("first_name")?.Value?.ToString() ?? "",
+                    Last = u.Child("last_name")?.Value?.ToString() ?? "",
+                    Second = u.Child("second_name")?.Value?.ToString() ?? "",
+                    GroupId = groupId,
+                    GroupName = await GetGroupName(groupId),
+                    Email = u.Child("email")?.Value?.ToString() ?? ""
+                }))).ToList();
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Ошибка загрузки студентов: {ex.Message}\n{ex.StackTrace}");
+            Debug.LogError($"[Students] Error: {ex.Message}");
+            return new List<Student>();
         }
-        return students;
     }
 
     public async Task<Student> GetStudentDetails(string studentId)
     {
         try
         {
-            DataSnapshot snapshot = await databaseRef.Child("14").Child("data").Child(studentId).GetValueAsync();
-
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("14/data").Child(studentId).GetValueAsync());
             if (snapshot.Exists)
             {
+                string groupId = snapshot.Child("group_id")?.Value?.ToString();
                 return new Student
                 {
                     Id = studentId,
-                    First = snapshot.Child("first_name").Value?.ToString() ?? "",
-                    Last = snapshot.Child("last_name").Value?.ToString() ?? "",
-                    Second = snapshot.Child("second_name").Value?.ToString() ?? "",
-                    GroupId = snapshot.Child("group_id").Value?.ToString() ?? "",
-                    Email = snapshot.Child("email").Value?.ToString() ?? "",
-                    AvatarPath = snapshot.Child("avatar_path").Value?.ToString() ?? "",
-                    Username = snapshot.Child("username").Value?.ToString() ?? "",
-                    CreatedAt = snapshot.Child("created_at").Value?.ToString() ?? "",
-                    UpdatedAt = snapshot.Child("updated_at").Value?.ToString() ?? "",
-                    GroupName = await GetGroupName(snapshot.Child("group_id").Value?.ToString())
+                    First = snapshot.Child("first_name")?.Value?.ToString() ?? "",
+                    Last = snapshot.Child("last_name")?.Value?.ToString() ?? "",
+                    Second = snapshot.Child("second_name")?.Value?.ToString() ?? "",
+                    GroupId = groupId,
+                    Email = snapshot.Child("email")?.Value?.ToString() ?? "",
+                    AvatarPath = snapshot.Child("avatar_path")?.Value?.ToString() ?? "",
+                    Username = snapshot.Child("username")?.Value?.ToString() ?? "",
+                    CreatedAt = snapshot.Child("created_at")?.Value?.ToString() ?? "",
+                    UpdatedAt = snapshot.Child("updated_at")?.Value?.ToString() ?? "",
+                    GroupName = await GetGroupName(groupId)
                 };
             }
+            return null;
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error loading student data: {ex.Message}");
+            Debug.LogError($"[Student] Error: {ex.Message}");
+            return null;
         }
-        return null;
     }
 
     public async Task UpdateStudentStats(string studentId, int coinsToAdd, float timeToAdd)
     {
         try
         {
-            // Получаем текущие данные студента
-            DataSnapshot snapshot = await databaseRef.Child("14").Child("data").Child(studentId).GetValueAsync();
-
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef.Child("14/data").Child(studentId).GetValueAsync());
             if (snapshot.Exists)
             {
-                // Парсим текущие значения
-                int currentCoins = 0;
-                float currentTime = 0f;
+                int currentCoins = int.TryParse(snapshot.Child("total_coins")?.Value?.ToString(), out var coins) ? coins : 0;
+                float currentTime = float.TryParse(snapshot.Child("total_play_time")?.Value?.ToString(), out var time) ? time : 0f;
 
-                if (snapshot.HasChild("total_coins"))
-                    int.TryParse(snapshot.Child("total_coins").Value?.ToString(), out currentCoins);
-
-                if (snapshot.HasChild("total_play_time"))
-                    float.TryParse(snapshot.Child("total_play_time").Value?.ToString(), out currentTime);
-
-                // Обновляем значения
                 var updates = new Dictionary<string, object>
-            {
-                {"total_coins", currentCoins + coinsToAdd},
-                {"total_play_time", currentTime + timeToAdd},
-                {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}
-            };
+                {
+                    {"total_coins", currentCoins + coinsToAdd},
+                    {"total_play_time", currentTime + timeToAdd},
+                    {"updated_at", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}
+                };
 
-                // Сохраняем обновления
-                await databaseRef.Child("14").Child("data").Child(studentId).UpdateChildrenAsync(updates);
-
-                Debug.Log($"Student stats updated: +{coinsToAdd} coins, +{timeToAdd} seconds");
+                await databaseRef.Child("14/data").Child(studentId).UpdateChildrenAsync(updates);
+                Debug.Log($"[Stats] Updated: +{coinsToAdd} coins, +{timeToAdd} seconds");
             }
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error updating student stats: {ex.Message}");
+            Debug.LogError($"[Stats] Error: {ex.Message}");
         }
     }
 
     public async Task<Dictionary<string, int>> GetStudentGameScores(string studentId)
     {
         var scores = new Dictionary<string, int>();
-
         try
         {
             if (!isInitialized) await Initialize();
-            if (string.IsNullOrEmpty(studentId)) return scores;
-
-            DataSnapshot snapshot = await databaseRef.Child("game_results")
+            DataSnapshot snapshot = await RetryQuery(() => databaseRef
+                .Child("game_results")
                 .OrderByChild("student_id")
                 .EqualTo(studentId)
-                .GetValueAsync();
+                .GetValueAsync());
 
-            if (snapshot.Exists)
+            foreach (DataSnapshot game in snapshot.Children)
             {
-                foreach (DataSnapshot gameSnapshot in snapshot.Children)
-                {
-                    string gameName = gameSnapshot.Child("game_name")?.Value?.ToString() ?? "unknown";
-                    int coins = 0;
-                    if (gameSnapshot.Child("coins")?.Value != null)
-                    {
-                        int.TryParse(gameSnapshot.Child("coins").Value.ToString(), out coins);
-                    }
-
-                    if (scores.ContainsKey(gameName))
-                    {
-                        scores[gameName] += coins;
-                    }
-                    else
-                    {
-                        scores.Add(gameName, coins);
-                    }
-                }
+                string gameName = game.Child("game_name")?.Value?.ToString() ?? "unknown";
+                int coins = int.TryParse(game.Child("coins")?.Value?.ToString(), out var c) ? c : 0;
+                scores[gameName] = scores.GetValueOrDefault(gameName, 0) + coins;
             }
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error getting student scores: {ex.Message}");
+            Debug.LogError($"[Scores] Error: {ex.Message}");
         }
-
         return scores;
+    }
+
+    private async Task<DataSnapshot> RetryQuery(Func<Task<DataSnapshot>> query)
+    {
+        for (int attempt = 1; attempt <= MaxRetries; attempt++)
+        {
+            try
+            {
+                return await query();
+            }
+            catch (Exception ex)
+            {
+                if (attempt == MaxRetries)
+                {
+                    Debug.LogError($"[Query] Failed after {MaxRetries} attempts: {ex.Message}");
+                    throw;
+                }
+                Debug.LogWarning($"[Query] Attempt {attempt} failed: {ex.Message}");
+                await Task.Delay((int)(RetryDelayBase * 1000 * attempt));
+            }
+        }
+        return null;
     }
 }

@@ -1,164 +1,199 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Collections;
-using Firebase.Database;
+using UnityEngine.UI;
+using TMPro;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject loadingIndicator;
-    public InputField loginInput;
-    public InputField passwordInput;
-    public Text errorText;
+    [SerializeField] private GameObject loadingIndicator;
+    [SerializeField] private TMP_InputField loginInput;
+    [SerializeField] private TMP_InputField passwordInput;
+    [SerializeField] private TMP_Text errorText;
 
     private FirebaseDBManager firebaseManager;
-    private bool isNewsLoading = false;
+    private bool isNewsLoading;
+    private bool isDestroyed; // Track if the GameObject is destroyed
 
-    async void Start()
+    private async void Start()
     {
-        // Create a persistent GameObject for FirebaseDBManager
+        if (!ValidateUIComponents()) return;
+
         var firebaseManagerObject = new GameObject("FirebaseDBManager");
         firebaseManager = firebaseManagerObject.AddComponent<FirebaseDBManager>();
-        DontDestroyOnLoad(firebaseManagerObject); // Ensure it persists across scenes
+        DontDestroyOnLoad(firebaseManagerObject);
 
         await firebaseManager.Initialize();
 
-        await DebugCheckDatabaseStructure();
-
         if (UserSession.CurrentUser != null && UserSession.CurrentUser.Role == "student")
         {
-            Debug.Log($"Текущий пользователь: {UserSession.CurrentUser.Username}");
-            // Начинаем фоновую загрузку данных при старте, если пользователь уже авторизован
-            StartCoroutine(PreloadStudentData());
+            Debug.Log($"[MainMenu] Current user: {UserSession.CurrentUser.Username}");
+            await PreloadStudentDataAsync();
         }
     }
 
-    private IEnumerator PreloadStudentData()
+    private void OnDestroy()
     {
-        // Создаем временный объект для предзагрузки
+        isDestroyed = true; // Mark as destroyed to prevent accessing invalid references
+    }
+
+    private bool ValidateUIComponents()
+    {
+        if (loginInput == null || passwordInput == null || errorText == null)
+        {
+            Debug.LogError("[MainMenu] UI components missing");
+            return false;
+        }
+        return true;
+    }
+
+    private async Task PreloadStudentDataAsync()
+    {
         var loaderObject = new GameObject("StudentDataPreloader");
         var progressController = loaderObject.AddComponent<StudentProgressController>();
         var ratingPreloader = loaderObject.AddComponent<RatingPreloader>();
 
-        // Загружаем данные
-        yield return progressController.PreloadSkillsCoroutine();
-        yield return ratingPreloader.PreloadRatingData();
-
-        // После загрузки уничтожаем временный объект
-        Destroy(loaderObject);
-    }
-
-    private async Task DebugCheckDatabaseStructure()
-    {
         try
         {
-            DataSnapshot snapshot = await FirebaseDatabase.DefaultInstance.GetReference("").GetValueAsync();
-            Debug.Log("Full DB data: " + snapshot.GetRawJsonValue());
+            await Task.WhenAll(
+                progressController.PreloadSkillsAsync(),
+                ratingPreloader.PreloadRatingDataAsync()
+            );
+            Debug.Log("[MainMenu] Student data preloaded");
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Database check failed: {ex.Message}");
+            Debug.LogError($"[MainMenu] Preload failed: {ex.Message}");
+        }
+        finally
+        {
+            if (loaderObject != null)
+                Destroy(loaderObject);
         }
     }
 
-    public void OnLoginButtonClick()
+    public async void OnLoginButtonClick()
     {
-        StartCoroutine(LoginStudentCoroutine(loginInput.text, passwordInput.text));
-    }
+        if (!ValidateUIComponents()) return;
 
-    private IEnumerator LoginStudentCoroutine(string login, string password)
-    {
-        if (loadingIndicator != null)
+        // Set loading indicator only if not destroyed
+        if (!isDestroyed && loadingIndicator != null)
             loadingIndicator.SetActive(true);
 
-        var task = firebaseManager.AuthenticateUser(login, password);
-        yield return new WaitUntil(() => task.IsCompleted);
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
-        if (task.IsFaulted)
+        try
         {
-            errorText.text = "Ошибка соединения";
-        }
-        else if (task.Result != null)
-        {
-            UserSession.CurrentUser = task.Result;
-
-            if (UserSession.CurrentUser.Role == "student")
+            var user = await firebaseManager.AuthenticateUser(loginInput.text, passwordInput.text);
+            if (user == null)
             {
-                errorText.text = "";
-                // Запускаем предзагрузку данных студента
-                yield return StartCoroutine(PreloadStudentData());
-                yield return StartCoroutine(LoadStudentAvatar(UserSession.CurrentUser.Id));
-                // Запускаем загрузку новостей в фоне
-                StartCoroutine(LoadNewsInBackground());
-                // Переходим на сцену студентов
-                yield return StartCoroutine(LoadStudentsSceneAsync());
+                if (!isDestroyed && errorText != null)
+                    errorText.text = "Invalid login or password";
+                return;
             }
-            else
+
+            UserSession.CurrentUser = user;
+            if (user.Role != "student")
             {
-                errorText.text = "Доступ только для студентов";
+                if (!isDestroyed && errorText != null)
+                    errorText.text = "Access restricted to students";
                 UserSession.CurrentUser = null;
+                return;
             }
-        }
-        else
-        {
-            errorText.text = "Неверный логин или пароль";
-        }
 
-        if (loadingIndicator != null)
-            loadingIndicator.SetActive(false);
+            if (!isDestroyed && errorText != null)
+                errorText.text = "";
+            await Task.WhenAll(
+                LoadStudentAvatarAsync(user.Id),
+                PreloadStudentDataAsync()
+            );
+
+            LoadNewsInBackground();
+            await LoadStudentsSceneAsync();
+        }
+        catch (Exception ex)
+        {
+            if (!isDestroyed && errorText != null)
+                errorText.text = "Connection error";
+            Debug.LogError($"[MainMenu] Login failed: {ex.Message}");
+        }
+        finally
+        {
+            // Only access loadingIndicator if not destroyed
+            if (!isDestroyed && loadingIndicator != null)
+                loadingIndicator.SetActive(false);
+            stopwatch.Stop();
+            Debug.Log($"[MainMenu] Login completed in {stopwatch.ElapsedMilliseconds} ms");
+        }
     }
 
-    private IEnumerator LoadStudentAvatar(string userId)
+    private async Task LoadStudentAvatarAsync(string userId)
     {
-        var task = firebaseManager.GetUserAvatar(userId);
-        yield return new WaitUntil(() => task.IsCompleted);
+        if (UserSession.CachedAvatar != null)
+        {
+            Debug.Log("[MainMenu] Using cached avatar");
+            return;
+        }
 
-        byte[] avatarData = task.Result;
+        byte[] avatarData = await firebaseManager.GetUserAvatar(userId);
         if (avatarData != null && avatarData.Length > 0)
         {
             Texture2D texture = new Texture2D(2, 2);
-            texture.LoadImage(avatarData);
-            UserSession.CachedAvatar = texture;
+            if (texture.LoadImage(avatarData))
+                UserSession.CachedAvatar = texture;
+            else
+                Debug.LogWarning("[MainMenu] Failed to load avatar image");
         }
     }
 
-    IEnumerator LoadNewsInBackground()
+    private void LoadNewsInBackground()
     {
+        if (isNewsLoading) return;
         isNewsLoading = true;
+
         var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
-        yield return StartCoroutine(vkNewsLoad.GetNewsFromVK(0, 100));
+        StartCoroutine(LoadNewsCoroutine(vkNewsLoad));
+    }
+
+    private IEnumerator LoadNewsCoroutine(VKNewsLoad vkNewsLoad)
+    {
+        yield return vkNewsLoad.GetNewsFromVK(0, 20);
 
         if (vkNewsLoad.allPosts != null && vkNewsLoad.groupDictionary != null)
         {
             NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
             NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
-            Debug.Log("Новости успешно загружены в фоне");
+            NewsDataCache.SaveCacheToPersistentStorage();
+            Debug.Log("[MainMenu] News loaded in background");
         }
         else
         {
-            Debug.LogWarning("Не удалось загрузить новости в фоне");
+            Debug.LogWarning("[MainMenu] Failed to load news");
         }
 
-        Destroy(vkNewsLoad);
+        if (vkNewsLoad != null)
+            Destroy(vkNewsLoad);
         isNewsLoading = false;
     }
 
-    IEnumerator LoadStudentsSceneAsync()
+    private async Task LoadStudentsSceneAsync()
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("StudentsScene");
-        asyncLoad.allowSceneActivation = false;
+        if (asyncLoad == null)
+        {
+            Debug.LogError("[MainMenu] Failed to load StudentsScene");
+            return;
+        }
 
+        asyncLoad.allowSceneActivation = false;
         while (!asyncLoad.isDone)
         {
             if (asyncLoad.progress >= 0.9f)
-            {
                 asyncLoad.allowSceneActivation = true;
-            }
-            yield return null;
+            await Task.Yield();
         }
     }
 
@@ -166,217 +201,68 @@ public class MainMenu : MonoBehaviour
     {
         if (UserSession.CurrentUser == null)
         {
-            errorText.text = "Сначала войдите в систему.";
+            if (!isDestroyed && errorText != null)
+                errorText.text = "Please log in first.";
             return;
         }
 
         if (!isNewsLoading)
-        {
             StartCoroutine(LoadNewsBeforeTransition());
-        }
     }
 
-    IEnumerator LoadNewsBeforeTransition()
+    private IEnumerator LoadNewsBeforeTransition()
     {
         isNewsLoading = true;
-
-        if (loadingIndicator != null)
+        if (!isDestroyed && loadingIndicator != null)
             loadingIndicator.SetActive(true);
 
-        yield return StartCoroutine(GetNewsFromVK());
-
-        yield return StartCoroutine(LoadStudentsSceneAsync());
-
-        if (loadingIndicator != null)
-            loadingIndicator.SetActive(false);
-
-        isNewsLoading = false;
-    }
-
-    IEnumerator GetNewsFromVK()
-    {
         var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
-        yield return StartCoroutine(vkNewsLoad.GetNewsFromVK(0, 100));
+        // No need to assign vkSettings; configure accessToken and groupIds in Inspector
+        yield return vkNewsLoad.GetNewsFromVK(0, 20);
 
         if (vkNewsLoad.allPosts != null && vkNewsLoad.groupDictionary != null)
         {
             NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
             NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
-            Debug.Log("Новости успешно загружены");
+            NewsDataCache.SaveCacheToPersistentStorage();
+            Debug.Log("[MainMenu] News loaded successfully");
         }
         else
         {
-            Debug.LogError("Не удалось загрузить новости");
-            errorText.text = "Ошибка загрузки новостей";
+            if (!isDestroyed && errorText != null)
+                errorText.text = "News loading error";
+            Debug.LogError("[MainMenu] Failed to load news");
         }
 
-        Destroy(vkNewsLoad);
+        yield return StartCoroutine(LoadStudentsSceneCoroutine());
+
+        if (!isDestroyed && loadingIndicator != null)
+            loadingIndicator.SetActive(false);
+        isNewsLoading = false;
+        if (vkNewsLoad != null)
+            Destroy(vkNewsLoad);
     }
-}
 
-// Helper class to preload rating data
-public class RatingPreloader : MonoBehaviour
-{
-    private List<UserSession.UserRatingData> allUsers = new List<UserSession.UserRatingData>();
-
-    public IEnumerator PreloadRatingData()
+    private IEnumerator LoadStudentsSceneCoroutine()
     {
-        Debug.Log("[RatingPreloader] Starting preload of rating data...");
-
-        var dbManager = FindObjectOfType<FirebaseDBManager>();
-        if (dbManager == null)
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("StudentsScene");
+        if (asyncLoad == null)
         {
-            Debug.LogError("[RatingPreloader] FirebaseDBManager not found!");
+            Debug.LogError("[MainMenu] Failed to load StudentsScene");
             yield break;
         }
 
-        // Load all users
-        Debug.Log("[RatingPreloader] Loading users from Firebase...");
-        var usersTask = FirebaseDatabase.DefaultInstance
-            .GetReference("14")
-            .Child("data")
-            .GetValueAsync();
-        yield return new WaitUntil(() => usersTask.IsCompleted);
-
-        DataSnapshot usersSnapshot = usersTask.Result;
-        if (!usersSnapshot.Exists)
+        asyncLoad.allowSceneActivation = false;
+        while (!asyncLoad.isDone)
         {
-            Debug.LogWarning("[RatingPreloader] No users found in database");
-            yield break;
+            if (asyncLoad.progress >= 0.9f)
+                asyncLoad.allowSceneActivation = true;
+            yield return null;
         }
-
-        Debug.Log($"[RatingPreloader] Found {usersSnapshot.ChildrenCount} users in database");
-
-        // Load all groups for group names
-        Debug.Log("[RatingPreloader] Loading groups...");
-        var groupsTask = dbManager.GetAllGroups();
-        yield return new WaitUntil(() => groupsTask.IsCompleted);
-        var groups = groupsTask.Result;
-        var groupNames = new Dictionary<string, string>();
-
-        foreach (var group in groups)
-        {
-            if (!groupNames.ContainsKey(group.Id))
-            {
-                groupNames.Add(group.Id, group.Title);
-                Debug.Log($"[RatingPreloader] Added group: {group.Id} - {group.Title}");
-            }
-            else
-            {
-                Debug.Log($"[RatingPreloader] Duplicate group ID skipped: {group.Id}");
-            }
-        }
-
-        // Load points for each user
-        Debug.Log("[RatingPreloader] Calculating points for users...");
-        foreach (DataSnapshot userSnapshot in usersSnapshot.Children)
-        {
-            string userId = userSnapshot.Key;
-            Debug.Log($"[RatingPreloader] Processing user: {userId}");
-
-            int points = 0;
-            var pointsTask = CalculateTotalPoints(userId);
-            yield return new WaitUntil(() => pointsTask.IsCompleted);
-            points = pointsTask.Result;
-            Debug.Log($"[RatingPreloader] User {userId} has {points} points");
-
-            if (points > 0) // Only include users with points
-            {
-                string groupId = userSnapshot.Child("group_id")?.Value?.ToString();
-                string groupName;
-
-                if (string.IsNullOrEmpty(groupId))
-                {
-                    Debug.Log($"[RatingPreloader] User {userId} has no group_id or group_id is null");
-                    groupName = "N/A";
-                }
-                else
-                {
-                    groupNames.TryGetValue(groupId, out groupName);
-                    if (string.IsNullOrEmpty(groupName))
-                    {
-                        Debug.Log($"[RatingPreloader] Group ID {groupId} not found in groupNames for user {userId}");
-                        groupName = "N/A";
-                    }
-                }
-
-                var user = new User
-                {
-                    Id = userId,
-                    First = userSnapshot.Child("first_name")?.Value?.ToString() ?? "Unknown",
-                    Last = userSnapshot.Child("last_name")?.Value?.ToString() ?? "Unknown",
-                    Email = userSnapshot.Child("email")?.Value?.ToString() ?? ""
-                };
-
-                allUsers.Add(new UserSession.UserRatingData
-                {
-                    User = user,
-                    TotalPoints = points,
-                    GroupName = groupName ?? "N/A"
-                });
-
-                Debug.Log($"[RatingPreloader] Added to rating: {user.Last} {user.First} - {points} points, Group: {groupName}");
-            }
-        }
-
-        // Sort by points descending and store in cache
-        allUsers = allUsers.OrderByDescending(u => u.TotalPoints).ToList();
-        UserSession.CachedRatingData = allUsers;
-        Debug.Log($"[RatingPreloader] Total users with points cached: {allUsers.Count}");
     }
-
-    private async Task<int> CalculateTotalPoints(string userId)
+    public void OnLogoutButtonClick()
     {
-        int totalPoints = 0;
-        Debug.Log($"[RatingPreloader] Calculating points for user: {userId}");
-
-        try
-        {
-            DataSnapshot snapshot = await FirebaseDatabase.DefaultInstance
-                .GetReference("16")
-                .Child("data")
-                .Child(userId)
-                .GetValueAsync();
-
-            if (snapshot.Exists)
-            {
-                var mainSkills = snapshot.Child("main_skills");
-                if (mainSkills.Exists)
-                {
-                    foreach (var skill in mainSkills.Children)
-                    {
-                        if (int.TryParse(skill.Value?.ToString(), out int points))
-                        {
-                            totalPoints += points;
-                            Debug.Log($"[RatingPreloader] Main skill {skill.Key}: +{points} (Total: {totalPoints})");
-                        }
-                    }
-                }
-
-                var additionalSkills = snapshot.Child("additional_skills");
-                if (additionalSkills.Exists)
-                {
-                    foreach (var skill in additionalSkills.Children)
-                    {
-                        if (int.TryParse(skill.Value?.ToString(), out int points))
-                        {
-                            totalPoints += points;
-                            Debug.Log($"[RatingPreloader] Additional skill {skill.Key}: +{points} (Total: {totalPoints})");
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Debug.Log($"[RatingPreloader] No skills data found for user {userId}");
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"[RatingPreloader] Error calculating points for user {userId}: {ex.Message}");
-        }
-
-        Debug.Log($"[RatingPreloader] Final points for {userId}: {totalPoints}");
-        return totalPoints;
+        UserSession.ClearSession();
+        SceneManager.LoadScene("MainScene");
     }
 }

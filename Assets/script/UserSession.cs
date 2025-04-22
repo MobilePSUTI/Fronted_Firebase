@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 public static class UserSession
 {
@@ -12,105 +13,69 @@ public static class UserSession
     private static Dictionary<string, List<Student>> _cachedStudents = new Dictionary<string, List<Student>>();
     private static StudentProgressController.SkillsCache _cachedSkills;
     private static Texture2D _cachedAvatar;
-    private static List<UserRatingData> _cachedRatingData; // New property for cached rating data
+    private static List<UserRatingData> _cachedRatingData = new List<UserRatingData>();
 
-    // Define UserRatingData as a serializable class for JSON storage
     [Serializable]
     public class UserRatingData
     {
         public User User { get; set; }
         public int TotalPoints { get; set; }
         public string GroupName { get; set; }
+        public string Course { get; set; }
     }
 
     public static User CurrentUser
     {
         get => _currentUser;
-        set
-        {
-            _currentUser = value;
-            SaveSession();
-        }
+        set { _currentUser = value; SaveSession(); }
     }
 
     public static Student SelectedStudent
     {
         get => _selectedStudent;
-        set
-        {
-            _selectedStudent = value;
-            SaveSession();
-        }
+        set { _selectedStudent = value; SaveSession(); }
     }
 
     public static string SelectedGroupId
     {
         get => _selectedGroupId;
-        set
-        {
-            _selectedGroupId = value;
-            SaveSession();
-        }
+        set { _selectedGroupId = value; SaveSession(); }
     }
 
     public static string SelectedGroupName
     {
         get => _selectedGroupName;
-        set
-        {
-            _selectedGroupName = value;
-            SaveSession();
-        }
+        set { _selectedGroupName = value; SaveSession(); }
     }
 
     public static Texture2D CachedAvatar
     {
         get => _cachedAvatar;
-        set
-        {
-            _cachedAvatar = value;
-            SaveSession();
-        }
+        set { _cachedAvatar = value; SaveSession(); }
     }
 
     public static List<Group> CachedGroups
     {
-        get => _cachedGroups ?? (_cachedGroups = new List<Group>());
-        set
-        {
-            _cachedGroups = value ?? new List<Group>();
-            SaveSession();
-        }
+        get => _cachedGroups;
+        set { _cachedGroups = value ?? new List<Group>(); SaveSession(); }
     }
 
     public static Dictionary<string, List<Student>> CachedStudents
     {
-        get => _cachedStudents ?? (_cachedStudents = new Dictionary<string, List<Student>>());
-        set
-        {
-            _cachedStudents = value ?? new Dictionary<string, List<Student>>();
-            SaveSession();
-        }
+        get => _cachedStudents;
+        set { _cachedStudents = value ?? new Dictionary<string, List<Student>>(); SaveSession(); }
     }
 
     public static StudentProgressController.SkillsCache CachedSkills
     {
         get => _cachedSkills;
-        set
-        {
-            _cachedSkills = value;
-            SaveSession();
-        }
+        set { _cachedSkills = value; SaveSession(); }
     }
 
     public static List<UserRatingData> CachedRatingData
     {
-        get => _cachedRatingData ?? (_cachedRatingData = new List<UserRatingData>());
-        set
-        {
-            _cachedRatingData = value ?? new List<UserRatingData>();
-            SaveSession();
-        }
+        get => _cachedRatingData;
+        set { _cachedRatingData = value ?? new List<UserRatingData>(); SaveSession(); }
     }
 
     static UserSession()
@@ -118,78 +83,80 @@ public static class UserSession
         LoadSession();
     }
 
-    private static void SaveSession()
+    public static void SaveSession()
     {
-        PlayerPrefs.SetString("UserSession_SelectedGroupId", _selectedGroupId ?? "");
-        PlayerPrefs.SetString("UserSession_SelectedGroupName", _selectedGroupName ?? "");
-
-        if (_currentUser != null)
+        try
         {
-            PlayerPrefs.SetString("UserSession_CurrentUser", JsonUtility.ToJson(_currentUser));
-        }
+            PlayerPrefs.SetString("UserSession_SelectedGroupId", _selectedGroupId ?? "");
+            PlayerPrefs.SetString("UserSession_SelectedGroupName", _selectedGroupName ?? "");
 
-        if (_selectedStudent != null)
+            if (_currentUser != null)
+                PlayerPrefs.SetString("UserSession_CurrentUser", JsonUtility.ToJson(_currentUser));
+
+            if (_selectedStudent != null)
+                PlayerPrefs.SetString("UserSession_SelectedStudent", JsonUtility.ToJson(_selectedStudent));
+
+            if (_cachedSkills != null)
+                PlayerPrefs.SetString("UserSession_CachedSkills", JsonUtility.ToJson(_cachedSkills));
+
+            if (_cachedRatingData != null)
+                PlayerPrefs.SetString("UserSession_CachedRatingData", JsonUtility.ToJson(new SerializableList<UserRatingData> { Items = _cachedRatingData }));
+
+            if (_cachedAvatar != null)
+            {
+                string path = Path.Combine(Application.persistentDataPath, "avatar.png");
+                File.WriteAllBytes(path, _cachedAvatar.EncodeToPNG());
+                PlayerPrefs.SetString("UserSession_CachedAvatarPath", path);
+            }
+
+            PlayerPrefs.Save();
+            Debug.Log("[UserSession] Session saved");
+        }
+        catch (Exception ex)
         {
-            PlayerPrefs.SetString("UserSession_SelectedStudent", JsonUtility.ToJson(_selectedStudent));
+            Debug.LogError($"[UserSession] Save failed: {ex.Message}");
         }
-
-        if (_cachedSkills != null)
-        {
-            PlayerPrefs.SetString("UserSession_CachedSkills", JsonUtility.ToJson(_cachedSkills));
-        }
-
-        if (_cachedAvatar != null)
-        {
-            string avatarBase64 = Convert.ToBase64String(_cachedAvatar.EncodeToPNG());
-            PlayerPrefs.SetString("UserSession_CachedAvatar", avatarBase64);
-        }
-
-        if (_cachedRatingData != null)
-        {
-            PlayerPrefs.SetString("UserSession_CachedRatingData", JsonUtility.ToJson(new SerializableList<UserRatingData> { Items = _cachedRatingData }));
-        }
-
-        PlayerPrefs.Save();
     }
 
     private static void LoadSession()
     {
-        _selectedGroupId = PlayerPrefs.GetString("UserSession_SelectedGroupId");
-        if (string.IsNullOrEmpty(_selectedGroupId)) _selectedGroupId = null;
-
-        _selectedGroupName = PlayerPrefs.GetString("UserSession_SelectedGroupName");
-        if (string.IsNullOrEmpty(_selectedGroupName)) _selectedGroupName = null;
-
-        if (PlayerPrefs.HasKey("UserSession_CurrentUser"))
+        try
         {
-            _currentUser = JsonUtility.FromJson<User>(PlayerPrefs.GetString("UserSession_CurrentUser"));
+            _selectedGroupId = PlayerPrefs.GetString("UserSession_SelectedGroupId", null);
+            _selectedGroupName = PlayerPrefs.GetString("UserSession_SelectedGroupName", null);
+
+            if (PlayerPrefs.HasKey("UserSession_CurrentUser"))
+                _currentUser = JsonUtility.FromJson<User>(PlayerPrefs.GetString("UserSession_CurrentUser"));
+
+            if (PlayerPrefs.HasKey("UserSession_SelectedStudent"))
+                _selectedStudent = JsonUtility.FromJson<Student>(PlayerPrefs.GetString("UserSession_SelectedStudent"));
+
+            if (PlayerPrefs.HasKey("UserSession_CachedSkills"))
+                _cachedSkills = JsonUtility.FromJson<StudentProgressController.SkillsCache>(PlayerPrefs.GetString("UserSession_CachedSkills"));
+
+            if (PlayerPrefs.HasKey("UserSession_CachedRatingData"))
+            {
+                var serializableList = JsonUtility.FromJson<SerializableList<UserRatingData>>(PlayerPrefs.GetString("UserSession_CachedRatingData"));
+                _cachedRatingData = serializableList?.Items ?? new List<UserRatingData>();
+            }
+
+            if (PlayerPrefs.HasKey("UserSession_CachedAvatarPath"))
+            {
+                string path = PlayerPrefs.GetString("UserSession_CachedAvatarPath");
+                if (File.Exists(path))
+                {
+                    byte[] avatarData = File.ReadAllBytes(path);
+                    Texture2D texture = new Texture2D(2, 2);
+                    if (texture.LoadImage(avatarData))
+                        _cachedAvatar = texture;
+                }
+            }
+
+            Debug.Log("[UserSession] Session loaded");
         }
-
-        if (PlayerPrefs.HasKey("UserSession_SelectedStudent"))
+        catch (Exception ex)
         {
-            _selectedStudent = JsonUtility.FromJson<Student>(PlayerPrefs.GetString("UserSession_SelectedStudent"));
-        }
-
-        if (PlayerPrefs.HasKey("UserSession_CachedSkills"))
-        {
-            _cachedSkills = JsonUtility.FromJson<StudentProgressController.SkillsCache>(
-                PlayerPrefs.GetString("UserSession_CachedSkills"));
-        }
-
-        if (PlayerPrefs.HasKey("UserSession_CachedAvatar"))
-        {
-            string avatarBase64 = PlayerPrefs.GetString("UserSession_CachedAvatar");
-            byte[] avatarData = Convert.FromBase64String(avatarBase64);
-            Texture2D texture = new Texture2D(2, 2);
-            texture.LoadImage(avatarData);
-            _cachedAvatar = texture;
-        }
-
-        if (PlayerPrefs.HasKey("UserSession_CachedRatingData"))
-        {
-            var serializableList = JsonUtility.FromJson<SerializableList<UserRatingData>>(
-                PlayerPrefs.GetString("UserSession_CachedRatingData"));
-            _cachedRatingData = serializableList?.Items;
+            Debug.LogError($"[UserSession] Load failed: {ex.Message}");
         }
     }
 
@@ -197,8 +164,7 @@ public static class UserSession
     {
         _cachedGroups.Clear();
         _cachedStudents.Clear();
-        _cachedRatingData.Clear(); // Clear cached rating data
-
+        _cachedRatingData.Clear();
         SaveSession();
     }
 
@@ -214,17 +180,15 @@ public static class UserSession
         _cachedStudents.Clear();
         _cachedRatingData.Clear();
 
-        PlayerPrefs.DeleteKey("UserSession_CurrentUser");
-        PlayerPrefs.DeleteKey("UserSession_SelectedStudent");
-        PlayerPrefs.DeleteKey("UserSession_SelectedGroupId");
-        PlayerPrefs.DeleteKey("UserSession_SelectedGroupName");
-        PlayerPrefs.DeleteKey("UserSession_CachedSkills");
-        PlayerPrefs.DeleteKey("UserSession_CachedAvatar");
-        PlayerPrefs.DeleteKey("UserSession_CachedRatingData");
+        PlayerPrefs.DeleteAll();
+        string avatarPath = Path.Combine(Application.persistentDataPath, "avatar.png");
+        if (File.Exists(avatarPath))
+            File.Delete(avatarPath);
+
         PlayerPrefs.Save();
+        Debug.Log("[UserSession] Session cleared");
     }
 
-    // Helper class to serialize lists with JsonUtility
     [Serializable]
     private class SerializableList<T>
     {

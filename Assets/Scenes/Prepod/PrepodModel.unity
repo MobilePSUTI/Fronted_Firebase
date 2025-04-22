@@ -1463,8 +1463,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newsContainer: {fileID: 1446930211}
-  scrollRect: {fileID: 0}
-  loadingIndicator: {fileID: 0}
+  scrollRect: {fileID: 66568201}
+  loadingIndicator: {fileID: 970561517}
 --- !u!114 &1446930216
 MonoBehaviour:
   m_ObjectHideFlags: 0

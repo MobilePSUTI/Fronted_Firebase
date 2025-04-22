@@ -1,57 +1,72 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Collections;
-using Firebase.Database;
-using System.Threading.Tasks;
+using UnityEngine.UI;
+using TMPro;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections;
 
 public class PrMenuModel : MonoBehaviour
 {
-    public GameObject loadingIndicator;
-    public InputField loginInput;
-    public InputField passwordInput;
-    public Text errorText;
+    [SerializeField] private GameObject loadingIndicator;
+    [SerializeField] private TMP_InputField loginInput;
+    [SerializeField] private TMP_InputField passwordInput;
+    [SerializeField] private TMP_Text errorText;
 
     private FirebaseDBManager firebaseManager;
-    private bool isNewsLoading = false;
+    private bool isNewsLoading;
+    private bool isDestroyed;
 
     async void Start()
     {
-        firebaseManager = gameObject.AddComponent<FirebaseDBManager>();
+        if (!ValidateUIComponents()) return;
+
+        // Создаем объект FirebaseDBManager и сохраняем его между сценами
+        var firebaseManagerObject = new GameObject("FirebaseDBManager");
+        firebaseManager = firebaseManagerObject.AddComponent<FirebaseDBManager>();
+        DontDestroyOnLoad(firebaseManagerObject);
+
         await firebaseManager.Initialize();
 
-        await DebugCheckDatabaseStructure();
-       
         if (UserSession.CurrentUser != null && UserSession.CurrentUser.Role == "teacher")
         {
-            Debug.Log($"Текущий пользователь: {UserSession.CurrentUser.Username}");
-            // фоновая загрузка новостей чтобы сразу зайти в приложение даже без новостей
+            Debug.Log($"[PrMenuModel] Текущий пользователь: {UserSession.CurrentUser.Username}");
             StartCoroutine(LoadNewsInBackground());
         }
     }
 
-    private async Task DebugCheckDatabaseStructure()
+    private void OnDestroy()
     {
-        try
+        isDestroyed = true; // Отмечаем, что объект уничтожен
+    }
+
+    private bool ValidateUIComponents()
+    {
+        if (loginInput == null || passwordInput == null || errorText == null)
         {
-            DataSnapshot snapshot = await FirebaseDatabase.DefaultInstance.GetReference("").GetValueAsync();
-            Debug.Log("Full DB data: " + snapshot.GetRawJsonValue());
+            Debug.LogError("[PrMenuModel] UI components missing");
+            return false;
         }
-        catch (Exception ex)
-        {
-            Debug.LogError($"Database check failed: {ex.Message}");
-        }
+        return true;
     }
 
     public void OnTeacherLoginButtonClick()
     {
+        if (!ValidateUIComponents()) return;
+
+        if (!isDestroyed && loadingIndicator != null)
+            loadingIndicator.SetActive(true);
+
         string login = loginInput.text;
         string password = passwordInput.text;
 
         if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
         {
-            errorText.text = "Логин и пароль не могут быть пустыми.";
+            if (!isDestroyed && errorText != null)
+                errorText.text = "Логин и пароль не могут быть пустыми.";
+            if (!isDestroyed && loadingIndicator != null)
+                loadingIndicator.SetActive(false);
             return;
         }
 
@@ -60,15 +75,20 @@ public class PrMenuModel : MonoBehaviour
 
     private IEnumerator LoginTeacherCoroutine(string login, string password)
     {
-        if (loadingIndicator != null)
-            loadingIndicator.SetActive(true);
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
+        // Выполняем асинхронную задачу авторизации
         var task = firebaseManager.AuthenticateUser(login, password);
         yield return new WaitUntil(() => task.IsCompleted);
 
+        // Теперь обрабатываем результат вне блока try-catch
+        bool loginSuccess = false;
+        string errorMessage = "";
+
         if (task.IsFaulted)
         {
-            errorText.text = "Ошибка соединения";
+            errorMessage = "Ошибка соединения";
+            Debug.LogError($"[PrMenuModel] Authentication failed: {task.Exception?.Message}");
         }
         else if (task.Result != null)
         {
@@ -76,50 +96,63 @@ public class PrMenuModel : MonoBehaviour
 
             if (UserSession.CurrentUser.Role == "teacher")
             {
-                errorText.text = "";
-                // Запускаем параллельную загрузку данных
-                StartCoroutine(LoadTeacherDataInBackground());
-                // Переходим на сцену преподавателя
-                yield return StartCoroutine(LoadTeacherSceneAsync());
+                errorMessage = "";
+                loginSuccess = true;
             }
             else
             {
-                errorText.text = "Доступ только для преподавателей";
+                errorMessage = "Доступ только для преподавателей";
                 UserSession.CurrentUser = null;
             }
         }
         else
         {
-            errorText.text = "Неверный логин или пароль";
+            errorMessage = "Неверный логин или пароль";
         }
 
-        if (loadingIndicator != null)
+        // Устанавливаем текст ошибки, если есть
+        if (!isDestroyed && errorText != null)
+            errorText.text = errorMessage;
+
+        // Если авторизация успешна, продолжаем
+        if (loginSuccess)
+        {
+            StartCoroutine(LoadTeacherDataInBackground());
+            yield return StartCoroutine(LoadTeacherSceneAsync());
+        }
+
+        // Завершаем
+        if (!isDestroyed && loadingIndicator != null)
             loadingIndicator.SetActive(false);
+
+        stopwatch.Stop();
+        Debug.Log($"[PrMenuModel] Login completed in {stopwatch.ElapsedMilliseconds} ms");
     }
 
     private IEnumerator LoadTeacherDataInBackground()
     {
-        // Предзагрузка групп и студентов
         var groupsTask = firebaseManager.GetAllGroups();
         yield return new WaitUntil(() => groupsTask.IsCompleted);
 
         if (groupsTask.IsCompletedSuccessfully)
         {
-            // Можно сохранить группы в кеш
             UserSession.CachedGroups = groupsTask.Result;
 
-            // Предзагрузка студентов для каждой группы
             foreach (var group in groupsTask.Result)
             {
                 var studentsTask = firebaseManager.GetStudentsByGroup(group.Id);
                 yield return new WaitUntil(() => studentsTask.IsCompleted);
 
-                // Сохраняем в кеш
                 if (studentsTask.IsCompletedSuccessfully)
                 {
                     UserSession.CachedStudents[group.Id] = studentsTask.Result;
                 }
             }
+            Debug.Log("[PrMenuModel] Teacher data preloaded");
+        }
+        else
+        {
+            Debug.LogWarning("[PrMenuModel] Failed to preload teacher data");
         }
     }
 
@@ -135,11 +168,11 @@ public class PrMenuModel : MonoBehaviour
         {
             NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
             NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
-            Debug.Log("Новости успешно загружены в фоне");
+            Debug.Log("[PrMenuModel] Новости успешно загружены в фоне");
         }
         else
         {
-            Debug.LogWarning("Не удалось загрузить новости в фоне");
+            Debug.LogWarning("[PrMenuModel] Не удалось загрузить новости в фоне");
         }
 
         Destroy(vkNewsLoad);
@@ -165,7 +198,8 @@ public class PrMenuModel : MonoBehaviour
     {
         if (UserSession.CurrentUser == null)
         {
-            errorText.text = "Сначала войдите в систему.";
+            if (!isDestroyed && errorText != null)
+                errorText.text = "Сначала войдите в систему.";
             return;
         }
 
@@ -179,14 +213,14 @@ public class PrMenuModel : MonoBehaviour
     {
         isNewsLoading = true;
 
-        if (loadingIndicator != null)
+        if (!isDestroyed && loadingIndicator != null)
             loadingIndicator.SetActive(true);
 
         yield return StartCoroutine(GetNewsFromVK());
 
         yield return StartCoroutine(LoadTeacherSceneAsync());
 
-        if (loadingIndicator != null)
+        if (!isDestroyed && loadingIndicator != null)
             loadingIndicator.SetActive(false);
 
         isNewsLoading = false;
@@ -201,14 +235,20 @@ public class PrMenuModel : MonoBehaviour
         {
             NewsDataCache.CachedPosts = vkNewsLoad.allPosts;
             NewsDataCache.CachedVKGroups = vkNewsLoad.groupDictionary;
-            Debug.Log("Новости успешно загружены");
+            Debug.Log("[PrMenuModel] Новости успешно загружены");
         }
         else
         {
-            Debug.LogError("Не удалось загрузить новости");
-            errorText.text = "Ошибка загрузки новостей";
+            if (!isDestroyed && errorText != null)
+                errorText.text = "Ошибка загрузки новостей";
+            Debug.LogError("[PrMenuModel] Не удалось загрузить новости");
         }
 
         Destroy(vkNewsLoad);
+    }
+    public void OnLogoutButtonClick()
+    {
+        UserSession.ClearSession();
+        SceneManager.LoadScene("MainScene");
     }
 }

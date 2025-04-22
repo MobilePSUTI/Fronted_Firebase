@@ -4,125 +4,54 @@ using TMPro;
 
 public class ExpandableNewsText : MonoBehaviour
 {
-    public Text textShort; // Используем Text
-    public Text textFull;  // Используем Text
+    public TMP_Text textShort;
+    public TMP_Text textFull;
     public Button showMoreButton;
-    [SerializeField] private int previewLength = 100;
 
-    private string fullText;
-    private bool isExpanded = false;
-    private RectTransform imageRectTransform; // Контейнер (Image или back)
-    private VerticalLayoutGroup containerLayoutGroup; // VerticalLayoutGroup на Image/back
-
-    private void Awake()
-    {
-        // Проверяем, что все необходимые компоненты привязаны
-        if (textShort == null)
-        {
-            Debug.LogError("textShort is not assigned in the Inspector!", this);
-        }
-        if (textFull == null)
-        {
-            Debug.LogError("textFull is not assigned in the Inspector!", this);
-        }
-        if (showMoreButton == null)
-        {
-            Debug.LogError("showMoreButton is not assigned in the Inspector!", this);
-        }
-        if (textShort == null || textFull == null || showMoreButton == null)
-        {
-            return;
-        }
-
-        // Находим RectTransform объекта Image или back (родителя textShort и textFull)
-        imageRectTransform = textShort.transform.parent.GetComponent<RectTransform>();
-        if (imageRectTransform == null)
-        {
-            Debug.LogError("Parent of textShort does not have a RectTransform component!", textShort);
-            return;
-        }
-
-        // Находим VerticalLayoutGroup на контейнере (Image или back)
-        containerLayoutGroup = imageRectTransform.GetComponent<VerticalLayoutGroup>();
-        if (containerLayoutGroup == null)
-        {
-            Debug.LogError("VerticalLayoutGroup component is missing on the parent of textShort (Image or back)!", imageRectTransform);
-            return;
-        }
-    }
+    private bool isFullTextShown; // Tracks whether full text is currently displayed
 
     public void Initialize(string text)
     {
-        // Проверяем, что Awake завершился без ошибок
-        if (textShort == null || textFull == null || showMoreButton == null || imageRectTransform == null || containerLayoutGroup == null)
+        if (textShort == null || textFull == null || showMoreButton == null)
         {
-            Debug.LogError("Cannot initialize due to missing components. Check the Awake method errors.", this);
+            Debug.LogWarning("[ExpandableNewsText] Components missing: textShort, textFull, or showMoreButton");
             return;
         }
 
-        fullText = text;
-        textFull.text = fullText;
+        // Set initial text content
+        textShort.text = text.Length > 100 ? text.Substring(0, 100) + "..." : text;
+        textFull.text = text;
 
-        if (fullText.Length > previewLength)
-        {
-            textShort.text = fullText.Substring(0, previewLength) + "...";
-            showMoreButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            textShort.text = fullText;
-            showMoreButton.gameObject.SetActive(false);
-        }
-
+        // Set initial state
         textShort.gameObject.SetActive(true);
         textFull.gameObject.SetActive(false);
+        isFullTextShown = false;
 
-        // Удаляем предыдущие слушатели, чтобы избежать дублирования
+        // Set up button listener
         showMoreButton.onClick.RemoveAllListeners();
         showMoreButton.onClick.AddListener(ToggleText);
-
-        // Обновляем макет после инициализации
-        UpdateLayout();
     }
 
     private void ToggleText()
     {
-        isExpanded = !isExpanded;
-
-        textShort.gameObject.SetActive(!isExpanded);
-        textFull.gameObject.SetActive(isExpanded);
-
-        // Обновляем текст кнопки (для TextMeshProUGUI)
-        var buttonText = showMoreButton.GetComponentInChildren<TextMeshProUGUI>();
-        if (buttonText != null)
+        if (isFullTextShown)
         {
-            buttonText.text = isExpanded ? "Скрыть" : "Ещё";
+            // Hide full text, show short text
+            textFull.gameObject.SetActive(false);
+            textShort.gameObject.SetActive(true);
+            isFullTextShown = false;
+            showMoreButton.GetComponentInChildren<TMP_Text>().text = "Ещё";
         }
         else
         {
-            Debug.LogWarning("Button text (TextMeshProUGUI) component not found! Make sure the button has a TextMeshProUGUI child.", showMoreButton);
+            // Show full text, hide short text
+            textShort.gameObject.SetActive(false);
+            textFull.gameObject.SetActive(true);
+            isFullTextShown = true;
+            showMoreButton.GetComponentInChildren<TMP_Text>().text = "Скрыть";
         }
 
-        // Обновляем макет
-        UpdateLayout();
-    }
-
-    private void UpdateLayout()
-    {
-        // Принудительно обновляем макет для активного текста
-        if (isExpanded)
-        {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(textFull.rectTransform);
-        }
-        else
-        {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(textShort.rectTransform);
-        }
-
-        // Обновляем макет контейнера (Image или back), чтобы он подстроился под содержимое
-        LayoutRebuilder.ForceRebuildLayoutImmediate(imageRectTransform);
-
-        // Обновляем макет корневого объекта (Panel_news или Panel_news_netPhoto)
-        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+        // Rebuild layout to reflect changes
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
 }
