@@ -567,6 +567,7 @@ MonoBehaviour:
   loginInput: {fileID: 1849368521}
   passwordInput: {fileID: 180092753}
   errorText: {fileID: 1308014849}
+  uiPanel: {fileID: 1168015641}
 --- !u!114 &404281702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1862,8 +1863,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90, y: -467}
-  m_SizeDelta: {x: 1038.9, y: 580.69}
+  m_AnchoredPosition: {x: -84.711975, y: -467}
+  m_SizeDelta: {x: 1028.3, y: 580.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1372527772
 MonoBehaviour:

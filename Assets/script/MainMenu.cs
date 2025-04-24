@@ -13,10 +13,21 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private TMP_InputField loginInput;
     [SerializeField] private TMP_InputField passwordInput;
     [SerializeField] private TMP_Text errorText;
+    [SerializeField] private RectTransform uiPanel; // Reference to the parent panel or canvas
 
     private FirebaseDBManager firebaseManager;
     private bool isNewsLoading;
     private bool isDestroyed; // Track if the GameObject is destroyed
+    private Vector2 originalPanelPosition;
+    private bool isKeyboardVisible;
+    private float keyboardHeight;
+
+    private void Awake()
+    {
+        // Store the original position of the UI panel
+        if (uiPanel != null)
+            originalPanelPosition = uiPanel.anchoredPosition;
+    }
 
     private async void Start()
     {
@@ -33,11 +44,120 @@ public class MainMenu : MonoBehaviour
             Debug.Log($"[MainMenu] Current user: {UserSession.CurrentUser.Username}");
             await PreloadStudentDataAsync();
         }
+
+        // Add listeners for input field focus
+        SetupInputFieldListeners();
+    }
+
+    private void SetupInputFieldListeners()
+    {
+        if (loginInput != null)
+        {
+            loginInput.onSelect.AddListener((string text) => OnInputFieldSelected(loginInput));
+            loginInput.onEndEdit.AddListener((string text) => OnInputFieldDeselected());
+        }
+        if (passwordInput != null)
+        {
+            passwordInput.onSelect.AddListener((string text) => OnInputFieldSelected(passwordInput));
+            passwordInput.onEndEdit.AddListener((string text) => OnInputFieldDeselected());
+        }
+    }
+
+    private void OnInputFieldSelected(TMP_InputField inputField)
+    {
+        if (Application.isMobilePlatform)
+        {
+            StartCoroutine(AdjustForKeyboard(inputField));
+        }
+    }
+
+    private void OnInputFieldDeselected()
+    {
+        if (Application.isMobilePlatform && uiPanel != null)
+        {
+            // Reset panel position when keyboard is hidden
+            uiPanel.anchoredPosition = originalPanelPosition;
+            isKeyboardVisible = false;
+        }
+    }
+
+    private IEnumerator AdjustForKeyboard(TMP_InputField inputField)
+    {
+        // Wait for the keyboard to appear (increased delay for reliability)
+        yield return new WaitForSeconds(0.3f);
+
+        if (!TouchScreenKeyboard.isSupported || !TouchScreenKeyboard.visible)
+        {
+            isKeyboardVisible = false;
+            if (uiPanel != null)
+                uiPanel.anchoredPosition = originalPanelPosition;
+            yield break;
+        }
+
+        isKeyboardVisible = true;
+
+        // Estimate keyboard height (fallback method for better compatibility)
+        float estimatedKeyboardHeight = Screen.height * 0.4f; // Fallback: assume 40% of screen height
+        if (TouchScreenKeyboard.area.height > 0)
+        {
+            estimatedKeyboardHeight = TouchScreenKeyboard.area.height / CanvasScaleFactor();
+        }
+
+        keyboardHeight = estimatedKeyboardHeight;
+
+        // Get the input field's position in screen space
+        RectTransform inputRect = inputField.GetComponent<RectTransform>();
+        Vector3[] corners = new Vector3[4];
+        inputRect.GetWorldCorners(corners);
+        float inputFieldBottomY = corners[0].y; // Bottom-left corner in world space
+        float inputFieldHeight = corners[1].y - corners[0].y; // Height of the input field
+
+        // Convert bottom position to screen space
+        Vector2 inputFieldBottomScreenPos = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
+
+        // Calculate the top of the keyboard in screen space
+        float screenHeight = Screen.height;
+        float keyboardTopY = screenHeight - keyboardHeight;
+
+        // Calculate how much the input field is obscured by the keyboard
+        float offset = 0f;
+        if (inputFieldBottomScreenPos.y < keyboardTopY)
+        {
+            // The input field is below the top of the keyboard, so we need to move it up
+            offset = keyboardTopY - inputFieldBottomScreenPos.y + (inputFieldHeight * CanvasScaleFactor()) + 20f; // Add padding
+        }
+
+        // Apply the offset to the UI panel
+        if (uiPanel != null && offset > 0)
+        {
+            Vector2 newPosition = originalPanelPosition + new Vector2(0, offset / CanvasScaleFactor());
+            uiPanel.anchoredPosition = newPosition;
+            Debug.Log($"[MainMenu] Adjusted UI panel by {offset} pixels to {newPosition}");
+        }
+    }
+
+    private float CanvasScaleFactor()
+    {
+        CanvasScaler scaler = GetComponentInParent<CanvasScaler>();
+        if (scaler != null)
+            return scaler.scaleFactor;
+        return 1f;
     }
 
     private void OnDestroy()
     {
         isDestroyed = true; // Mark as destroyed to prevent accessing invalid references
+        // Remove listeners to prevent memory leaks
+        if (loginInput != null)
+        {
+            loginInput.onSelect.RemoveAllListeners();
+            loginInput.onEndEdit.RemoveAllListeners();
+        }
+        if (passwordInput != null)
+        {
+            passwordInput.onSelect.RemoveAllListeners();
+            passwordInput.onEndEdit.RemoveAllListeners();
+        }
     }
 
     private bool ValidateUIComponents()
@@ -217,7 +337,6 @@ public class MainMenu : MonoBehaviour
             loadingIndicator.SetActive(true);
 
         var vkNewsLoad = gameObject.AddComponent<VKNewsLoad>();
-        // No need to assign vkSettings; configure accessToken and groupIds in Inspector
         yield return vkNewsLoad.GetNewsFromVK(0, 20);
 
         if (vkNewsLoad.allPosts != null && vkNewsLoad.groupDictionary != null)
@@ -260,6 +379,7 @@ public class MainMenu : MonoBehaviour
             yield return null;
         }
     }
+
     public void OnLogoutButtonClick()
     {
         UserSession.ClearSession();

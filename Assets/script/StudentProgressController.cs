@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,11 +21,11 @@ public class StudentProgressController : MonoBehaviour
 
     [Header("UI Elements")]
     public List<Image> mainSkillBars = new List<Image>();
-    public List<Text> mainSkillTexts = new List<Text>();
-    public List<Text> mainSkillTitles = new List<Text>();
+    public List<TextMeshProUGUI> mainSkillTexts = new List<TextMeshProUGUI>();
+    public List<TextMeshProUGUI> mainSkillTitles = new List<TextMeshProUGUI>();
     public List<Image> additionalSkillBars = new List<Image>();
-    public List<Text> additionalSkillTexts = new List<Text>();
-    public List<Text> additionalSkillTitles = new List<Text>();
+    public List<TextMeshProUGUI> additionalSkillTexts = new List<TextMeshProUGUI>();
+    public List<TextMeshProUGUI> additionalSkillTitles = new List<TextMeshProUGUI>();
 
     [Header("Settings")]
     public float fillAnimationDuration = 0.5f;
@@ -48,11 +49,11 @@ public class StudentProgressController : MonoBehaviour
     {
         // Initialize all lists to prevent null references
         if (mainSkillBars == null) mainSkillBars = new List<Image>();
-        if (mainSkillTexts == null) mainSkillTexts = new List<Text>();
-        if (mainSkillTitles == null) mainSkillTitles = new List<Text>();
+        if (mainSkillTexts == null) mainSkillTexts = new List<TextMeshProUGUI>();
+        if (mainSkillTitles == null) mainSkillTitles = new List<TextMeshProUGUI>();
         if (additionalSkillBars == null) additionalSkillBars = new List<Image>();
-        if (additionalSkillTexts == null) additionalSkillTexts = new List<Text>();
-        if (additionalSkillTitles == null) additionalSkillTitles = new List<Text>();
+        if (additionalSkillTexts == null) additionalSkillTexts = new List<TextMeshProUGUI>();
+        if (additionalSkillTitles == null) additionalSkillTitles = new List<TextMeshProUGUI>();
 
         // Check for cached data
         if (UserSession.CachedSkills != null)
@@ -409,6 +410,7 @@ public class StudentProgressController : MonoBehaviour
             }
         }
     }
+
     public void LoadFromCache(SkillsCache cache)
     {
         if (cache == null) return;
@@ -616,7 +618,7 @@ public class StudentProgressController : MonoBehaviour
 
             // Load all skills (main and additional)
             var skillsSnapshot = await firebaseManager.DatabaseReference
-                .Child("11/data")
+                .Child("11/ data")
                 .GetValueAsync();
             if (!skillsSnapshot.Exists || !skillsSnapshot.HasChildren)
             {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase.Database;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public class StudentRatingManager : MonoBehaviour
 {
@@ -173,7 +174,7 @@ public class StudentRatingManager : MonoBehaviour
             var userData = allUsers[i];
             int position = i + 1;
 
-            if (SetTextComponents(ratingItems[i], position.ToString(), $"{userData.User.Last} {userData.User.First}",
+            if (SetTextComponents(ratingItems[i], position.ToString(), $"{userData.User.First} {userData.User.Last[0] + "."}",
                 userData.TotalPoints.ToString(), $"{userData.GroupName} ({userData.Course})"))
             {
                 ratingItems[i].SetActive(true);
@@ -241,7 +242,7 @@ public class StudentRatingManager : MonoBehaviour
 
     private void HighlightPosition(GameObject ratingItem)
     {
-        var image = ratingItem.GetComponent<Image>();
+        var image = ratingItem.GetComponent<UnityEngine.UI.Image>();
         if (image != null)
             image.color = currentUserHighlightColor;
     }
